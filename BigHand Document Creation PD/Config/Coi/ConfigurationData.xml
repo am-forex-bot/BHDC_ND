@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CoiConfiguration>
+  <languages>
+    <language id="ca6c962b-6ae0-4580-ab69-aeb6a5182c72" localeId="0" name="English" isoCode="en-GB" isDefault="true" inheritFromDefault="false" />
+  </languages>
+  <documentFields />
+  <templateDefinitions />
+  <dataConnectorDefinitions>
+    <dataConnectorDefinition id="63502df0-5bb4-484f-9276-6502016db095" name="Wallace Matter Partner" assembly="Iphelion.Outline.DataConnector.Sql.dll" type="Iphelion.Outline.DataConnector.Sql.SqlConnector">
+      <inputParameters>
+        <inputParameter id="85a0b92b-f85e-43ad-95e4-d0174f64ab2c" name="@Client" typeName="System.String" />
+        <inputParameter id="fb155624-7ca7-4786-81b0-c57b188c82d7" name="@Matter" typeName="System.String" />
+      </inputParameters>
+      <outputFields>
+        <outputField id="fea69f7b-2cea-4b98-88e8-952b2ff49cfc" name="Client" typeName="System.String" />
+        <outputField id="1d013322-05d8-41b0-aa1a-bdfa7826d8ea" name="Matter" typeName="System.String" />
+        <outputField id="9d7c6fd8-3355-4f39-bbef-fa2be6d1b5c5" name="Partner_Initials" typeName="System.String" />
+        <outputField id="1e2ad507-3264-4e11-93fa-f27934a4903a" name="Supervisor_Initials" typeName="System.String" />
+      </outputFields>
+      <configurationData>
+        <configurationItem id="a1335297-2733-4b4d-99cc-d223541742b9" name="Server" typeName="System.String">WLUKSPSQL01</configurationItem>
+        <configurationItem id="b1ba27e2-a74f-43a0-87ac-c93dea69682c" name="IntegratedSecurity" typeName="System.Boolean">True</configurationItem>
+        <configurationItem id="1843506f-549f-4ee8-ad1f-ea63df98dc61" name="Username" typeName="System.String" />
+        <configurationItem id="316fdffc-e0d5-489f-923c-c1a7e9df7524" name="Password" typeName="System.String" />
+        <configurationItem id="1be10dee-ac94-40c0-989e-5c3f92905d4f" name="Database" typeName="System.String">p4w_wallace</configurationItem>
+        <configurationItem id="84ddf82d-9be5-4207-a256-26498cb583f7" name="CommandType" typeName="System.String">SQL</configurationItem>
+        <configurationItem id="50e2bc41-e322-4814-becc-8b9843c586e4" name="CommandText" typeName="System.String">SELECT Top 1
+		EntityRef As Client,
+      Number As Matter,
+      PartnerRef As Partner_Initials,
+      SupervisorRef As Supervisor_Initials
+  FROM [p4w_wallace].[dbo].[Matters]
+  WHERE EntityRef = Left(@client, 1) + RIGHT('00000000000000' + SUBSTRING(@client, 2, 14), 14)
+  AND Number = @Matter</configurationItem>
+        <configurationItem id="36398adc-c58c-4f91-9708-bd9bd116d95a" name="Timeout" typeName="System.String">60</configurationItem>
+      </configurationData>
+    </dataConnectorDefinition>
+    <dataConnectorDefinition id="34dd0e8e-6e90-4964-a632-73727e307826" name="Get Invoice No" assembly="Iphelion.Outline.DataConnector.Sql.dll" type="Iphelion.Outline.DataConnector.Sql.SqlConnector">
+      <inputParameters />
+      <outputFields>
+        <outputField id="af6e2a09-de80-4540-964b-ce60069c9e9d" name="NewInv" typeName="System.String" />
+      </outputFields>
+      <configurationData>
+        <configurationItem id="3664ef1e-225e-41f7-9c75-47f9c24863ec" name="Server" typeName="System.String">WLUKSPSQL01</configurationItem>
+        <configurationItem id="16f654ad-e744-44f9-83d4-05c398721fc2" name="IntegratedSecurity" typeName="System.Boolean">True</configurationItem>
+        <configurationItem id="8ef11116-a73c-4743-ae3b-461d5bece06a" name="Username" typeName="System.String" />
+        <configurationItem id="92a037f2-ae47-42c8-8972-1bcb7fb834c0" name="Password" typeName="System.String" />
+        <configurationItem id="ffae63ed-f8c0-4c42-90cc-752debff3560" name="Database" typeName="System.String">Outline</configurationItem>
+        <configurationItem id="0eaf7e50-24e6-4d0a-943c-2773f978db88" name="CommandType" typeName="System.String">SPO</configurationItem>
+        <configurationItem id="1894c847-2b17-4504-b60b-0c79ac68b23a" name="CommandText" typeName="System.String">GetNextInvNo</configurationItem>
+      </configurationData>
+    </dataConnectorDefinition>
+  </dataConnectorDefinitions>
+</CoiConfiguration>

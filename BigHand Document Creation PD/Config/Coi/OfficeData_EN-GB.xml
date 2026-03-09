@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<officeInformation id="00000000-0000-0000-0000-000000000000">
+  <properties />
+  <country id="94d8ba2c-5983-40db-a4c4-5eb3e60dad54" name="United Kingdom">
+    <properties />
+    <office id="044ace2b-c28f-492a-a094-8a1bf7f77ba2" location="London">
+      <properties />
+      <buildingAddress>
+        <buildingAddressLine1>27 Mortimer Street</buildingAddressLine1>
+        <buildingAddressLine2>London</buildingAddressLine2>
+        <buildingAddressLine3>W1T 3JF</buildingAddressLine3>
+      </buildingAddress>
+      <postalAddress />
+      <officeURL>www.wallace.co.uk</officeURL>
+      <phoneNumberFormat>+44 (0)20 7xxx xxxx</phoneNumberFormat>
+      <faxNumberFormat>+44 (0)20 7xxx xxxx</faxNumberFormat>
+      <mobileNumberFormat>+44 (0)xxxx xxx xxx</mobileNumberFormat>
+      <switchboardNo>+44 (0)20 7636 4422</switchboardNo>
+      <faxNo>+44 (0)20 7636 3736</faxNo>
+      <taxNo>380 5808 41</taxNo>
+      <dx>82990 Mayfair</dx>
+      <index d4p1:nil="true" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance" />
+      <entity>
+        <entityName1>Wallace LLP</entityName1>
+        <displayName>Wallace LLP</displayName>
+      </entity>
+      <bankDetails>
+        <bankAccountName>Wallace LLP Office Account</bankAccountName>
+        <bankAccountNo>03302105</bankAccountNo>
+        <bankSortCode>20-36-47</bankSortCode>
+        <bankIban>GB27BARC20364703302105</bankIban>
+        <bankSwift>BARCGB22</bankSwift>
+        <displayName>Office Account</displayName>
+      </bankDetails>
+      <disclaimer />
+    </office>
+    <disclaimer>
+      <firm>Wallace LLP is a law firm authorised by the Solicitors Regulation Authority. All members are solicitors or registered foreign lawyers. Registered in England &amp; Wales No. OC305907.</firm>
+      <firmDb>Registered office as above. A list of members is open to inspection at the registered office.</firmDb>
+    </disclaimer>
+    <documentSettings>
+      <pageHeight d4p1:nil="true" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance" />
+      <pageWidth d4p1:nil="true" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance" />
+      <topMargin d4p1:nil="true" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance" />
+      <bottomMargin d4p1:nil="true" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance" />
+      <leftMargin d4p1:nil="true" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance" />
+      <rightMargin d4p1:nil="true" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance" />
+    </documentSettings>
+    <vatTaxRate>
+      <name>20</name>
+      <rate>20</rate>
+      <default>true</default>
+    </vatTaxRate>
+    <vatTaxRate>
+      <name>0</name>
+      <rate>0</rate>
+      <default>false</default>
+    </vatTaxRate>
+  </country>
+  <labels>
+    <label id="fbebb204-d6ea-45e1-82f6-36dcb58bdb8b" name="Title Letter" labelType="Content" group="Doc Titles">Letter</label>
+    <label id="5547a21d-0351-4c2f-8302-b3a6330f30e2" name="Title Memo" labelType="Content" group="Doc Titles">Memorandum</label>
+    <label id="f6e4dd1f-260d-4b4e-bbf1-39cbd9e5ca40" name="Title Fax" labelType="Content" group="Doc Titles">Fax</label>
+    <label id="2c38a2bd-567c-4a4f-b401-07ece469a993" name="Title Report" labelType="Content" group="Doc Titles">Report</label>
+    <label id="48aa660e-b8d3-4321-9ab2-b361fb7eefde" name="Title Attendance Note" labelType="Content" group="Doc Titles">Attendance Note</label>
+    <label id="698ed907-e99f-43a4-a5cd-cdf4ccd24235" name="Title Blank" labelType="Content" group="Doc Titles">Blank</label>
+    <label id="c1349597-4e1a-49dd-b702-1c0dfc569030" name="Logos" labelType="Content" group="File Paths">Logos\</label>
+    <label id="084e33e8-a9ca-4d2e-9a42-d52b2285e02b" name="Main Logo" labelType="Content" group="Images and Logos">W Logo.png</label>
+    <label id="910ab7a8-5f00-4d79-a111-7825866532f0" name="Switchboard Phone" labelType="Content" group="Content Labels">T</label>
+    <label id="1c2d6647-0fdb-4694-b404-867c8a074be1" name="Switchboard Fax" labelType="Content" group="Content Labels">F</label>
+    <label id="bfed0962-be70-4500-8c2a-48bd09a2ae86" name="DX" labelType="Content" group="Content Labels">DX</label>
+    <label id="6869df78-542c-494f-a0cb-a9d9c8baa5fc" name="Email" labelType="Content" group="Content Labels">Email</label>
+    <label id="ab146ed2-6151-448c-a520-2604d5ffa68a" name="Our Ref" labelType="Content" group="Content Labels">Our Ref</label>
+    <label id="bbf00afd-3d55-4ac1-a55d-0c74511fd71d" name="Your Ref" labelType="Content" group="Content Labels">Your Ref</label>
+    <label id="14dc1e06-5930-4cfa-b72c-afdd89afd3c3" name="Delivery Method Fax" labelType="Content" group="Letter Delivery, Privacy Etc">By Fax Only</label>
+    <label id="d2ee4aa1-0424-4e55-a853-363d5fb1f5bb" name="Delivery Method Hand" labelType="Content" group="Letter Delivery, Privacy Etc">By Hand</label>
+    <label id="52c4c0b2-9e14-48f4-b6f4-0f8a8ce25595" name="List separator" labelType="Content" group="General">, </label>
+    <label id="55f8e708-d1e8-4a5d-97c7-be84047c2559" name="Path separator" labelType="Content" group="General">\</label>
+    <label id="9a0cd1fc-f3de-4896-83a9-573c45901801" name="Empty Text" labelType="Content" group="General">&lt;none&gt;</label>
+    <label id="68cb6c94-f3b5-4bde-80c5-25089c6c6216" name="Label Separator" labelType="Content" group="General">:</label>
+    <label id="acfdb02c-adb1-40b1-beca-d5c3a4b4f7be" name="Date - Long" labelType="Content" group="General">dd MMMM yyyy</label>
+    <label id="bc1e0bff-2a09-40a6-8576-d8ee3466a1b5" name="Data Separator" labelType="Content" group="General"> - </label>
+    <label id="adc0fe3f-2dbd-4bf9-b96e-03798e564d2c" name="Data Marker" labelType="Content" group="General">[●]</label>
+    <label id="9a3ff216-3d74-4c81-a18a-bac4066922a9" name="Parentheses left" labelType="Content" group="General">(</label>
+    <label id="8874d98d-d6c1-4f39-a055-53a96c09b757" name="Parentheses right" labelType="Content" group="General">)</label>
+    <label id="3754e1f7-daab-489e-8a45-69a45da240e7" name="Date Format - Short" labelType="Content" group="General">dd/MM/yy</label>
+    <label id="ed6436c4-f089-48f6-9224-5879e49247e7" name="Delimiter Return" labelType="Content" group="General">&amp;#10;</label>
+    <label id="1c05e8ea-06ad-46e5-804e-7f7ae77729f8" name="Ref Separator" labelType="Content" group="General">.</label>
+    <label id="adbc5502-258a-4e86-bcb0-2bbe42876eb2" name="Time Format" labelType="Content" group="General">HH:mm</label>
+    <label id="5bd35766-9cfa-4c33-a131-c17376c1a7e5" name="CC" labelType="Content" group="Content Labels">cc</label>
+    <label id="094439bc-0a54-4b07-bc6c-932121066659" name="Date" labelType="Content" group="Content Labels">Date</label>
+    <label id="c0d554e5-19c2-4530-a030-08e329b2d1dd" name="Matter" labelType="Content" group="Content Labels">Matter</label>
+    <label id="94faf78c-a7c9-4fae-9811-fd0c8e14160a" name="File Number" labelType="Content" group="Content Labels">File Number</label>
+    <label id="22023ddd-462d-4711-99f4-4ca3e1f06a30" name="Fax Number" labelType="Content" group="Content Labels">Fax Number</label>
+    <label id="171d218e-5423-4035-8c6b-65679e6ff702" name="Pages" labelType="Content" group="Content Labels">Pages</label>
+    <label id="b46fd611-a668-42ef-abdc-fb25535775ec" name="Fax Privacy Notice Header" labelType="Content" group="Content Labels">Privacy and confidentiality notice</label>
+    <label id="66a078ff-fa83-4993-863d-ee89f7d1c3a4" name="Fax Privacy Notice" labelType="Content" group="Content Labels">[This document and any of the following pages are intended solely for the named addressee ....]</label>
+    <label id="b7ac2d5b-2ab9-4165-af0e-1d04ef85de05" name="Re" labelType="Content" group="Content Labels">Re</label>
+    <label id="9c9217ef-eeb8-4ea6-a54b-70b14802157e" name="Direct Line" labelType="Content" group="Content Labels">Direct Line</label>
+    <label id="f3a4045e-bf7e-4eda-99a9-c865b16a56f2" name="FAO" labelType="Content" group="Content Labels">FAO</label>
+    <label id="1c8645e8-6741-4931-9a61-3dd445cbeee0" name="Fax" labelType="Content" group="Content Labels">Fax</label>
+    <label id="8017e5f1-1b5d-4b66-bcd2-7d280da93832" name="To" labelType="Content" group="Content Labels">To</label>
+    <label id="95cb466c-6fbc-47d5-80ed-244b37c57958" name="Fax To Company" labelType="Content" group="Content Labels">Company</label>
+    <label id="1ee94389-8bd2-4c5d-842f-2b6b325ee72d" name="From" labelType="Content" group="Content Labels">From</label>
+    <label id="4e04ce08-0946-46d6-adaa-d6e2185d4de6" name="Title Meeting Note" labelType="Content" group="Doc Titles">Meeting Note</label>
+    <label id="8613c6e5-11e1-4a95-9475-fbe299fc2c46" name="Title File Note" labelType="Content" group="Doc Titles">File Note</label>
+    <label id="71171ce3-ab20-4911-a733-80b2ec4d9e13" name="Delivery Method Email" labelType="Content" group="Letter Delivery, Privacy Etc">By Email</label>
+    <label id="e8a68993-6a14-45d5-9bde-7e7c06ecc74e" name="Draft line" labelType="Content" group="Content Labels">Draft</label>
+    <label id="63a81ce1-52dc-47a7-a2e3-aed1bbb08b72" name="Date Format - Draft Line" labelType="Content" group="General">dd.MM.yyyy</label>
+    <label id="5769f1f9-6529-4983-b3f4-f57c042545d4" name="Relating to" labelType="Content" group="General">- relating to - </label>
+    <label id="dbb5d436-a714-4931-bb19-96f5fffdce3a" name="Dated" labelType="Content" group="Content Labels">Dated</label>
+    <label id="06b9b0c8-3dca-4ed0-909f-9cc216209c55" name="Agreement Ref" labelType="Content" group="Content Labels">Ref</label>
+    <label id="39959cf7-57a0-4af3-9bb2-ed92d4162d87" name="Strictly P&amp;C" labelType="Content" group="Letter Delivery, Privacy Etc">Strictly Private &amp; Confidential</label>
+    <label id="2098c7ba-16cd-460f-bd4a-1b49504a4aee" name="By Email" labelType="Content" group="Content Labels">By Email</label>
+    <label id="6922c25a-a893-4d0d-a389-1285f7362f0b" name="Yours faithfully" labelType="Content" group="General">Yours faithfully</label>
+    <label id="60fdae59-ce93-4283-9106-abfb6cd80a6b" name="Tel" labelType="Content" group="Content Labels">Tel</label>
+    <label id="c0c31b18-552d-4025-a7ed-11ef0b4db0f9" name="Copy To" labelType="Content" group="Content Labels">Copy To</label>
+    <label id="b2c6178a-e920-4129-9fc3-ae7d4a363cda" name="Subject" labelType="Content" group="Content Labels">Subject</label>
+    <label id="54aee5fe-e3a5-474b-bcb4-50e38fade7e0" name="LofE Content" labelType="Content" group="File Paths">Content\LofE\</label>
+    <label id="9f1dfd92-7cc6-4527-ac47-3fdd54e4e976" name="Author" labelType="Content" group="Content Labels">Author</label>
+    <label id="59245727-6821-4529-a977-3aca065d5328" name="Client" labelType="Content" group="Content Labels">Client</label>
+    <label id="abd12ccf-970f-4f61-bbfd-e07bc5b8a5d8" name="Signatures" labelType="Content" group="File Paths">Signatures\</label>
+    <label id="ccd8444e-ffa4-4bc1-9068-f93a95c97978" name="Outline" labelType="Content" group="File Paths">C:\ProgramData\Bighand\BigHand Document Creation\</label>
+    <label id="31dbfc90-4ed9-48f2-9192-fe831852e182" name="Draft" labelType="Content" group="Letter Delivery, Privacy Etc">Draft</label>
+    <label id="763f8204-975b-41ee-bb05-a2b99e8808c9" name="Delivery Method Fax &amp; Email" labelType="Content" group="Letter Delivery, Privacy Etc">By Fax &amp; Email</label>
+    <label id="ab36374e-910e-44c9-a2f7-fa10031cef4c" name="Strictly P&amp;C - Label" labelType="Content" group="Letter Delivery, Privacy Etc">Strictly P &amp; C</label>
+    <label id="4cb03f00-2b66-43ec-bc8b-ba6c8e056c50" name="Images" labelType="Content" group="File Paths">Images\</label>
+    <label id="6dffddac-2c90-4f6d-bcab-1d68d26f591d" name="Footer" labelType="Content" group="Images and Logos">Footer.jpg</label>
+    <label id="8d84566f-5fff-40a4-b0fc-0f8b6a27503e" name="Delivery Method Courier" labelType="Content" group="Letter Delivery, Privacy Etc">By Courier</label>
+    <label id="4620382e-32f3-496e-b148-4e9db9262678" name="Enc" labelType="Content" group="Content Labels">enc</label>
+    <label id="8f9d3bf6-4985-45f6-94e7-8cb002a8570b" name="Vat Reg No" labelType="Content" group="Content Labels">Vat Reg No.</label>
+    <label id="9da7b2da-f0f2-4b68-85e3-d0a740b01259" name="EU Recipient Notice" labelType="Content" group="Bill">Subject to reverse charge by the recipient</label>
+    <label id="2791a189-5c89-4690-a219-d7b53a23c680" name="Disbursements" labelType="Content" group="Bill">Disbursements</label>
+    <label id="96767004-cf0f-4425-b17e-c9c1cbf5789e" name="Other Charges" labelType="Content" group="Bill">Other Charges</label>
+    <label id="34b848b9-c6ab-432c-b9a1-3b6905c9a0ab" name="Subtotal" labelType="Content" group="Bill">Subtotal</label>
+    <label id="2e517158-9466-4967-bdde-83a7bc9d4f13" name="Decimal Format" labelType="Content" group="Bill">#,##0.00</label>
+    <label id="0014f429-243e-43e8-8856-3fb885222761" name="Payable By" labelType="Content" group="Bill">Payable By</label>
+    <label id="b1625c4f-41c9-4cfc-9391-d7b035acfdc3" name="Total - Bill" labelType="Content" group="Bill">Balance due</label>
+    <label id="bccfa62c-d9c8-43de-ac39-8014d26c9e2a" name="Total - Credit Note" labelType="Content" group="Bill">Credit due</label>
+    <label id="b4a21732-c5a9-4f36-8442-7d9fdbd8d949" name="Wallace" labelType="Content" group="Images and Logos">Wallace.png</label>
+    <label id="5b4f3b17-208b-42e5-8d77-f15d8060b4d8" name="Type - Bill" labelType="Content" group="Bill">Bill</label>
+    <label id="a35ac816-6534-4189-bb0d-16a923be0dcb" name="Type - Credit Note" labelType="Content" group="Bill">Credit Note</label>
+    <label id="2c9860da-cf68-46e0-8b9f-58f475c64c5e" name="Credit Note" labelType="Content" group="Bill">Credit Note</label>
+    <label id="a674844d-b41d-46e2-80ca-6271dba195f6" name="Photocopying and faxing" labelType="Content" group="Bill - Other Charges">Photocopying and faxing</label>
+    <label id="c30d3097-71bb-4416-846b-58377f78a490" name="TT charges" labelType="Content" group="Bill - Other Charges">TT charges</label>
+    <label id="15ee5633-7c5d-4cf8-b775-9cc3c93f1ea9" name="Travelling" labelType="Content" group="Bill - Other Charges">Travelling</label>
+    <label id="8ae6e547-9d32-4732-81f9-c32b83e8e562" name="KYC/AML Administration Fee" labelType="Content" group="Bill - Other Charges">KYC/AML Administration Fee</label>
+    <label id="f6028478-7e13-4e17-98f9-4bae17ecfc1d" name="Paid By" labelType="Content" group="Bill">Paid By</label>
+    <label id="7ef1f412-f87c-4b49-9d7a-77fde6932f15" name="File storage and retrieval" labelType="Content" group="Bill - Other Charges">File storage and retrieval</label>
+    <label id="f7ecaa24-f122-4ecd-b6e9-d74ecf7e3eab" name="Registration fees" labelType="Content" group="Bill - Other Charges">Registration fees</label>
+    <label id="f75744f1-3fee-4e96-8e65-866ec8b3eb33" name="Subsistence" labelType="Content" group="Bill - Other Charges">Subsistence</label>
+    <label id="58efccbf-97fd-47db-8495-4fe3b926d5b5" name="Property search fees" labelType="Content" group="Bill - Other Charges">Property search fees</label>
+    <label id="efc7a927-3460-417d-875d-3cdda29d33af" name="Search fees" labelType="Content" group="Bill - Other Charges">Search fees</label>
+    <label id="d7f89659-cbb7-416d-b879-5e2789dd9ccd" name="Land Registry search fees" labelType="Content" group="Bill - Other Charges">Land Registry search fees</label>
+    <label id="d8ed47d6-ff8a-400c-b190-c378291ab0d4" name="Copying charges" labelType="Content" group="Bill - Disbursements">Copying charges</label>
+    <label id="1a0b42e1-5972-4aaf-84a2-dcb2c98321a8" name="Expert fees" labelType="Content" group="Bill - Disbursements">Expert fees</label>
+    <label id="09d5cf9a-6d47-4059-a726-87024c6d96e9" name="Company registration fees" labelType="Content" group="Bill - Disbursements">Company registration fees</label>
+    <label id="901118fe-86d6-4040-a33a-98782ca96756" name="Trade mark application fees" labelType="Content" group="Bill - Disbursements">Trade mark application fees</label>
+    <label id="c2264ad5-7e71-4b7c-a96d-6897ce659610" name="Courier fees" labelType="Content" group="Bill - Disbursements">Courier fees</label>
+    <label id="602b7c28-d499-47b8-ba04-e71752d7c21d" name="Telephone charges" labelType="Content" group="Bill - Disbursements">Telephone charges</label>
+    <label id="cb28809d-487f-4f96-a3dc-41486ded815f" name="Stamp duty" labelType="Content" group="Bill - Disbursements">Stamp duty</label>
+    <label id="fd9f1853-1e5d-4fa8-a425-bd0f351fa040" name="Statutory declaration fees" labelType="Content" group="Bill - Disbursements">Statutory declaration fees</label>
+    <label id="d0056e1c-9fec-4ef7-94eb-e234d4971431" name="Land Registry application fees" labelType="Content" group="Bill - Disbursements">Land Registry application fees</label>
+    <label id="83f7d600-325a-44e9-a4c4-7bdfd3d40599" name="Court fees" labelType="Content" group="Bill - Disbursements">Court fees</label>
+    <label id="ce206f30-96fb-45e6-957d-994a66be016d" name="Counsel fees" labelType="Content" group="Bill - Disbursements">Counsel fees</label>
+    <label id="240ebabd-7cbc-4a47-ab62-23f5d8f972cc" name="Reg fees" labelType="Content" group="Bill - Disbursements">Registration fees</label>
+    <label id="400f7ad8-358c-408a-8bf7-e465938234e6" name="Delivery Method Special" labelType="Content" group="Letter Delivery, Privacy Etc">By Special Delivery</label>
+  </labels>
+  <labelSets>
+    <labelSet id="fdaa7c4e-4e8d-4d24-80f5-ad40b5882f82" name="Disbursements" group="Bill - Disbursements">
+      <label>Company registration fees</label>
+      <label>Copying charges</label>
+      <label>Counsel fees</label>
+      <label>Courier fees</label>
+      <label>Court fees</label>
+      <label>Expert fees</label>
+      <label>Land Registry application fees</label>
+      <label>Reg fees</label>
+      <label>Stamp duty</label>
+      <label>Statutory declaration fees</label>
+      <label>Telephone charges</label>
+      <label>Trade mark application fees</label>
+    </labelSet>
+    <labelSet id="8a7696d2-ea6e-4ff3-90d4-826522dd90fd" name="Other Charges" group="Bill - Other Charges">
+      <label>File storage and retrieval</label>
+      <label>KYC/AML Administration Fee</label>
+      <label>Land Registry search fees</label>
+      <label>Photocopying and faxing</label>
+      <label>Property search fees</label>
+      <label>Registration fees</label>
+      <label>Search fees</label>
+      <label>Subsistence</label>
+      <label>Travelling</label>
+      <label>TT charges</label>
+    </labelSet>
+  </labelSets>
+  <epistolary>
+    <titles>
+      <title id="1" text="Mr" default="false" gender="M" />
+      <title id="2" text="Mrs" default="false" gender="F" />
+      <title id="3" text="Miss" default="false" gender="F" />
+      <title id="4" text="Ms" default="false" gender="F" />
+      <title id="5" text="Dr" default="false" />
+    </titles>
+    <addressees>
+      <addressee id="4" text="&lt;Forename&gt; &lt;Surname&gt;" default="true" format="{Addressee_Forename:$VAL$ }{Addressee_Surname}&#xD;&#xA;{Addressee_Address}" formatType="formatString" formatNameOnly="{Addressee_Forename:$VAL$ }{Addressee_Surname}" formatNameOnlyType="formatString" />
+      <addressee id="5" text="&lt;Forename&gt;" default="false" format="{Addressee_Forename}&#xD;&#xA;{Addressee_Address}" formatType="formatString" formatNameOnly="{Addressee_Forename}" formatNameOnlyType="formatString" />
+      <addressee id="6" text="&lt;Title&gt; &lt;Surname&gt;" default="false" format="{Addressee_Title:$VAL$ }{Addressee_Surname}&#xD;&#xA;{Addressee_Address}" formatType="formatString" formatNameOnly="{Addressee_Title:$VAL$ }{Addressee_Surname}" formatNameOnlyType="formatString" />
+      <addressee id="7" text="&lt;Title&gt; &lt;Initial&gt; &lt;Surname&gt;" default="false" format="{Addressee_Title:$VAL$ }{Addressee_Initial:$VAL$ }{Addressee_Surname}&#xD;&#xA;{Addressee_Address}" formatType="formatString" formatNameOnly="{Addressee_Title:$VAL$ }{Addressee_Initial:$VAL$ }{Addressee_Surname}" formatNameOnlyType="formatString" />
+      <addressee id="10" text="To whom it may concern" default="false" format="To whom it may concern&#xD;&#xA;{Addressee_Address}" formatType="formatString" formatNameOnly="To whom it may concern" formatNameOnlyType="formatString" />
+      <addressee id="11" text="&lt;None&gt;" default="false" format="{Addressee_Address}" formatType="formatString" formatNameOnly="{blank}" formatNameOnlyType="formatString" />
+    </addressees>
+    <prefixes />
+    <salutations>
+      <salutation id="13" text="&lt;Title&gt; &lt;Surname&gt;" default="true" format="Dear {Addressee_Title:$VAL$ }{Addressee_Surname}" formatType="formatString" prefixId="0" closeId="23" />
+      <salutation id="12" text="&lt;Forename&gt;" default="false" format="Dear {Addressee_Forename}" formatType="formatString" prefixId="0" closeId="23" />
+      <salutation id="18" text="Sir" default="false" format="Dear Sir" formatType="formatString" prefixId="0" closeId="24" excludeClosings="23" />
+      <salutation id="19" text="Sirs" default="false" format="Dear Sirs" formatType="formatString" prefixId="0" closeId="24" excludeClosings="23" />
+      <salutation id="20" text="Madam" default="false" format="Dear Madam" formatType="formatString" prefixId="0" closeId="24" excludeClosings="23" />
+      <salutation id="21" text="Sir or Madam" default="false" format="Dear Sir or Madam" formatType="formatString" prefixId="0" closeId="24" excludeClosings="23" />
+    </salutations>
+    <closings>
+      <close id="23" text="Yours sincerely" default="true" format="Yours sincerely" formatType="formatString" />
+      <close id="24" text="Yours faithfully" default="false" format="Yours faithfully" formatType="formatString" />
+    </closings>
+  </epistolary>
+</officeInformation>

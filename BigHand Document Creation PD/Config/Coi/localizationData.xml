@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<officeInformation>
+  <cultureName>en</cultureName>
+  <labels>
+    <label id="f794dffc-0c40-4cad-954f-1d06ca7e7a37" name="Template Name Blank" labelType="UI" group="Template Names">Blank document</label>
+    <label id="151de79f-f196-483f-b7c7-ce17843e20e0" name="Template Name Letter" labelType="UI" group="Template Names">Letter</label>
+    <label id="5377170d-dc78-40c6-a3df-ca0f5394d780" name="Template Name Fax" labelType="UI" group="Template Names">Fax</label>
+    <label id="abc60479-d8e5-40c1-af1e-acd150badfdc" name="Template Name Agreement" labelType="UI" group="Template Names">Agreement</label>
+    <label id="3ca725e0-c0b2-40fb-8800-5f38b5523153" name="Template Name Engagement Letter" labelType="UI" group="Template Names">Engagement Letter</label>
+    <label id="5b0a62dc-0b71-436c-ab48-648e41f86852" name="Date" labelType="UI" group="Wizard-General">_Date</label>
+    <label id="94ec11da-b01e-4549-88e4-8aa264842434" name="Our Ref" labelType="UI" group="Wizard-General">_Our ref</label>
+    <label id="a997688e-f534-46d9-a1ed-5dc4a438fdec" name="Your Ref" labelType="UI" group="Wizard-General">_Your ref</label>
+    <label id="ab7b9c74-926a-407c-9b00-853a023d330f" name="Subject" labelType="UI" group="Wizard-General">S_ubject</label>
+    <label id="cd2018fd-b5fc-4571-8afd-1ae761c44bd6" name="CC" labelType="UI" group="Wizard-General">_CC</label>
+    <label id="e538bdcf-737f-4f6f-823b-32eff8c13c7b" name="Enclosures" labelType="UI" group="Wizard-Letter">CC &amp; _Enclosures</label>
+    <label id="ff6f0933-0e01-46c6-aaa4-6a495563fa57" name="Delivery Method" labelType="UI" group="Wizard-General">Deli_very</label>
+    <label id="3ef1f134-1bc7-440d-85cc-fcade2dc0c3e" name="Options" labelType="UI" group="Wizard-Letter">_Options</label>
+    <label id="25cf7db0-98b5-4359-9772-3a59619c16f5" name="From" labelType="UI" group="Wizard-General">_From</label>
+    <label id="e2d38fa4-1132-4328-bac9-b2f2d69af9fa" name="To" labelType="UI" group="Wizard-General">_To</label>
+    <label id="e70a813b-e6fc-491a-bf5c-3e0b05226405" name="Number of Pages" labelType="UI" group="Wizard-Fax">_Pages</label>
+    <label id="dc88c6ff-8e2b-42bc-9bff-db5876ace35f" name="Document Title" labelType="UI" group="Wizard-General">Document _title</label>
+    <label id="79bd0993-f1e5-4198-8723-f4f5fcab28e4" name="Internal Copy" labelType="UI" group="Print Profiles">_Internal copy</label>
+    <label id="20316ee6-b48a-49b8-9003-864dbde19a02" name="Client Copy" labelType="UI" group="Print Profiles">_Client copy</label>
+    <label id="6613e7aa-5ac2-4aaa-afa4-9753db9a8b4d" name="Client" labelType="UI" group="Wizard-General">_Client</label>
+    <label id="a7d7e0f3-3d21-4a11-a000-4b78967bfb99" name="Matter" labelType="UI" group="Wizard-General">_Matter</label>
+    <label id="0643ea61-12a7-4444-aff3-18568a723a5b" name="File Number" labelType="UI" group="Wizard-General">File _number</label>
+    <label id="df759d23-bb7c-4efa-a799-fe1db60eef03" name="Without Prejudice" labelType="UI" group="Wizard-General">_Without prejudice</label>
+    <label id="1711d72d-bc16-4839-8d72-561d02bd1937" name="Confidentiality" labelType="UI" group="Wizard-General">Co_nfidentiality</label>
+    <label id="b33fc8dd-95c2-4cee-b58f-2e194aa5dac5" name="Original to Follow" labelType="UI" group="Wizard-Fax">Ori_ginal to follow</label>
+    <label id="9e440fab-9846-4210-a07f-e74d4f23c4ed" name="Agreement Title" labelType="UI" group="Wizard-Agreement">Document _title</label>
+    <label id="5fb75f05-d84c-431d-a2ca-650f6f67ad22" name="Agreement Description" labelType="UI" group="Wizard-Agreement">D_escription</label>
+    <label id="c37428a6-8e63-42e4-855c-81a5379eeecb" name="Copy to" labelType="UI" group="Wizard-General">_Copy to</label>
+    <label id="c0bab638-c2ca-41e7-9628-df415f6d4ba6" name="Engagement Type" labelType="UI" group="Wizard-LofE">L of E Type</label>
+    <label id="ecd7242f-7939-4f61-af1b-4a7c49e3778e" name="Invoice No" labelType="UI" group="Wizard-Bill">Invoice No</label>
+    <label id="9b925aff-0d4d-44b3-9b7a-9578613a5291" name="Payable By" labelType="UI" group="Wizard-Bill">Payable by (third party only)</label>
+    <label id="14d9f7ab-b0d6-4f83-bc2a-0164dd8faeef" name="EU Recipient" labelType="UI" group="Wizard-Bill">Tick if billing corporate client at European Union address</label>
+    <label id="beef07ea-9584-4397-ac9c-913b274149a0" name="Fees" labelType="UI" group="Wizard-Bill">Fees</label>
+    <label id="6f8eb9d1-cec4-4109-b7e2-4d4453cecff4" name="Other Charges" labelType="UI" group="Wizard-Bill">Other Charges</label>
+    <label id="d376d848-1b66-46a3-b28b-371c25ddf4c9" name="Disbursements" labelType="UI" group="Wizard-Bill">Disbursements</label>
+    <label id="ebf01df4-4575-481c-9b2d-5319c4fb8d1a" name="On account" labelType="UI" group="Wizard-Bill">Less funds held on account</label>
+    <label id="1dbd6551-17fe-4e97-8a60-cd7f9b979696" name="Re" labelType="UI" group="Wizard-General">Re</label>
+    <label id="4f477587-7726-46a0-80e0-0d794b8c828f" name="Disbursements Only" labelType="UI" group="Wizard-Bill">Disbursements Only</label>
+    <label id="687ce4da-02f5-4410-aeba-41248b78b07b" name="Parties" labelType="UI" group="Wizard-Agreement">Parties</label>
+    <label id="7ac0edc5-7388-4cb0-8838-b43ab02d0b66" name="Title" labelType="UI" group="Wizard-Agreement">Title</label>
+    <label id="25ff706b-1e68-4ad3-b4b4-980707b9d8dc" name="Bill" labelType="UI" group="Template Names">Bill</label>
+    <label id="c0baaa50-70c6-48f6-b421-cda3ea83bf9e" name="Bill Type" labelType="UI" group="Wizard-Bill">Bill Type</label>
+    <label id="4c0cb803-72dc-4549-ae54-5dd4c304fdd4" name="Credit Note" labelType="UI" group="Template Names">Credit Note</label>
+    <label id="d3a9f549-7505-4256-80e6-8773c6a913b9" name="New Matter Letter" labelType="UI" group="Template Names">New Matter Letter</label>
+    <label id="8e4f6618-d864-40f8-878e-649cc197c669" name="Period" labelType="UI" group="Wizard-Bill">For the period of</label>
+  </labels>
+</officeInformation>
