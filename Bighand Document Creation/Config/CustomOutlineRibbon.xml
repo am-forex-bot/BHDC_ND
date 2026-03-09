@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mso:customUI xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:outline="Iphelion.Outline.CustomUI" xmlns="http://schemas.microsoft.com/office/2009/07/customui" loadImage="LoadImage" onLoad="RibbonLoad" xmlns:mso="http://schemas.microsoft.com/office/2009/07/customui">
+  <mso:commands>
+    <mso:command idMso="FileNewDefault" onAction="FileNewOverride" />
+    <mso:command idMso="PrintPreviewAndPrint" onAction="FilePrintOverride" />
+  </mso:commands>
+  <mso:ribbon startFromScratch="false">
+    <mso:tabs>
+      <mso:tab idQ="outline:TabOutline" insertAfterMso="TabHome" label="Wallace" keytip="X">
+        <mso:group idQ="outline:GrpAuthor" insertBeforeQ="outline:GrpDesigner" label="Author">
+          <mso:dropDown id="DdAuthor" label="Author" keytip="A" image="Icon_16_AuthorList" screentip="Click dropdown to select a different author" showImage="true" getItemCount="DdAuthorGetItemCount" getItemLabel="DdAuthorGetItemLabel" sizeString="1234567812345678" onAction="DdAuthorOnAction" getSelectedItemIndex="DdAuthorGetSelectedItemIndex" />
+          <mso:dropDown id="DdOffice" label="Office" keytip="O" image="Icon_16_Office" screentip="Click dropdown to select a different office" showImage="true" getItemCount="DdOfficeGetItemCount" getItemLabel="DdOfficeGetItemLabel" sizeString="1234567812345678" onAction="DdOfficeOnAction" getSelectedItemIndex="DdOfficeGetSelectedItemIndex" />
+          <mso:dropDown id="DdLanguage" label="Language" keytip="G" image="Icon_16_Languages" screentip="Click dropdown to select a different language" showImage="true" getItemCount="DdLanguageGetItemCount" getItemLabel="DdLanguageGetItemLabel" sizeString="1234567812345678" onAction="DdLanguageOnAction" getSelectedItemIndex="DdLanguageGetSelectedItemIndex" />
+          <mso:dialogBoxLauncher>
+            <mso:button id="EditAuthors" keytip="U" screentip="Edit your author list" onAction="EditAuthorsOnAction" />
+          </mso:dialogBoxLauncher>
+        </mso:group>
+        <mso:group idQ="outline:GrpDMSToolsDMS" insertBeforeQ="outline:GrpDesigner" label="DMS">
+          <mso:box id="boxDMSOpts1" boxStyle="vertical">
+            <mso:control idMso="FileOpen" size="normal" />
+            <mso:control idMso="FileClose" size="normal" />
+            <mso:control idMso="FileSave" size="normal" />
+          </mso:box>
+          <mso:box id="boxDMSOpts12" boxStyle="vertical">
+            <mso:editBox id="QuickOpen" tag="openDmsDocument" keytip="OO" screentip="Enter a DMS document number to open" getEnabled="RunCommandEnabled" sizeString="12345678901234567" onChange="RunCommandActionOnChange" />
+            <mso:button id="EditProfile" tag="editDmsProfile" visible="false" label="Edit Profile" keytip="OP" imageMso="FileProperties" screentip="Edit the document's DMS profile" getEnabled="RunCommandEnabled" size="normal" onAction="RunCommandAction" />
+            <mso:control idMso="FileSaveAs" size="normal" />
+            <mso:button id="BtnInsertDmsIdForm" visible="false" label="Edit footer" image="Icon_64_AddDocRef" screentip="Add or remove a DMS reference" getEnabled="InsertDocIdEnabled" size="normal" onAction="BtnInsertDocIdAction" />
+          </mso:box>
+          <mso:splitButton id="BtnDocIdOptions" visible="false" getEnabled="InsertDocIdEnabled" size="large">
+            <mso:button id="BtnInsertDocId" label="Doc ID Options" image="Icon_64_AddDocRef" onAction="BtnInsertDocIdAction" />
+            <mso:menu id="MnuInsertDocId">
+              <mso:button id="BtnInsertDocId2" label="Doc ID Options" image="Icon_64_AddDocRef" onAction="BtnInsertDocIdAction" />
+              <mso:button id="BtnRemoveDocId" label="Remove Doc ID" image="Icon_64_ReferenceRemoval" onAction="BtnRemoveDocIdAction" />
+            </mso:menu>
+          </mso:splitButton>
+        </mso:group>
+        <mso:group idQ="outline:GrpTemplates" insertBeforeQ="outline:GrpDesigner" label="Templates">
+          <mso:splitButton id="spltNewDoc" size="large">
+            <mso:button id="BtnNewDoc" label="All Templates" keytip="T" image="Icon_32_OtherTemplates" screentip="Display a list of all available templates" onAction="OpenOtherAction" />
+            <mso:menu id="spltNewDocSubMenu">
+              <mso:button id="BtnLtr" tag="Letter.dotx" label="Letter" keytip="L" image="%programdata%\BigHand\BigHand Document Creation\Images\ribbon\L.png" screentip="Launch Letter" supertip="Launch Letter template" onAction="OpenTemplateAction" />
+              <mso:button id="BtnBill" tag="Bill.dotx" label="Bill" keytip="B" image="%programdata%\BigHand\BigHand Document Creation\Images\ribbon\B.png" screentip="Launch Bill" supertip="Launch Bill template" onAction="OpenTemplateAction" />
+              <mso:menuSeparator id="sep00aa" />
+              <mso:dynamicMenu id="BtnFavourites" label="Favourites" keytip="F" image="Icon_32_FavouritesStar" screentip="Show a list of your favourite templates" getContent="BtnFavouritesGetContent" />
+              <mso:menuSeparator id="sep00ab" />
+              <mso:button id="BtnTemplateFavs" label="Select Favourites" keytip="V" screentip="Select your favourite templates" onAction="SelectFavouritesOnAction" />
+            </mso:menu>
+          </mso:splitButton>
+          <mso:button id="BtnFromExistingWithContent" label="Create from existing" keytip="CE" image="Icon_32_CopyItem" screentip="Create a new document and pass in any current data" getEnabled="HasActiveDocumentCallback" size="large" onAction="OpenOtherWithCopyAndContentAction" />
+        </mso:group>
+        <mso:group idQ="outline:GrpWizard" insertBeforeQ="outline:GrpDesigner">
+          <mso:button id="ShowFormButton" label="Show Wizard" keytip="W" image="Icon_32_TemplateWizard" getEnabled="ShowWizardGetEnabled" size="large" onAction="ShowFormOnAction" />
+        </mso:group>
+        <mso:group idQ="outline:GrpMainStyles" insertBeforeQ="outline:GrpDesigner" label="Styles">
+          <mso:menu id="mnuHeadings" visible="true" label="Numbered" image="%programdata%\BigHand\BigHand Document Creation\Images\Ribbon\LegalNumbering.png" size="large">
+            <mso:button id="btnLevel1Number" tag="Level 1 Number" label="Level 1" image="%programdata%\BigHand\BigHand Document Creation/Images/Ribbon/Level1Number.png" screentip="Apply Level 1 Number style" onAction="SetStyleAction" />
+            <mso:button id="btnLevel2Number" tag="Level 2 Number" label="Level 2" image="%programdata%\BigHand\BigHand Document Creation/Images/Ribbon/Level2Number.png" screentip="Apply Level 2 Number style" onAction="SetStyleAction" />
+            <mso:button id="btnLevel3Number" tag="Level 3 Number" label="Level 3" image="%programdata%\BigHand\BigHand Document Creation/Images/Ribbon/Level3Number.png" screentip="Apply Level 3 Number style" onAction="SetStyleAction" />
+            <mso:button id="btnLevel4Number" tag="Level 4 Number" label="Level 4" image="%programdata%\BigHand\BigHand Document Creation/Images/Ribbon/Level4Number.png" screentip="Apply Level 4 Number style" onAction="SetStyleAction" />
+            <mso:button id="btnLevel5Number" tag="Level 5 Number" label="Level 5" image="%programdata%\BigHand\BigHand Document Creation/Images/Ribbon/Level5Number.png" screentip="Apply Level 5 Number style" onAction="SetStyleAction" />
+            <mso:button id="btnLevel6Number" tag="Level 6 Number" label="Level 6" image="%programdata%\BigHand\BigHand Document Creation/Images/Ribbon/Level6Number.png" screentip="Apply Level 6 Number style" onAction="SetStyleAction" />
+            <mso:button id="btnLevel7Number" tag="Level 7 Number" label="Level 7" image="%programdata%\BigHand\BigHand Document Creation/Images/Ribbon/Level7Number.png" screentip="Apply Level 7 Number style" onAction="SetStyleAction" />
+          </mso:menu>
+          <mso:splitButton id="spltBodyStyles" tag="Body" size="large">
+            <mso:button id="btnBodyText" tag="Body Text" label="Body Text" image="%programdata%\BigHand\BigHand Document Creation\Images\ribbon\BodyText.png" screentip="Apply Body Text style, or select Body Text 1 - 7 from drop-down" onAction="SetStyleAction" />
+            <mso:menu id="mnuBodyText">
+              <mso:button id="btnBodyText1" tag="Body Text 1" label="Body Text 1" onAction="SetStyleAction" />
+              <mso:button id="btnBodyText2" tag="Body Text 2" label="Body Text 2" onAction="SetStyleAction" />
+              <mso:button id="btnBodyText3" tag="Body Text 3" label="Body Text 3" onAction="SetStyleAction" />
+              <mso:button id="btnBodyText4" tag="Body Text 4" label="Body Text 4" onAction="SetStyleAction" />
+              <mso:button id="btnBodyText5" tag="Body Text 5" label="Body Text 5" onAction="SetStyleAction" />
+              <mso:button id="btnBodyText6" tag="Body Text 6" label="Body Text 6" onAction="SetStyleAction" />
+              <mso:button id="btnBodyText7" tag="Body Text 7" label="Body Text 7" onAction="SetStyleAction" />
+            </mso:menu>
+          </mso:splitButton>
+          <mso:dialogBoxLauncher>
+            <mso:button idMso="StylesPane" screentip="Open Styles Pane" />
+          </mso:dialogBoxLauncher>
+        </mso:group>
+        <mso:group idQ="outline:GrpContent" insertBeforeQ="outline:GrpDesigner" label="Content">
+          <mso:menu id="mnuInsertOther" label="Add/Remove" keytip="C" image="Icon_32_AddField" size="large">
+            <mso:button id="btnCover" tag="modExtras.AddCover" label="Insert Cover" imageMso="CoverPageInsertGallery" screentip="Insert Wallace cover page at current cursor position" getEnabled="HasActiveDocumentCallback" onAction="RunMacroAction" />
+            <mso:button idMso="CoverPageRemove" label="Remove Cover" />
+            <mso:menuSeparator id="ID103586B1E2454A66A7895380CA153897" />
+            <mso:button id="btnAddWatermark" tag="modExtras.ShowFormAddWatermark" label="Add watermark" imageMso="WatermarkGallery" screentip="Add a new watermark" onAction="RunMacroAction" />
+            <mso:button id="btnRemoveWatermark" tag="modExtras.RemoveWatermark" label="Remove watermark" imageMso="FileNew" screentip="Remove an existing watermark" onAction="RunMacroAction" />
+            <mso:menuSeparator id="ID3CD3070DC768480E91AC9EC9E78EE46D" />
+            <mso:button id="BtnInsertDate" tag="insertFormattedDate" label="Date" image="Icon_16_DateField" screentip="Insert formatted date at the cursor position" getEnabled="RunCommandEnabled" onAction="RunCommandAction" />
+            <mso:button id="BtnInsertDmsId" tag="insertDmsId" visible="false" label="Insert DMS Ref" image="Icon_16_AddDocRef" screentip="Insert DMS reference at the cursor position" getEnabled="RunCommandEnabled" onAction="RunCommandAction" />
+          </mso:menu>
+          <mso:button id="btnClauseBank" tag="clauseBank" label="Clause Bank" image="Icon_32_AddField" getEnabled="HasActiveDocumentCallback" size="large" onAction="ToggleClauseBankOnAction" />
+          <mso:button id="ShowEndnotesButton" visible="false" label="Show Endnotes" keytip="NO" image="Icon_32_Endnotes" getEnabled="HasActiveDocumentCallback" size="large" onAction="ShowEndnotesOnAction" />
+        </mso:group>
+        <mso:group id="grpTools" insertBeforeQ="outline:GrpDesigner" label="Tools">
+          <mso:button id="btnAnonymiseAuthors" tag="modExtras.ShowFormCleanseAuthors" label="Anonymise Authors" imageMso="ContactPictureMenu" getEnabled="HasActiveDocumentCallback" size="large" onAction="RunMacroAction" />
+          <mso:menu id="mnuTools" visible="false" label="Tools" image="Icon_32_AddField" size="large">
+            <mso:button id="btnAnonymiseAuthors1" tag="modExtras.ShowFormCleanseAuthors" label="Anonymise Authors" imageMso="ContactPictureMenu" getEnabled="HasActiveDocumentCallback" onAction="RunMacroAction" />
+          </mso:menu>
+          <mso:menu idMso="ReviewProtectDocumentMenu" visible="false" />
+          <mso:control idQ="mso:ProtectDocument" visible="true" label="Protect" size="large" />
+          <mso:control idQ="mso:FileSaveAsPdfOrXps" label="Save to PDF" keytip="S" screentip="Save Doc to PDF" size="large" />
+        </mso:group>
+        <mso:group idQ="outline:GrpPrint" insertBeforeQ="outline:GrpDesigner">
+          <mso:button id="BtnPrint" label="Smart Print" keytip="P" image="Icon_32_PrinterDialog" getEnabled="CustomPrintGetEnabled" size="large" onAction="BtnPrintOnAction" />
+          <mso:button id="BtnManualPrint" visible="false" label="Manual Print" keytip="CP" image="Icon_32_PrinterDialog" getEnabled="CustomPrintGetEnabled" size="large" onAction="BtnManualPrintOnAction" />
+          <mso:dialogBoxLauncher>
+            <mso:button id="BtnPrinterSettings2" label="Printer Settings" keytip="R" screentip="Amend printer tray settings" onAction="BtnPrinterSettingsOnAction" />
+          </mso:dialogBoxLauncher>
+        </mso:group>
+        <mso:group idQ="outline:DocOptions" insertBeforeQ="outline:GrpDesigner" visible="false" label="Document">
+          <mso:button id="BtnMailMerge" label="Update for mail merge" keytip="M" imageMso="MailMergeFieldFormatMenu" screentip="Prepare the document for mail merge" getEnabled="MailMergeGetEnabled" size="large" onAction="MailMergeOnAction" />
+          <mso:control idQ="mso:FileSaveAsPdfOrXps" label="Save to PDF" keytip="S" screentip="Save Doc to PDF" size="large" />
+        </mso:group>
+        <mso:group idQ="outline:GrpHelp" insertBeforeQ="outline:GrpDesigner" label=" ">
+          <mso:button id="BtnOptions" label="Options" keytip="Q" image="Icon_32_Prefs" screentip="Open Options" size="normal" onAction="ShowOptionsOnAction" />
+          <mso:button id="BtnHelp" label="Help" keytip="H" image="Icon_32_Help" screentip="Open Help" size="normal" onAction="ShowHelpOnAction" />
+          <mso:dialogBoxLauncher>
+            <mso:button id="AboutOutline" keytip="B" screentip="About Outline" onAction="AboutOutline" />
+          </mso:dialogBoxLauncher>
+        </mso:group>
+      </mso:tab>
+    </mso:tabs>
+  </mso:ribbon>
+</mso:customUI>

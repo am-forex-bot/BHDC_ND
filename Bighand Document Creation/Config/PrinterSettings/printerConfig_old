@@ -1,0 +1,1765 @@
+<?xml version="1.0" encoding="utf-8"?>
+<printerTraySettings>
+  <printers>
+    <printer id="55d9f4c0-3e29-4c24-80a5-bea3da6dadd7" name="\\WLPRINT1\Camden" driverName="Xerox WorkCentre 7835 PS">
+      <mappedTrays>
+        <tray>
+          <Id>50844d6a-4495-415a-902d-1af41cf08ea2</Id>
+          <Name>Automatically Sele~1</Name>
+          <Kind>9287</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>c990a6db-458d-4895-a53b-f792c1e36b0e</Id>
+          <Name>Automatically Select</Name>
+          <Kind>15</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>9271e8e2-bf93-40fb-b56f-475af2b6c678</Id>
+          <Name>Bond</Name>
+          <Kind>9138</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>5b666cc4-9fc2-4446-9b56-0dda84693bbd</Id>
+          <Name>Cardstock</Name>
+          <Kind>9234</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>39e054cf-b450-4b53-8809-b27da72ee0fb</Id>
+          <Name>Cardstock Reloaded</Name>
+          <Kind>9245</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>de112503-55bb-4e72-8b2e-e02d315449c2</Id>
+          <Name>Custom Type 1</Name>
+          <Kind>9141</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>d2653a76-59e7-44d8-93ff-872b9cf3d8e0</Id>
+          <Name>Custom Type 2</Name>
+          <Kind>9142</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>84c6f537-2af6-487c-969a-9fac91edebd5</Id>
+          <Name>Custom Type 3</Name>
+          <Kind>9143</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>a9363dc1-5663-4949-b8cf-67879d811ae9</Id>
+          <Name>Custom Type 4</Name>
+          <Kind>9144</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>08ff733b-8631-4aa2-917a-620327f90cad</Id>
+          <Name>Custom Type 5</Name>
+          <Kind>9145</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>9637b909-5bbb-4e33-81e1-ebbfff6333ec</Id>
+          <Name>Custom Type 6</Name>
+          <Kind>9146</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>04b3957b-018d-433e-96f0-f2bf0ba997ef</Id>
+          <Name>Custom Type 7</Name>
+          <Kind>9147</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>78325f49-9b47-49e2-b5e6-de19fd88be36</Id>
+          <Name>Envelope</Name>
+          <Kind>9149</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>d8949644-cd90-4a4c-ad34-43e54112974f</Id>
+          <Name>Glossy Cardstock</Name>
+          <Kind>9233</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>3e11eb61-4a15-4091-b971-8cc3e9771af0</Id>
+          <Name>Glossy Cardstock Reload</Name>
+          <Kind>9251</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>53866fa1-aa11-4db6-8e72-d2f09b8dad78</Id>
+          <Name>Heavyweight Cardstock</Name>
+          <Kind>9236</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>9a32207f-aa27-4dba-963e-3363f513f30b</Id>
+          <Name>Heavyweight Cardstock R</Name>
+          <Kind>9246</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>778e7460-0b93-4aad-8127-d63c05b4b65b</Id>
+          <Name>Heavyweight Glossy Ca~1</Name>
+          <Kind>9253</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>302be7dd-3e64-4794-b303-a96e0c8a1edc</Id>
+          <Name>Heavyweight Glossy Card</Name>
+          <Kind>9252</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>544fbc8a-1943-4c89-a915-adbdae8ec073</Id>
+          <Name>Hole Punched</Name>
+          <Kind>9242</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>02f1ca44-2eb0-47d5-aba1-a5154c3328cc</Id>
+          <Name>Labels</Name>
+          <Kind>9139</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>b3c1a047-2f57-46a5-886a-3779294368df</Id>
+          <Name>Letterhead</Name>
+          <Kind>9262</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>8ab74417-1d45-4356-aed3-2e5bf738458f</Id>
+          <Name>Lightweight</Name>
+          <Kind>9240</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>affdfcf1-7613-4b09-b814-c150c7536b5e</Id>
+          <Name>Lightweight Cardstock</Name>
+          <Kind>9235</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>dc8056f3-77e0-4081-8d52-d3e91ced1a98</Id>
+          <Name>Lightweight Cardstock R</Name>
+          <Kind>9231</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>7044816e-7b4b-47de-8fb5-e939b5a5bbd0</Id>
+          <Name>Lightweight Glossy Ca~1</Name>
+          <Kind>9250</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>96a19e09-bcf5-4962-a834-c83d700efb05</Id>
+          <Name>Lightweight Glossy Card</Name>
+          <Kind>9249</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>27bcc275-dcfd-4cc9-8104-f8fc47ab9c61</Id>
+          <Name>Plain</Name>
+          <Kind>9148</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>09d436d9-9450-423d-bf48-92f247a88f62</Id>
+          <Name>Plain Reloaded</Name>
+          <Kind>9244</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>7b1c8158-e211-470d-99c4-30b7b8b7b345</Id>
+          <Name>Pre-Printed</Name>
+          <Kind>9241</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>2a0da36f-79b8-45b9-9eb1-0eab1c847a11</Id>
+          <Name>Printer Default Type</Name>
+          <Kind>9257</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>b0d94cee-63d0-4a51-9a0c-bcded4c7b46a</Id>
+          <Name>Recycled</Name>
+          <Kind>9259</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>cbf85951-536c-4c5a-bb19-eb44572bd87e</Id>
+          <Name>Transparency</Name>
+          <Kind>9134</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>f43b8454-d597-4195-a4d1-ea811ae29a2f</Id>
+          <Name>Tray 1</Name>
+          <Kind>262</Kind>
+          <TrayType>Colour1</TrayType>
+        </tray>
+        <tray>
+          <Id>17dcd885-5dea-4a9e-a2cc-844a26001571</Id>
+          <Name>Tray 2</Name>
+          <Kind>261</Kind>
+          <TrayType>size2</TrayType>
+        </tray>
+        <tray>
+          <Id>eee911c2-322b-49a7-9075-19ee1ecb3557</Id>
+          <Name>Tray 3</Name>
+          <Kind>260</Kind>
+          <TrayType>headed</TrayType>
+        </tray>
+        <tray>
+          <Id>5aedd386-ae14-4820-8680-77be050ad856</Id>
+          <Name>Tray 4</Name>
+          <Kind>259</Kind>
+          <TrayType>bond</TrayType>
+        </tray>
+        <tray>
+          <Id>4e1664ac-4e97-4cff-94b7-c63e74dd3635</Id>
+          <Name>Tray 5</Name>
+          <Kind>258</Kind>
+          <TrayType>Colour2</TrayType>
+        </tray>
+        <tray>
+          <Id>d1d9c1d7-66b0-44f5-811c-406422b93882</Id>
+          <Name>Tray 6</Name>
+          <Kind>257</Kind>
+          <TrayType>plain</TrayType>
+        </tray>
+      </mappedTrays>
+    </printer>
+    <printer id="373a3d81-9a9b-4408-9a84-d65974492800" name="\\WLPRINT1\Camden - Colour" driverName="Xerox WorkCentre 7835 PS">
+      <mappedTrays>
+        <tray>
+          <Id>416b72d5-d348-4f1a-bee5-f90ee539bb81</Id>
+          <Name>Automatically Sele~1</Name>
+          <Kind>9287</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>1a9c9abd-693a-45c9-b68d-abd3e4e0807c</Id>
+          <Name>Automatically Select</Name>
+          <Kind>15</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>91c6bb65-23af-44e1-85b8-85868cad656f</Id>
+          <Name>Bond</Name>
+          <Kind>9138</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>eec93577-9c53-4ccb-9ac9-ac9ecd966631</Id>
+          <Name>Cardstock</Name>
+          <Kind>9234</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>dc0ad67b-4a59-4afa-bc1e-dbdc2b0f04d1</Id>
+          <Name>Cardstock Reloaded</Name>
+          <Kind>9245</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>8762ecf8-5125-4046-b5a9-5d0a26585d6f</Id>
+          <Name>Custom Type 1</Name>
+          <Kind>9141</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>339fc30a-b68c-45b7-a96c-d5130a4d4960</Id>
+          <Name>Custom Type 2</Name>
+          <Kind>9142</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>53428231-c2a7-4c95-afd9-9c501145eb99</Id>
+          <Name>Custom Type 3</Name>
+          <Kind>9143</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>6f2696e7-57aa-4f40-94ca-3277b587c5a6</Id>
+          <Name>Custom Type 4</Name>
+          <Kind>9144</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>99f19c30-a79d-4581-b1af-9986eb8ab690</Id>
+          <Name>Custom Type 5</Name>
+          <Kind>9145</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>85aa3cee-98fd-4543-9486-af3548d2cddf</Id>
+          <Name>Custom Type 6</Name>
+          <Kind>9146</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>d80a20a3-7b8d-4d6b-81eb-12150afc456c</Id>
+          <Name>Custom Type 7</Name>
+          <Kind>9147</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>57b93b2b-a95e-4e38-96b6-ebb1155967df</Id>
+          <Name>Envelope</Name>
+          <Kind>9149</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>ece51c40-461a-46cb-9da4-892234cd9bba</Id>
+          <Name>Glossy Cardstock</Name>
+          <Kind>9233</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>27c3ea12-533a-494c-af3b-824532cee80c</Id>
+          <Name>Glossy Cardstock Reload</Name>
+          <Kind>9251</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>21101404-9736-4f66-bffb-a945265bc1d7</Id>
+          <Name>Heavyweight Cardstock</Name>
+          <Kind>9236</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>fcad5002-cd09-48a4-9b39-24cb36817c0e</Id>
+          <Name>Heavyweight Cardstock R</Name>
+          <Kind>9246</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>2edac5a1-820d-44a9-bdc9-059e02a52c49</Id>
+          <Name>Heavyweight Glossy Ca~1</Name>
+          <Kind>9253</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>ca65daad-2a10-483d-9906-d9856894f14f</Id>
+          <Name>Heavyweight Glossy Card</Name>
+          <Kind>9252</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>74e52b78-6ace-4529-84e5-27dec458a335</Id>
+          <Name>Hole Punched</Name>
+          <Kind>9242</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>11716cd5-0b74-40f2-97dd-5f035e343857</Id>
+          <Name>Labels</Name>
+          <Kind>9139</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>4d8e61f0-f6c0-43c1-8956-27df6b365ac0</Id>
+          <Name>Letterhead</Name>
+          <Kind>9262</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>4f201216-a014-4d4b-9a05-f2a0053dca04</Id>
+          <Name>Lightweight</Name>
+          <Kind>9240</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>5cff0501-d291-49b5-aad5-b6fad638f2ce</Id>
+          <Name>Lightweight Cardstock</Name>
+          <Kind>9235</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>f5536a89-0830-41d4-afed-de0e0a8aceed</Id>
+          <Name>Lightweight Cardstock R</Name>
+          <Kind>9231</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>9a63f15f-6074-41bd-b048-c9cf400365c8</Id>
+          <Name>Lightweight Glossy Ca~1</Name>
+          <Kind>9250</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>9105b50c-20de-4a87-98c3-e00db06ab0b6</Id>
+          <Name>Lightweight Glossy Card</Name>
+          <Kind>9249</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>7be60aaf-8a37-4e2d-8223-23cf42674f98</Id>
+          <Name>Plain</Name>
+          <Kind>9148</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>d7342378-1a62-4295-98bf-963ca0d808fe</Id>
+          <Name>Plain Reloaded</Name>
+          <Kind>9244</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>dd0cfa63-69ac-48a4-bd15-60bdbdf1f99a</Id>
+          <Name>Pre-Printed</Name>
+          <Kind>9241</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>18ac15f7-03a8-4375-8ef6-7c6ea2be0e52</Id>
+          <Name>Printer Default Type</Name>
+          <Kind>9257</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>b43a95d9-536a-4843-a26d-ab105f998cc9</Id>
+          <Name>Recycled</Name>
+          <Kind>9259</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>b93d57b5-267f-42b6-a273-8a95afcb897a</Id>
+          <Name>Transparency</Name>
+          <Kind>9134</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>f6a5e7f7-0722-4b50-8e80-d577a4d00f32</Id>
+          <Name>Tray 1</Name>
+          <Kind>262</Kind>
+          <TrayType>Colour1</TrayType>
+        </tray>
+        <tray>
+          <Id>7033bc62-4967-428c-9a08-ee4f5a727072</Id>
+          <Name>Tray 2</Name>
+          <Kind>261</Kind>
+          <TrayType>size2</TrayType>
+        </tray>
+        <tray>
+          <Id>08ca4aaa-8546-4f9c-8264-6fd8d5eaf369</Id>
+          <Name>Tray 3</Name>
+          <Kind>260</Kind>
+          <TrayType>headed</TrayType>
+        </tray>
+        <tray>
+          <Id>4ec3bb99-12e3-4cef-8ac3-713cd1444b23</Id>
+          <Name>Tray 4</Name>
+          <Kind>259</Kind>
+          <TrayType>bond</TrayType>
+        </tray>
+        <tray>
+          <Id>256cbe4a-dd4f-4d4d-9453-0b39c87b6976</Id>
+          <Name>Tray 5</Name>
+          <Kind>258</Kind>
+          <TrayType>Colour2</TrayType>
+        </tray>
+        <tray>
+          <Id>82800699-7767-471f-8c8e-3869581991de</Id>
+          <Name>Tray 6</Name>
+          <Kind>257</Kind>
+          <TrayType>plain</TrayType>
+        </tray>
+      </mappedTrays>
+    </printer>
+    <printer id="a3ac7e74-b140-472d-953b-6e2096382eb4" name="\\wlprint1\Kingston" driverName="HP Universal Printing PCL 6 (v6.0.0)">
+      <mappedTrays>
+        <tray>
+          <Id>4acdd5b1-1fd2-4658-a236-57f5c9c68005</Id>
+          <Name> Automatically Select</Name>
+          <Kind>15</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>acff3995-d382-46d8-9f31-187b6ec4c7ed</Id>
+          <Name> Manual Feed</Name>
+          <Kind>258</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>5b2200e7-cf35-4abe-a538-b335291803a9</Id>
+          <Name> Printer auto select</Name>
+          <Kind>257</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>9e2fe79d-665d-49a8-9b93-221aaf176f83</Id>
+          <Name> Tray 1</Name>
+          <Kind>259</Kind>
+          <TrayType>manual</TrayType>
+        </tray>
+        <tray>
+          <Id>5ac6ac30-62c0-4ce1-a318-caaf38dde642</Id>
+          <Name> Tray 2</Name>
+          <Kind>260</Kind>
+          <TrayType>headed</TrayType>
+        </tray>
+        <tray>
+          <Id>378e8306-4eb0-410a-b3fb-d5c9a2671e25</Id>
+          <Name> Tray 3</Name>
+          <Kind>261</Kind>
+          <TrayType>bond</TrayType>
+        </tray>
+        <tray>
+          <Id>737bdde3-b163-4180-a104-f2df8d1d4974</Id>
+          <Name> Tray 4</Name>
+          <Kind>262</Kind>
+          <TrayType>plain</TrayType>
+        </tray>
+        <tray>
+          <Id>665d99ad-479d-4d65-84e6-43edfacdc5a7</Id>
+          <Name>Bond</Name>
+          <Kind>1279</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>a2a3fc6a-b19b-4060-873c-4b6e891b2846</Id>
+          <Name>Cardstock 176-220g</Name>
+          <Kind>1273</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>160b9e19-b003-4180-b851-5ad3268b7092</Id>
+          <Name>Colored</Name>
+          <Kind>1277</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>e0cd5ee2-cd3a-4a3a-b6ff-8804db8ad6e6</Id>
+          <Name>Envelope</Name>
+          <Kind>1267</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>f3b3a175-d087-44a7-93ed-db11da673e48</Id>
+          <Name>HP EcoSMART Lite</Name>
+          <Kind>1333</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>b51b270a-1dbe-4e10-afb8-ab9d76f67aa3</Id>
+          <Name>Labels</Name>
+          <Kind>1280</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>9786bd01-a78f-4396-a041-8045433fcec0</Id>
+          <Name>Letterhead</Name>
+          <Kind>1282</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>090da2e7-051e-4b2e-a292-1abe50ae6ebd</Id>
+          <Name>Light 60-74g</Name>
+          <Kind>1276</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>bfb78bac-c5c5-4a03-912b-dd31ec80f30f</Id>
+          <Name>Monochrome Laser Transp</Name>
+          <Kind>1538</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>f175aa16-488f-46f3-a126-5c7a69f6036c</Id>
+          <Name>Plain</Name>
+          <Kind>1284</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>fcfe3c0d-a20c-47ce-a42c-a9e85eb75548</Id>
+          <Name>Preprinted</Name>
+          <Kind>1283</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>59482a69-931c-4114-873c-f2c91e41daed</Id>
+          <Name>Prepunched</Name>
+          <Kind>1281</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>1805a776-4c7a-4a55-856a-d3e7340c2633</Id>
+          <Name>Recycled</Name>
+          <Kind>1278</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>96ce9221-76c9-4b2e-b5d9-973b53bb0bde</Id>
+          <Name>Retail Shelf Edge Label</Name>
+          <Kind>1570</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>8392eeb0-88be-4e14-97e5-a28e159e5bda</Id>
+          <Name>Rough</Name>
+          <Kind>1540</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>b5f38481-75a1-40f3-aaf3-83506260cdd8</Id>
+          <Name>Unspecified</Name>
+          <Kind>1285</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+      </mappedTrays>
+    </printer>
+    <printer id="766d74f3-b151-4743-8c22-4a03779af8a8" name="\\WLPRINT1\Mayfair" driverName="HP LaserJet 600 M601 M602 M603 PCL6">
+      <mappedTrays>
+        <tray>
+          <Id>be11ef51-568f-41ef-a0d4-c31823429f76</Id>
+          <Name />
+          <Kind>263</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>56de4aec-48ef-4776-a12a-7c42a7d72e21</Id>
+          <Name />
+          <Kind>264</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>76021251-c6ac-494f-a511-aaf3014d96fd</Id>
+          <Name />
+          <Kind>512</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>7bb34543-1929-4f1b-a6d7-324fdea52513</Id>
+          <Name> Automatically Select</Name>
+          <Kind>15</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>e80d6279-58af-478f-95cf-568624d24910</Id>
+          <Name> Manual Feed in Tray 1</Name>
+          <Kind>258</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>7a30099a-5a74-4ab2-8d3b-1cbbc477c620</Id>
+          <Name> Printer auto select</Name>
+          <Kind>257</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>06701b2e-bf35-4a88-b7ba-026e4990189f</Id>
+          <Name> Tray 1</Name>
+          <Kind>259</Kind>
+          <TrayType>manual</TrayType>
+        </tray>
+        <tray>
+          <Id>b0cda4d1-2443-4dee-b9d3-70856176c65d</Id>
+          <Name> Tray 2</Name>
+          <Kind>260</Kind>
+          <TrayType>headed</TrayType>
+        </tray>
+        <tray>
+          <Id>a017b9b8-d335-4347-9d7e-77fdf679adff</Id>
+          <Name> Tray 3</Name>
+          <Kind>261</Kind>
+          <TrayType>bond</TrayType>
+        </tray>
+        <tray>
+          <Id>b2d780a4-9cc8-4a32-8873-cbc212fdaf47</Id>
+          <Name> Tray 4</Name>
+          <Kind>262</Kind>
+          <TrayType>plain</TrayType>
+        </tray>
+      </mappedTrays>
+    </printer>
+    <printer id="eefcb2b9-38e4-49ea-9e86-0f6641585400" name="\\WLPRINT1\Redbridge" driverName="HP LaserJet 600 M601 M602 M603 PCL6">
+      <mappedTrays>
+        <tray>
+          <Id>6ff99e2e-cd12-470c-95b2-ae2b3791f387</Id>
+          <Name />
+          <Kind>1266</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>a852900a-4863-430b-b419-815e141b5cb1</Id>
+          <Name />
+          <Kind>1265</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>97b91622-88ef-4108-822f-54f586320375</Id>
+          <Name />
+          <Kind>1264</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>97e4832f-212f-4917-9806-bee74c39ab33</Id>
+          <Name />
+          <Kind>1263</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>a0bd2b69-59c6-45cb-88c4-2f11525c108b</Id>
+          <Name />
+          <Kind>1262</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>7083cd31-1d60-4e91-b145-adfcd463c083</Id>
+          <Name />
+          <Kind>1261</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>1f618539-c4c8-4142-9b73-ad971b46c16c</Id>
+          <Name />
+          <Kind>1260</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>749764f3-a4ce-4038-800f-0cba8335819c</Id>
+          <Name />
+          <Kind>1259</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>1787467c-bbfe-4a22-9324-378599c2c949</Id>
+          <Name />
+          <Kind>1258</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>8254fb20-67d5-4ca1-94df-345909902111</Id>
+          <Name />
+          <Kind>1257</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>b6e074e6-7537-46b7-9d64-8c6c74cefbbd</Id>
+          <Name> Automatically Select</Name>
+          <Kind>15</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>eeb25e27-a81c-4cfb-893f-2dc2146678ca</Id>
+          <Name> Manual Feed in Tray 1</Name>
+          <Kind>258</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>831f1f0d-dcf7-4ee9-a3ae-7717dde5ae7c</Id>
+          <Name> Printer auto select</Name>
+          <Kind>257</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>ac9bb7f9-df1a-4d6f-bb5e-97e85610a345</Id>
+          <Name> Tray 1</Name>
+          <Kind>259</Kind>
+          <TrayType>manual</TrayType>
+        </tray>
+        <tray>
+          <Id>9e324bc3-57fd-4e83-87ab-6c77e0baba89</Id>
+          <Name> Tray 2</Name>
+          <Kind>260</Kind>
+          <TrayType>headed</TrayType>
+        </tray>
+        <tray>
+          <Id>22c329cd-58f5-4ec8-83e5-a3a25a902dee</Id>
+          <Name> Tray 3</Name>
+          <Kind>261</Kind>
+          <TrayType>bond</TrayType>
+        </tray>
+        <tray>
+          <Id>058cb740-1119-4e98-a7b7-213c7efa973b</Id>
+          <Name> Tray 4</Name>
+          <Kind>262</Kind>
+          <TrayType>plain</TrayType>
+        </tray>
+        <tray>
+          <Id>0dc45506-1ab9-4a62-a833-728ed71e3f7b</Id>
+          <Name>Bond</Name>
+          <Kind>1275</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>965f050f-d54d-44b5-8625-c4c61327a912</Id>
+          <Name>Cardstock 176-220g</Name>
+          <Kind>1271</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>867ee4f7-e87b-4de1-969e-ce22cfd419f6</Id>
+          <Name>Colored</Name>
+          <Kind>1273</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>b6eff649-dc98-464a-a3cb-c59513e9b836</Id>
+          <Name>Envelope</Name>
+          <Kind>1267</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>e772b130-424c-4490-85c6-3d32cf8d30dc</Id>
+          <Name>HP EcoSMART Lite</Name>
+          <Kind>1269</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>7b446896-de75-4620-b369-99195095fcda</Id>
+          <Name>Labels</Name>
+          <Kind>1276</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>d3fee416-0540-478d-9029-ce3956cf5735</Id>
+          <Name>Letterhead</Name>
+          <Kind>1278</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>42416d7b-63dd-4f77-80e8-0f3aac45c958</Id>
+          <Name>Light 60-74g</Name>
+          <Kind>1272</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>ba3b3977-786a-47a6-a63f-751ded5ce20a</Id>
+          <Name>Monochrome Laser Transp</Name>
+          <Kind>1002</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>a348c408-6c60-4418-97f0-db75e7de9dd7</Id>
+          <Name>Plain</Name>
+          <Kind>1280</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>f1cf8258-dd90-4970-a338-5a9f451b609c</Id>
+          <Name>Preprinted</Name>
+          <Kind>1279</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>85d4e234-c468-421d-afe3-1d09c0add3ec</Id>
+          <Name>Prepunched</Name>
+          <Kind>1277</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>de2629a6-61dc-466a-ac6d-61780e63d0f0</Id>
+          <Name>Recycled</Name>
+          <Kind>1274</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>d37f0630-3f8c-4632-a51e-23b9d9f17d6c</Id>
+          <Name>Retail Shelf Edge Label</Name>
+          <Kind>1268</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>e6903bd0-710f-470d-b561-42c42c4b90b5</Id>
+          <Name>Rough</Name>
+          <Kind>1270</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>47fc7855-6303-4bd9-9309-d9644732a815</Id>
+          <Name>Unspecified</Name>
+          <Kind>1281</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+      </mappedTrays>
+    </printer>
+    <printer id="ad76023c-62f8-4a79-ba6b-806fad49e32c" name="\\WLPRINT2\Enfield" driverName="Xerox Color C60 PCL6">
+      <mappedTrays>
+        <tray>
+          <Id>a53d8b88-4e04-4744-9ecc-337c1519f2c0</Id>
+          <Name>Automatically Sele~1</Name>
+          <Kind>9287</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>8727d99b-9cf7-4143-845f-9c50d9a30871</Id>
+          <Name>Automatically Select</Name>
+          <Kind>15</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>e25793d8-4ffb-4e78-8757-2e82ad273513</Id>
+          <Name>Bypass Tray</Name>
+          <Kind>4</Kind>
+          <TrayType>manual</TrayType>
+        </tray>
+        <tray>
+          <Id>9c534764-ec4e-4618-b9c2-42b4a10198bc</Id>
+          <Name>Cardstock</Name>
+          <Kind>9234</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>b0a3d2a1-c7f5-454e-aa91-40d0af176e10</Id>
+          <Name>Cardstock Reloaded</Name>
+          <Kind>9245</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>b43718f5-9e44-4e9c-b85c-dfcca896cf08</Id>
+          <Name>Custom Type 1</Name>
+          <Kind>9141</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>220cab3f-b103-44ae-b7f6-85e498e8e2c0</Id>
+          <Name>Custom Type 2</Name>
+          <Kind>9142</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>280be306-e396-4e5c-baa1-19223d9eb064</Id>
+          <Name>Custom Type 3</Name>
+          <Kind>9143</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>53515ddd-aced-4110-a744-f2357d9a7651</Id>
+          <Name>Custom Type 4</Name>
+          <Kind>9144</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>39eaef07-72d7-4722-b895-c8a042d6f436</Id>
+          <Name>Custom Type 5</Name>
+          <Kind>9145</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>cc6a4212-de90-4ab2-b5dd-b49b3448c0d8</Id>
+          <Name>Envelope</Name>
+          <Kind>9149</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>24c1e2bc-20d9-4c45-9b1f-8b3da4d37dc6</Id>
+          <Name>Extra Heavyweight Car~1</Name>
+          <Kind>10154</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>e787c023-30c6-4ec9-b8e4-dff9b0c3c686</Id>
+          <Name>Extra Heavyweight Cards</Name>
+          <Kind>9243</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>5929159f-6f21-47e4-9293-02b10c0ef40a</Id>
+          <Name>Extra Heavyweight Hole </Name>
+          <Kind>9296</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>b44dcc81-470a-4542-9dd8-c9a18ff30753</Id>
+          <Name>Extra Heavyweight Label</Name>
+          <Kind>9248</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>60e6831b-d942-4362-9129-c7ec7331d6c6</Id>
+          <Name>Glossy</Name>
+          <Kind>10159</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>f45583fe-eed6-4703-a832-5a9b4a1f505a</Id>
+          <Name>Glossy Cardstock</Name>
+          <Kind>9233</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>e71e968b-6845-490b-ae24-0576b1236abe</Id>
+          <Name>Glossy Cardstock Reload</Name>
+          <Kind>9251</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>70b72432-14a9-4072-b24d-19be114b0646</Id>
+          <Name>Glossy Reloaded</Name>
+          <Kind>10160</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>15ccaf0a-b19d-48d2-9ce8-0fd218dfd65f</Id>
+          <Name>Heavyweight</Name>
+          <Kind>9230</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>076218da-d23c-45ac-ac8f-fca43e9f0846</Id>
+          <Name>Heavyweight Cardstock</Name>
+          <Kind>9236</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>b09e21ac-7729-4eb1-be32-61b7362ee294</Id>
+          <Name>Heavyweight Cardstock R</Name>
+          <Kind>9246</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>8226a42f-bed7-4b31-a791-c017d5b72f2a</Id>
+          <Name>Heavyweight Glossy Ca~1</Name>
+          <Kind>9253</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>83e20fcb-3eac-467f-9fbe-40fafa80fa6f</Id>
+          <Name>Heavyweight Glossy Card</Name>
+          <Kind>9252</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>b55b9ce7-0d45-4286-9d51-eb1d846989fe</Id>
+          <Name>Heavyweight Hole Punche</Name>
+          <Kind>10155</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>44f4e9a6-d0e7-47b5-b804-fe82b4a63c9b</Id>
+          <Name>Heavyweight Labels</Name>
+          <Kind>9247</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>9d1b482e-d7e4-4066-81bb-f39db915e083</Id>
+          <Name>Heavyweight Reloaded</Name>
+          <Kind>10161</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>927fa307-cc6f-47e5-acf3-ebb77cecb485</Id>
+          <Name>Hole Punched</Name>
+          <Kind>9242</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>d6ba4f9b-2679-49bc-b5e0-222d0c3e8cb6</Id>
+          <Name>Hole Punched Cardstock</Name>
+          <Kind>10157</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>4f232a45-429b-4c5d-84f1-d30c34d90efe</Id>
+          <Name>Labels</Name>
+          <Kind>9139</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>778d795c-e79e-4f82-8c2d-957652707c60</Id>
+          <Name>Letterhead</Name>
+          <Kind>9262</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>6263d96f-c420-48d6-8a22-9bdf97101392</Id>
+          <Name>Lightweight Hole Punche</Name>
+          <Kind>10156</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>abb5cdfa-585e-4f38-bb42-26302372882c</Id>
+          <Name>Other Type</Name>
+          <Kind>9232</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>b7d72fc8-fa21-4dfa-94d8-2ac018583005</Id>
+          <Name>Plain</Name>
+          <Kind>9148</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>4ecaa5f2-dfe9-46f4-8636-cd7aded15f4b</Id>
+          <Name>Plain Reloaded</Name>
+          <Kind>9244</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>c28c23f3-4dc8-412a-96af-ebf24a898116</Id>
+          <Name>Pre-Cut Tab</Name>
+          <Kind>9156</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>0b66b009-b109-477d-b73e-5457bc6194dc</Id>
+          <Name>Pre-Cut Tab Cardstock</Name>
+          <Kind>9288</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>224cf2e6-a113-4fa3-a99d-9d2052886c75</Id>
+          <Name>Pre-Cut Tab Extra Heavy</Name>
+          <Kind>9290</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>89777962-2440-4abe-8c27-dddaadbaa9a8</Id>
+          <Name>Pre-Cut Tab Heavyweight</Name>
+          <Kind>9289</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>64e2ac9b-4cf4-490d-8d3f-48356513ec6a</Id>
+          <Name>Pre-Printed</Name>
+          <Kind>9241</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>d40d0fac-57d0-491b-9a59-5baa90f99f5d</Id>
+          <Name>Printer Default Type</Name>
+          <Kind>9257</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>bd60e091-1d72-4584-a85e-43d054b768ae</Id>
+          <Name>Recycled</Name>
+          <Kind>9259</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>6ba670a5-0ab3-435a-9393-1da2fc3d1763</Id>
+          <Name>Transfer</Name>
+          <Kind>10158</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>00ab5c9d-ddca-407c-9fc7-ddfd038d7ccf</Id>
+          <Name>Transparency</Name>
+          <Kind>9134</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>355af2aa-fcd8-4761-a0a7-38a55bb03464</Id>
+          <Name>Tray 1</Name>
+          <Kind>262</Kind>
+          <TrayType>headed</TrayType>
+        </tray>
+        <tray>
+          <Id>255adeb5-1a0c-450b-aee4-e5a59b85d4cd</Id>
+          <Name>Tray 2</Name>
+          <Kind>261</Kind>
+          <TrayType>bond</TrayType>
+        </tray>
+        <tray>
+          <Id>767806ed-7789-46d4-8184-be54fe474bfa</Id>
+          <Name>Tray 3</Name>
+          <Kind>260</Kind>
+          <TrayType>plain</TrayType>
+        </tray>
+        <tray>
+          <Id>97c9b755-bfee-4dab-9319-2ba199f868b2</Id>
+          <Name>Tray 4</Name>
+          <Kind>259</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+      </mappedTrays>
+    </printer>
+    <printer id="e5a81050-b21a-4794-9e40-54997bc9ca37" name="\\WLPRINT2\Enfield - Colour" driverName="Xerox Color C60 PCL6">
+      <mappedTrays>
+        <tray>
+          <Id>ed55b7d2-8972-483d-8628-5519671b167c</Id>
+          <Name>Automatically Sele~1</Name>
+          <Kind>9287</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>194c2582-5c37-4302-a80b-7310b23fcbe2</Id>
+          <Name>Automatically Select</Name>
+          <Kind>15</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>d3d7103f-47e3-4ced-b780-55ff7a7c1d36</Id>
+          <Name>Bypass Tray</Name>
+          <Kind>4</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>2fa74efd-7e4d-4721-9bbc-f2860a4057b9</Id>
+          <Name>Cardstock</Name>
+          <Kind>9234</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>7d160def-740a-4e45-ab1f-3fa2129197b8</Id>
+          <Name>Cardstock Reloaded</Name>
+          <Kind>9245</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>a5430d82-b3be-4d89-ad70-75ef65540d44</Id>
+          <Name>Custom Type 1</Name>
+          <Kind>9141</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>ae93ac68-e2cc-4e96-b1df-1321ebce1b0b</Id>
+          <Name>Custom Type 2</Name>
+          <Kind>9142</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>e9c0358e-ea82-498f-88fd-658a1c99cd90</Id>
+          <Name>Custom Type 3</Name>
+          <Kind>9143</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>7b59f369-b2f3-4054-a92c-11d778fd2a5f</Id>
+          <Name>Custom Type 4</Name>
+          <Kind>9144</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>76b27857-0ea8-44b1-958d-d70552a0e687</Id>
+          <Name>Custom Type 5</Name>
+          <Kind>9145</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>341847f7-8256-4864-8108-f23c8d2d108f</Id>
+          <Name>Envelope</Name>
+          <Kind>9149</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>27544e0b-5458-49d8-9eb1-b5e9237ec49e</Id>
+          <Name>Extra Heavyweight Car~1</Name>
+          <Kind>10154</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>94bc6532-5773-481f-af51-a94d55dfb4bf</Id>
+          <Name>Extra Heavyweight Cards</Name>
+          <Kind>9243</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>7b59203f-c813-4a4d-9088-f4ebcfed603d</Id>
+          <Name>Extra Heavyweight Hole </Name>
+          <Kind>9296</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>d44043cc-4c11-4594-97a4-03d220b4c39a</Id>
+          <Name>Extra Heavyweight Label</Name>
+          <Kind>9248</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>2c64d70a-89f5-4eac-b784-79780490a7a1</Id>
+          <Name>Glossy</Name>
+          <Kind>10159</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>f0d55b3c-1656-4088-9155-62760f20907f</Id>
+          <Name>Glossy Cardstock</Name>
+          <Kind>9233</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>c827dfe1-c1ed-4763-a983-0eea4fbaba10</Id>
+          <Name>Glossy Cardstock Reload</Name>
+          <Kind>9251</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>6b2c7570-f658-4845-9211-dcbb1e66e297</Id>
+          <Name>Glossy Reloaded</Name>
+          <Kind>10160</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>aaccca49-ca5c-4572-b826-094cfb7b64ab</Id>
+          <Name>Heavyweight</Name>
+          <Kind>9230</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>aaee995d-b17a-4f48-8131-d9470824c72b</Id>
+          <Name>Heavyweight Cardstock</Name>
+          <Kind>9236</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>3b83049a-6384-42ac-97a1-cc026b8379e0</Id>
+          <Name>Heavyweight Cardstock R</Name>
+          <Kind>9246</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>62ed6974-ae27-4d8d-8811-dfd715fbf6e1</Id>
+          <Name>Heavyweight Glossy Ca~1</Name>
+          <Kind>9253</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>ebda7b4d-e1a3-425e-a08c-675cf4fe8a7e</Id>
+          <Name>Heavyweight Glossy Card</Name>
+          <Kind>9252</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>0dd5d8dd-e11c-4642-9aaa-1bc2464b834d</Id>
+          <Name>Heavyweight Hole Punche</Name>
+          <Kind>10155</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>40a7727e-6eeb-429e-a152-7d50e86b4346</Id>
+          <Name>Heavyweight Labels</Name>
+          <Kind>9247</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>08e7e7a0-9153-4fea-bf31-0cb3135094d5</Id>
+          <Name>Heavyweight Reloaded</Name>
+          <Kind>10161</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>dbfe12e0-0730-4ab2-826f-5d36f14ef430</Id>
+          <Name>Hole Punched</Name>
+          <Kind>9242</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>b2e13d20-77ad-485c-9b59-a8bf9ffa159a</Id>
+          <Name>Hole Punched Cardstock</Name>
+          <Kind>10157</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>b1d08041-d834-4499-a083-ac9009bf0d71</Id>
+          <Name>Labels</Name>
+          <Kind>9139</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>746b723d-83fd-46f1-b790-ead9ff13affc</Id>
+          <Name>Letterhead</Name>
+          <Kind>9262</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>5403689d-9343-4f1b-854d-25593431c37d</Id>
+          <Name>Lightweight Hole Punche</Name>
+          <Kind>10156</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>e0638fa6-1152-403c-a511-0d77405bf836</Id>
+          <Name>Other Type</Name>
+          <Kind>9232</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>be1a9edb-9525-43d0-9bd3-3467aaa76b6e</Id>
+          <Name>Plain</Name>
+          <Kind>9148</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>c8a7fe5d-e037-48e7-afaf-e5e275d24b57</Id>
+          <Name>Plain Reloaded</Name>
+          <Kind>9244</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>71857421-3ee2-4045-9002-4515d851695b</Id>
+          <Name>Pre-Cut Tab</Name>
+          <Kind>9156</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>daa437a5-99a8-4322-a515-7d3db135c4f5</Id>
+          <Name>Pre-Cut Tab Cardstock</Name>
+          <Kind>9288</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>7fa2cdbd-5b6f-4d02-9723-d93f02d2f4c7</Id>
+          <Name>Pre-Cut Tab Extra Heavy</Name>
+          <Kind>9290</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>fef91cd5-6987-4e37-92d8-441d354f5f19</Id>
+          <Name>Pre-Cut Tab Heavyweight</Name>
+          <Kind>9289</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>5aa7bdc1-cd0e-4711-a4b5-30b4ed52f241</Id>
+          <Name>Pre-Printed</Name>
+          <Kind>9241</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>c3e38960-b5dd-413f-b05a-e2b1121d047e</Id>
+          <Name>Printer Default Type</Name>
+          <Kind>9257</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>32da3ed9-c881-409b-8c40-1e412ddc85c8</Id>
+          <Name>Recycled</Name>
+          <Kind>9259</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>ebd8ea40-d07b-4591-a5e1-4e7230c88637</Id>
+          <Name>Transfer</Name>
+          <Kind>10158</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>ee5c2d16-cf9a-49b4-87d9-ef3c7247a8df</Id>
+          <Name>Transparency</Name>
+          <Kind>9134</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>fc0e6db7-2bb6-4e10-8806-bc82274e0ac6</Id>
+          <Name>Tray 1</Name>
+          <Kind>262</Kind>
+          <TrayType>headed</TrayType>
+        </tray>
+        <tray>
+          <Id>d551356b-ffce-4a59-8d1f-0f53a7ef419a</Id>
+          <Name>Tray 2</Name>
+          <Kind>261</Kind>
+          <TrayType>bond</TrayType>
+        </tray>
+        <tray>
+          <Id>dfa84bc7-1c3f-4f29-9b34-cf690f7467a2</Id>
+          <Name>Tray 3</Name>
+          <Kind>260</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>d7cd5b15-5c8b-4816-af46-f6348ac6a005</Id>
+          <Name>Tray 4</Name>
+          <Kind>259</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+      </mappedTrays>
+    </printer>
+    <printer id="04da59cc-079f-4962-ae2a-895dba6aaad9" name="\\WLPRINT2\Haringey" driverName="Xerox Color C60 PCL6">
+      <mappedTrays>
+        <tray>
+          <Id>c4ddf25d-84ca-4f4b-9342-a415bae4cf28</Id>
+          <Name>Automatically Sele~1</Name>
+          <Kind>9287</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>65a8a6ee-3556-4425-9d22-ff0d91f85ade</Id>
+          <Name>Automatically Select</Name>
+          <Kind>15</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>61521d7c-af73-41c6-ac30-26173bcceadc</Id>
+          <Name>Bypass Tray</Name>
+          <Kind>4</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>911a6063-e1b2-4b5a-a413-b9b7dab237d9</Id>
+          <Name>Cardstock</Name>
+          <Kind>9234</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>507f7296-962a-44ba-9ef1-712944c4bc5f</Id>
+          <Name>Cardstock Reloaded</Name>
+          <Kind>9245</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>afabd8d0-90f2-4392-b5ab-0136e5d97da7</Id>
+          <Name>Custom Type 1</Name>
+          <Kind>9141</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>ebaf2b94-c890-483b-af8b-31824f4fd4f6</Id>
+          <Name>Custom Type 2</Name>
+          <Kind>9142</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>0b1601ca-d4ac-4d6a-bcdd-a719316d7362</Id>
+          <Name>Custom Type 3</Name>
+          <Kind>9143</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>19486d74-2f49-4cb2-adc7-ae9e772f797c</Id>
+          <Name>Custom Type 4</Name>
+          <Kind>9144</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>c8772860-8959-4014-bd76-964ef15fdcf8</Id>
+          <Name>Custom Type 5</Name>
+          <Kind>9145</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>3a4ec6dc-4c4d-4d05-b231-7137f05a0a94</Id>
+          <Name>Envelope</Name>
+          <Kind>9149</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>8fede6d7-4815-4142-82f6-5e15e0908cd0</Id>
+          <Name>Extra Heavyweight Car~1</Name>
+          <Kind>10154</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>cfaa384d-9270-4c8e-b9f4-963832d6f063</Id>
+          <Name>Extra Heavyweight Cards</Name>
+          <Kind>9243</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>11cff312-87d3-4db7-87ac-e45e8a7dcda6</Id>
+          <Name>Extra Heavyweight Hole </Name>
+          <Kind>9296</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>99c5b0fe-a379-4bd3-a9d5-3732624d7874</Id>
+          <Name>Extra Heavyweight Label</Name>
+          <Kind>9248</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>0e31eece-d22d-4277-a219-b8bbbb683e29</Id>
+          <Name>Glossy</Name>
+          <Kind>10159</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>a21876fe-7dc3-45be-b7ce-39c937f2ddd0</Id>
+          <Name>Glossy Cardstock</Name>
+          <Kind>9233</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>ac0e529b-166d-40f8-820d-8d4a58e6ee8e</Id>
+          <Name>Glossy Cardstock Reload</Name>
+          <Kind>9251</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>8cc4a2f7-8983-4fb9-adbf-c146ef02a9e4</Id>
+          <Name>Glossy Reloaded</Name>
+          <Kind>10160</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>f76fe893-f2ef-4ab7-8bbf-41e2096c1d84</Id>
+          <Name>Heavyweight</Name>
+          <Kind>9230</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>3a66f3e9-fc48-42a3-8354-f13467a73fa2</Id>
+          <Name>Heavyweight Cardstock</Name>
+          <Kind>9236</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>81717c2d-30be-4276-8f73-daf6ec93e21d</Id>
+          <Name>Heavyweight Cardstock R</Name>
+          <Kind>9246</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>f134965f-71db-4308-b4e7-d49e79d8f730</Id>
+          <Name>Heavyweight Glossy Ca~1</Name>
+          <Kind>9253</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>c98295dd-4532-48f4-a84d-660d82dcc908</Id>
+          <Name>Heavyweight Glossy Card</Name>
+          <Kind>9252</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>aecd8779-4634-47af-8700-fcc7d32a54eb</Id>
+          <Name>Heavyweight Hole Punche</Name>
+          <Kind>10155</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>2211e04c-2aa1-4f6b-8a8e-12b400b8e2bc</Id>
+          <Name>Heavyweight Labels</Name>
+          <Kind>9247</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>30fca5d5-7c17-444a-b853-cd951d9b2241</Id>
+          <Name>Heavyweight Reloaded</Name>
+          <Kind>10161</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>9fe1e742-59a0-4af9-8a6d-19f4aa3d2697</Id>
+          <Name>Hole Punched</Name>
+          <Kind>9242</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>6dd73562-9b16-4f8d-aa0a-7e250ac29ae5</Id>
+          <Name>Hole Punched Cardstock</Name>
+          <Kind>10157</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>b502abcc-8fa5-410c-956d-965de1979118</Id>
+          <Name>Labels</Name>
+          <Kind>9139</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>d41d7dcb-ba87-4325-8239-697251b314dc</Id>
+          <Name>Letterhead</Name>
+          <Kind>9262</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>d6ea4946-8851-481c-a22c-13843c7bc851</Id>
+          <Name>Lightweight Hole Punche</Name>
+          <Kind>10156</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>42f1fd50-5709-4415-9a88-5d06565c1734</Id>
+          <Name>Other Type</Name>
+          <Kind>9232</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>d2dfd43f-6227-417a-bca2-3291e7533cce</Id>
+          <Name>Plain</Name>
+          <Kind>9148</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>b9e1f8e6-4690-44f3-b20a-0a1816cd8605</Id>
+          <Name>Plain Reloaded</Name>
+          <Kind>9244</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>5067c7a6-811b-4ccb-8902-34a037bfbad9</Id>
+          <Name>Pre-Cut Tab</Name>
+          <Kind>9156</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>b2c0fa95-578c-43f8-b59c-baf27ffc477e</Id>
+          <Name>Pre-Cut Tab Cardstock</Name>
+          <Kind>9288</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>a15aeb04-dd5c-4ff7-951d-9a37a2d3a0ba</Id>
+          <Name>Pre-Cut Tab Extra Heavy</Name>
+          <Kind>9290</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>0519699f-9c01-4928-895b-67ed5e1e58ee</Id>
+          <Name>Pre-Cut Tab Heavyweight</Name>
+          <Kind>9289</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>86c3f84b-f2f8-430e-8d33-73c8220beecf</Id>
+          <Name>Pre-Printed</Name>
+          <Kind>9241</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>a26739c6-bfb8-4977-91c7-fb09380e247e</Id>
+          <Name>Printer Default Type</Name>
+          <Kind>9257</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>fca1db33-f7ec-4c6e-9d55-4a5fecbee6dd</Id>
+          <Name>Recycled</Name>
+          <Kind>9259</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>5351f757-49d5-49b4-9c9d-f933d5fbde7b</Id>
+          <Name>Transfer</Name>
+          <Kind>10158</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>7fee3c63-28cc-4474-a0c5-4f002c1c46ed</Id>
+          <Name>Transparency</Name>
+          <Kind>9134</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+        <tray>
+          <Id>f35d6761-e5a9-42f1-b1e9-5c6ca35ee627</Id>
+          <Name>Tray 1</Name>
+          <Kind>262</Kind>
+          <TrayType>headed</TrayType>
+        </tray>
+        <tray>
+          <Id>71e6be52-5371-470f-998a-9017f7fe78f1</Id>
+          <Name>Tray 2</Name>
+          <Kind>261</Kind>
+          <TrayType>Colour1</TrayType>
+        </tray>
+        <tray>
+          <Id>441096a6-1495-44d8-b7ee-f46005cad7a0</Id>
+          <Name>Tray 3</Name>
+          <Kind>260</Kind>
+          <TrayType>plain</TrayType>
+        </tray>
+        <tray>
+          <Id>57b85172-f1c4-4bec-9bf9-05d12242630d</Id>
+          <Name>Tray 4</Name>
+          <Kind>259</Kind>
+          <TrayType>unknown</TrayType>
+        </tray>
+      </mappedTrays>
+    </printer>
+  </printers>
+</printerTraySettings>
