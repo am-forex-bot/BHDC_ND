@@ -22010,3 +22010,99 @@ AppDomainName : Iphelion.Outline.WordAddin.vsto|vstolocal
 ThreadIdentity : 
 WindowsIdentity : WALLACE\andrew.meston
 
+2026-03-10 11:51:30.859	HandlingInstanceID: 58f22250-adab-4dea-8111-6ab40bb85d39
+An exception of type 'System.Runtime.InteropServices.COMException' occurred and was caught.
+-------------------------------------------------------------------------------------------
+2026-03-10 11:51:30.842
+Type : System.Runtime.InteropServices.COMException, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+Message : Object has been deleted.
+Source : Microsoft Word
+Help link : wdmain11.chm#25305
+ErrorCode : -2146822463
+Data : System.Collections.ListDictionaryInternal
+TargetSite : Microsoft.Office.Interop.Word.Range get_Range()
+HResult : -2146822463
+Stack Trace :    at Microsoft.Office.Interop.Word.ContentControl.get_Range()
+   at Iphelion.Outline.Word.Commands.RemoveRegionWhiteSpaceCommand.ClearControllsBegining(DocumentHelper helper, ContentControl control, String[]& items, Int32& itemCount, Int32& repeatsAtCount)
+
+Additional Info:
+
+MachineName : WL-L-244
+TimeStamp : 2026-03-10 11:51:30.000
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : Iphelion.Outline.WordAddin.vsto|vstolocal
+ThreadIdentity : 
+WindowsIdentity : WALLACE\andrew.meston
+
+2026-03-10 12:38:34.168	HandlingInstanceID: 2de0f3cd-916c-470e-b97b-d5d24e9f7ad2
+An exception of type 'System.Runtime.InteropServices.COMException' occurred and was caught.
+-------------------------------------------------------------------------------------------
+2026-03-10 12:38:33.394
+Type : System.Runtime.InteropServices.COMException, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+Message : Object has been deleted.
+Source : Microsoft Word
+Help link : wdmain11.chm#25305
+ErrorCode : -2146822463
+Data : System.Collections.ListDictionaryInternal
+TargetSite : Microsoft.Office.Interop.Word.Range get_Range()
+HResult : -2146822463
+Stack Trace :    at Microsoft.Office.Interop.Word.ContentControl.get_Range()
+   at Iphelion.Outline.Word.Commands.RemoveRegionWhiteSpaceCommand.ClearControllsBegining(DocumentHelper helper, ContentControl control, String[]& items, Int32& itemCount, Int32& repeatsAtCount)
+
+Additional Info:
+
+MachineName : WL-L-244
+TimeStamp : 2026-03-10 12:38:34.000
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : Iphelion.Outline.WordAddin.vsto|vstolocal
+ThreadIdentity : 
+WindowsIdentity : WALLACE\andrew.meston
+
+2026-03-10 13:59:29.481	HandlingInstanceID: 21a532a6-8330-4cb1-b752-ce3645340e72
+An exception of type 'System.Runtime.InteropServices.COMException' occurred and was caught.
+-------------------------------------------------------------------------------------------
+2026-03-10 13:59:29.471
+Type : System.Runtime.InteropServices.COMException, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+Message : Object has been deleted.
+Source : Microsoft Word
+Help link : wdmain11.chm#25305
+ErrorCode : -2146822463
+Data : System.Collections.ListDictionaryInternal
+TargetSite : Microsoft.Office.Interop.Word.Range get_Range()
+HResult : -2146822463
+Stack Trace :    at Microsoft.Office.Interop.Word.ContentControl.get_Range()
+   at Iphelion.Outline.Word.Commands.RemoveRegionWhiteSpaceCommand.ClearControllsBegining(DocumentHelper helper, ContentControl control, String[]& items, Int32& itemCount, Int32& repeatsAtCount)
+
+Additional Info:
+
+MachineName : WL-L-244
+TimeStamp : 2026-03-10 13:59:29.000
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : Iphelion.Outline.WordAddin.vsto|vstolocal
+ThreadIdentity : 
+WindowsIdentity : WALLACE\andrew.meston
+
+2026-03-10 14:03:10.549	HandlingInstanceID: 3e0b09e0-1bac-4973-b9b4-bda25a40ad36
+An exception of type 'System.Runtime.InteropServices.COMException' occurred and was caught.
+-------------------------------------------------------------------------------------------
+2026-03-10 14:03:10.548
+Type : System.Runtime.InteropServices.COMException, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+Message : Object has been deleted.
+Source : Microsoft Word
+Help link : wdmain11.chm#25305
+ErrorCode : -2146822463
+Data : System.Collections.ListDictionaryInternal
+TargetSite : Microsoft.Office.Interop.Word.Range get_Range()
+HResult : -2146822463
+Stack Trace :    at Microsoft.Office.Interop.Word.ContentControl.get_Range()
+   at Iphelion.Outline.Word.Commands.RemoveRegionWhiteSpaceCommand.ClearControllsBegining(DocumentHelper helper, ContentControl control, String[]& items, Int32& itemCount, Int32& repeatsAtCount)
+
+Additional Info:
+
+MachineName : WL-L-244
+TimeStamp : 2026-03-10 14:03:10.000
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : Iphelion.Outline.WordAddin.vsto|vstolocal
+ThreadIdentity : 
+WindowsIdentity : WALLACE\andrew.meston
+
