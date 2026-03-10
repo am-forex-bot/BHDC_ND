@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<docIdSettings>
+  <docIdFormat value="{DocNumber:$VAL$.}{DocVersion}" />
+  <fields>
+    <field name="DocNumber" fieldId="4391e415-b6c6-4380-b620-00144a66365b" />
+    <field name="DocVersion" fieldId="014ff85a-b1de-4839-8ed8-7d8d79cdd820" />
+    <field name="DocIdFormat" fieldId="cae65a0c-9dba-4e06-868e-6fc5fd082911" />
+  </fields>
+</docIdSettings>
