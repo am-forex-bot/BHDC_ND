@@ -25,9 +25,9 @@
             <mso:editBox id="QuickOpen" tag="openDmsDocument" keytip="OO" screentip="Enter a DMS document number to open" getEnabled="RunCommandEnabled" sizeString="12345678901234567" onChange="RunCommandActionOnChange" />
             <mso:button id="EditProfile" tag="editDmsProfile" visible="false" label="Edit Profile" keytip="OP" imageMso="FileProperties" screentip="Edit the document's DMS profile" getEnabled="RunCommandEnabled" size="normal" onAction="RunCommandAction" />
             <mso:control idMso="FileSaveAs" size="normal" />
-            <mso:button id="BtnInsertDmsIdForm" visible="false" label="Edit footer" image="Icon_64_AddDocRef" screentip="Add or remove a DMS reference" getEnabled="InsertDocIdEnabled" size="normal" onAction="BtnInsertDocIdAction" />
+            <mso:button id="BtnInsertDmsIdForm" visible="true" label="Edit footer" image="Icon_64_AddDocRef" screentip="Add or remove a DMS reference" getEnabled="InsertDocIdEnabled" size="normal" onAction="BtnInsertDocIdAction" />
           </mso:box>
-          <mso:splitButton id="BtnDocIdOptions" visible="false" getEnabled="InsertDocIdEnabled" size="large">
+          <mso:splitButton id="BtnDocIdOptions" visible="true" getEnabled="InsertDocIdEnabled" size="large">
             <mso:button id="BtnInsertDocId" label="Doc ID Options" image="Icon_64_AddDocRef" onAction="BtnInsertDocIdAction" />
             <mso:menu id="MnuInsertDocId">
               <mso:button id="BtnInsertDocId2" label="Doc ID Options" image="Icon_64_AddDocRef" onAction="BtnInsertDocIdAction" />
@@ -87,7 +87,7 @@
             <mso:button id="btnRemoveWatermark" tag="modExtras.RemoveWatermark" label="Remove watermark" imageMso="FileNew" screentip="Remove an existing watermark" onAction="RunMacroAction" />
             <mso:menuSeparator id="ID3CD3070DC768480E91AC9EC9E78EE46D" />
             <mso:button id="BtnInsertDate" tag="insertFormattedDate" label="Date" image="Icon_16_DateField" screentip="Insert formatted date at the cursor position" getEnabled="RunCommandEnabled" onAction="RunCommandAction" />
-            <mso:button id="BtnInsertDmsId" tag="insertDmsId" visible="false" label="Insert DMS Ref" image="Icon_16_AddDocRef" screentip="Insert DMS reference at the cursor position" getEnabled="RunCommandEnabled" onAction="RunCommandAction" />
+            <mso:button id="BtnInsertDmsId" tag="insertDmsId" visible="true" label="Insert DMS Ref" image="Icon_16_AddDocRef" screentip="Insert DMS reference at the cursor position" getEnabled="RunCommandEnabled" onAction="RunCommandAction" />
           </mso:menu>
           <mso:button id="btnClauseBank" tag="clauseBank" label="Clause Bank" image="Icon_32_AddField" getEnabled="HasActiveDocumentCallback" size="large" onAction="ToggleClauseBankOnAction" />
           <mso:button id="ShowEndnotesButton" visible="false" label="Show Endnotes" keytip="NO" image="Icon_32_Endnotes" getEnabled="HasActiveDocumentCallback" size="large" onAction="ShowEndnotesOnAction" />
