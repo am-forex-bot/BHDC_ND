@@ -26,8 +26,8 @@
             <mso:button id="EditProfile" tag="editDmsProfile" visible="false" label="Edit Profile" keytip="OP" imageMso="FileProperties" screentip="Edit the document's DMS profile" getEnabled="RunCommandEnabled" size="normal" onAction="RunCommandAction" />
             <mso:control idMso="FileSaveAs" size="normal" />
             <mso:button id="BtnInsertDmsIdForm" visible="false" label="Edit footer" image="Icon_64_AddDocRef" screentip="Add or remove a DMS reference" getEnabled="InsertDocIdEnabled" size="normal" onAction="BtnInsertDocIdAction" />
-            <mso:button id="BtnInsertNDRef" tag="modInsertDocId.InsertNDDocId" label="Insert ND Ref" keytip="ND" imageMso="NumberInsert" screentip="Insert NetDocuments reference into footer (reads from title bar)" getEnabled="HasActiveDocumentCallback" size="normal" onAction="RunMacroAction" />
-            <mso:button id="BtnInsertNDDocNum" tag="modInsertDocId.InsertNDDocNum" label="Insert ND Doc No" keytip="DN" imageMso="NumberInsert" screentip="Insert NetDocuments document number at cursor position (reads from title bar)" getEnabled="HasActiveDocumentCallback" size="normal" onAction="RunMacroAction" />
+            <mso:button id="BtnInsertNDRef" label="Insert ND Ref" keytip="ND" imageMso="NumberInsert" screentip="Insert NetDocuments reference into footer" getEnabled="InsertDocIdEnabled" size="normal" onAction="BtnInsertDocIdAction" />
+            <mso:button id="BtnInsertNDDocNum" tag="insertDmsId" label="Insert ND Doc No" keytip="DN" imageMso="NumberInsert" screentip="Insert NetDocuments document number at cursor position" getEnabled="RunCommandEnabled" size="normal" onAction="RunCommandAction" />
           </mso:box>
           <mso:splitButton id="BtnDocIdOptions" visible="false" getEnabled="InsertDocIdEnabled" size="large">
             <mso:button id="BtnInsertDocId" label="Doc ID Options" image="Icon_64_AddDocRef" onAction="BtnInsertDocIdAction" />
