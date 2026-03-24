@@ -39,7 +39,7 @@ Private Function GetNDDocIdFromTitleBar() As String
 End Function
 
 Private Sub InsertOrReplaceInFooter(ftr As HeaderFooter, docId As String)
-    ' Inserts or replaces an ND ref in the given footer, left-aligned
+    ' Inserts or replaces an ND ref in the given footer, right-aligned, 8pt
 
     Dim ftrRange As Range
     Set ftrRange = ftr.Range
@@ -63,8 +63,9 @@ Private Sub InsertOrReplaceInFooter(ftr As HeaderFooter, docId As String)
         insertRange.InsertAfter vbCrLf & docId
     End If
 
-    ' Left-align the footer content
-    ftr.Range.ParagraphFormat.Alignment = wdAlignParagraphLeft
+    ' Right-align and set consistent font size (8pt) for the footer
+    ftr.Range.ParagraphFormat.Alignment = wdAlignParagraphRight
+    ftr.Range.Font.Size = 8
 End Sub
 
 Public Sub InsertNDDocIdAllPages()
