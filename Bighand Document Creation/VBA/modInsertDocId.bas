@@ -80,7 +80,7 @@ Public Sub InsertNDDocId()
         findObj.Replacement.ClearFormatting
         findObj.Text = ""
         findObj.MatchWildcards = True
-        findObj.Text = "[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}"
+        findObj.Text = "[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}[.\0-9]{0,}"
         findObj.Replacement.Text = docId
         findObj.Execute Replace:=wdReplaceAll
     Else
