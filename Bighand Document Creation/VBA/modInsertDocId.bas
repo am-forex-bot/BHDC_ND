@@ -51,15 +51,10 @@ Private Sub InsertOrReplaceInFooter(ftr As HeaderFooter, docId As String)
     regex.Pattern = "[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}(\.\d+)?"
 
     If regex.Test(ftrRange.Text) Then
-        ' Replace existing ND ref in footer
-        Dim findObj As Find
-        Set findObj = ftrRange.Find
-        findObj.ClearFormatting
-        findObj.Replacement.ClearFormatting
-        findObj.MatchWildcards = True
-        findObj.Text = "[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}[.\0-9]{0,}"
-        findObj.Replacement.Text = docId
-        findObj.Execute Replace:=wdReplaceAll
+        ' Replace existing ND ref in footer using VBScript.RegExp
+        Dim newText As String
+        newText = regex.Replace(ftrRange.Text, docId)
+        ftrRange.Text = newText
     Else
         ' Append to footer
         Dim insertRange As Range
