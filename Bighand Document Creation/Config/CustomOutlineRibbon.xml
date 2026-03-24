@@ -26,7 +26,14 @@
             <mso:button id="EditProfile" tag="editDmsProfile" visible="false" label="Edit Profile" keytip="OP" imageMso="FileProperties" screentip="Edit the document's DMS profile" getEnabled="RunCommandEnabled" size="normal" onAction="RunCommandAction" />
             <mso:control idMso="FileSaveAs" size="normal" />
             <mso:button id="BtnInsertDmsIdForm" visible="false" label="Edit footer" image="Icon_64_AddDocRef" screentip="Add or remove a DMS reference" getEnabled="InsertDocIdEnabled" size="normal" onAction="BtnInsertDocIdAction" />
-            <mso:button id="BtnInsertDocNum" tag="modInsertDocId.InsertNDDocId" label="Insert Doc Number" keytip="DN" imageMso="NumberInsert" screentip="Insert NetDocuments document number into the footer" getEnabled="HasActiveDocumentCallback" size="normal" onAction="RunMacroAction" />
+            <mso:splitButton id="spltInsertFooter" size="normal" getEnabled="HasActiveDocumentCallback">
+              <mso:button id="BtnInsertDocNumAll" tag="modInsertDocId.InsertNDDocIdAllPages" label="Footer (All Pages)" keytip="DN" imageMso="NumberInsert" screentip="Insert NetDocuments reference into footer on all pages" onAction="RunMacroAction" />
+              <mso:menu id="mnuInsertFooter">
+                <mso:button id="BtnInsertDocNumAll2" tag="modInsertDocId.InsertNDDocIdAllPages" label="All Pages" imageMso="NumberInsert" screentip="Insert ND reference into footer on all pages" onAction="RunMacroAction" />
+                <mso:button id="BtnInsertDocNumFirst" tag="modInsertDocId.InsertNDDocIdFirstOnly" label="First Page Only" imageMso="NumberInsert" screentip="Insert ND reference into first page footer only" onAction="RunMacroAction" />
+                <mso:button id="BtnInsertDocNumNotFirst" tag="modInsertDocId.InsertNDDocIdAllButFirst" label="All Except First" imageMso="NumberInsert" screentip="Insert ND reference into footer on all pages except the first" onAction="RunMacroAction" />
+              </mso:menu>
+            </mso:splitButton>
             <mso:button id="BtnInsertNDRef" tag="modInsertDocId.InsertNDDocNum" label="Insert ND Ref" keytip="ND" imageMso="NumberInsert" screentip="Insert NetDocuments reference at the cursor position" getEnabled="HasActiveDocumentCallback" size="normal" onAction="RunMacroAction" />
           </mso:box>
           <mso:splitButton id="BtnDocIdOptions" visible="false" getEnabled="InsertDocIdEnabled" size="large">
