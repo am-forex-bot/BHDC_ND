@@ -72,8 +72,9 @@ Private Sub InsertOrReplaceInFooter(ftr As HeaderFooter, docId As String)
     Dim para As Paragraph
     For Each para In ftr.Range.Paragraphs
         If ndRegex.Test(para.Range.Text) Or imRegex.Test(para.Range.Text) Then
-            ' Found it - replace the entire paragraph text with the new ND doc ID
-            para.Range.Text = docId & vbCr
+            ' Found it - replace the paragraph text with the new ND doc ID
+            ' Don't append vbCr as the paragraph range already includes its paragraph mark
+            para.Range.Text = docId
             para.Range.Font.Size = 8
             para.Range.Font.Color = RGB(128, 128, 128)
             para.Range.ParagraphFormat.Alignment = wdAlignParagraphRight
@@ -266,7 +267,7 @@ Public Sub AutoOpen()
     Dim para As Paragraph
     For Each para In sec.Footers(wdHeaderFooterPrimary).Range.Paragraphs
         If imRegex.Test(para.Range.Text) Then
-            para.Range.Text = docId & vbCr
+            para.Range.Text = docId
             para.Range.Font.Size = 8
             para.Range.Font.Color = RGB(128, 128, 128)
             para.Range.ParagraphFormat.Alignment = wdAlignParagraphRight
@@ -279,7 +280,7 @@ Public Sub AutoOpen()
     If sec.PageSetup.DifferentFirstPageHeaderFooter Then
         For Each para In sec.Footers(wdHeaderFooterFirstPage).Range.Paragraphs
             If imRegex.Test(para.Range.Text) Then
-                para.Range.Text = docId & vbCr
+                para.Range.Text = docId
                 para.Range.Font.Size = 8
                 para.Range.Font.Color = RGB(128, 128, 128)
                 para.Range.ParagraphFormat.Alignment = wdAlignParagraphRight
