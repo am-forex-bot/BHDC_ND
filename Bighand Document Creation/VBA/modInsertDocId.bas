@@ -168,7 +168,7 @@ Reschedule:
     ScheduleDocCheck
 End Sub
 
-Private Sub MigrateIManageFooter()
+Public Sub MigrateIManageFooter()
     ' If the current document is open via ndOffice (ND ref in title bar),
     ' scans all footers for iManage doc numbers and replaces them.
 
