@@ -4,14 +4,17 @@ Option Explicit
 ' =============================================================================
 ' modInsertDocId - NetDocuments Document ID functions
 ' =============================================================================
-' AutoOpen                    - Auto-replace iManage refs with ND ref on open
-' InsertNDDocIdAllPages       - Insert ND ref into footer on all pages
-' InsertNDDocIdFirstOnly      - Insert ND ref into first page footer only
-' InsertNDDocIdAllButFirst    - Insert ND ref into footer on all pages except first
-' InsertNDDocNum              - Insert ND ref at cursor position
+' AutoOpen / MigrateIManageFooter - Auto-replace iManage refs with ND ref on open
+' InsertNDDocIdAllPages          - Insert ND ref (with version) into footer on all pages
+' InsertNDDocIdFirstOnly         - Insert ND ref (with version) into first page footer only
+' InsertNDDocIdAllButFirst       - Insert ND ref (with version) into footer except first
+' InsertNDDocIdAllPagesNoVer     - Insert ND ref (number only) into footer on all pages
+' InsertNDDocIdFirstOnlyNoVer    - Insert ND ref (number only) into first page footer only
+' InsertNDDocIdAllButFirstNoVer  - Insert ND ref (number only) into footer except first
+' InsertNDDocNum                 - Insert ND ref at cursor position
 ' =============================================================================
 
-Private Function GetNDDocIdFromTitleBar() As String
+Private Function GetNDDocIdFromTitleBar(Optional includeVersion As Boolean = True) As String
     ' When a document is open via ndOffice, the title bar contains the ND reference
     ' Typical format: "DocumentName - 1234-5678-9012.1 - NetDocuments"
     ' Or it may appear as: "DocumentName [1234-5678-9012] - Word"
@@ -27,13 +30,17 @@ Private Function GetNDDocIdFromTitleBar() As String
     regex.Global = False
     regex.IgnoreCase = True
 
-    ' Pattern: 4 alphanumeric chars, dash, 4, dash, 4 (optionally followed by .version)
+    ' Pattern: 4 alphanumeric chars, dash, 4, dash, 4 (optionally followed by .version or vVersion)
     regex.Pattern = "([A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4})([\.v]\d+)?"
 
     If regex.Test(titleText) Then
         Dim matches As Object
         Set matches = regex.Execute(titleText)
-        docId = matches(0).Value
+        If includeVersion Then
+            docId = matches(0).Value
+        Else
+            docId = matches(0).SubMatches(0)
+        End If
     End If
 
     GetNDDocIdFromTitleBar = docId
@@ -254,13 +261,21 @@ End Sub
 
 Public Sub AutoOpen()
     ' Runs automatically when a document is opened.
+    ' Schedules the migration check after a 2-second delay to give ndOffice
+    ' time to update the title bar with the NetDocuments reference.
+    On Error Resume Next
+    Application.OnTime When:=Now + TimeValue("00:00:02"), Name:="MigrateIManageFooter"
+End Sub
+
+Public Sub MigrateIManageFooter()
+    ' Called by AutoOpen after a short delay.
     ' If opened via ndOffice (ND ref in title bar), scans all footers for
     ' iManage doc numbers and replaces them with the NetDocuments reference.
 
     On Error GoTo ErrorHandler
 
     Dim docId As String
-    docId = GetNDDocIdFromTitleBar()
+    docId = GetNDDocIdFromTitleBar(includeVersion:=True)
 
     ' Only proceed if this document is open via NetDocuments
     If docId = "" Then Exit Sub
@@ -294,6 +309,94 @@ Public Sub AutoOpen()
 
 ErrorHandler:
     ' Silently fail - don't interrupt the user opening their document
+End Sub
+
+' === No-version variants (insert doc number only, without .1 / v1 suffix) ===
+
+Public Sub InsertNDDocIdAllPagesNoVer()
+    On Error GoTo ErrorHandler
+    Dim docId As String
+    docId = GetNDDocIdFromTitleBar(includeVersion:=False)
+    If docId = "" Then
+        MsgBox "Could not find a NetDocuments reference in the title bar." & vbCrLf & vbCrLf & _
+               "Make sure the document is saved to NetDocuments first.", _
+               vbExclamation, "Insert ND Ref"
+        Exit Sub
+    End If
+    Dim cursorPos As Range
+    Set cursorPos = Selection.Range
+    Dim sec As Section
+    Set sec = ActiveDocument.Sections(1)
+    InsertOrReplaceInFooter sec.Footers(wdHeaderFooterPrimary), docId
+    If sec.PageSetup.DifferentFirstPageHeaderFooter Then
+        InsertOrReplaceInFooter sec.Footers(wdHeaderFooterFirstPage), docId
+    End If
+    cursorPos.Select
+    MsgBox "NetDocuments reference " & docId & " inserted into footer on all pages.", _
+           vbInformation, "Insert ND Ref"
+    Exit Sub
+ErrorHandler:
+    MsgBox "An error occurred inserting the ND reference." & vbCrLf & _
+           "Error " & Err.Number & ": " & Err.Description, _
+           vbCritical, "Insert ND Ref"
+End Sub
+
+Public Sub InsertNDDocIdFirstOnlyNoVer()
+    On Error GoTo ErrorHandler
+    Dim docId As String
+    docId = GetNDDocIdFromTitleBar(includeVersion:=False)
+    If docId = "" Then
+        MsgBox "Could not find a NetDocuments reference in the title bar." & vbCrLf & vbCrLf & _
+               "Make sure the document is saved to NetDocuments first.", _
+               vbExclamation, "Insert ND Ref"
+        Exit Sub
+    End If
+    Dim cursorPos As Range
+    Set cursorPos = Selection.Range
+    Dim sec As Section
+    Set sec = ActiveDocument.Sections(1)
+    If Not sec.PageSetup.DifferentFirstPageHeaderFooter Then
+        sec.PageSetup.DifferentFirstPageHeaderFooter = True
+    End If
+    InsertOrReplaceInFooter sec.Footers(wdHeaderFooterFirstPage), docId
+    RemoveDocRefFromFooter sec.Footers(wdHeaderFooterPrimary)
+    cursorPos.Select
+    MsgBox "NetDocuments reference " & docId & " inserted into first page footer.", _
+           vbInformation, "Insert ND Ref"
+    Exit Sub
+ErrorHandler:
+    MsgBox "An error occurred inserting the ND reference." & vbCrLf & _
+           "Error " & Err.Number & ": " & Err.Description, _
+           vbCritical, "Insert ND Ref"
+End Sub
+
+Public Sub InsertNDDocIdAllButFirstNoVer()
+    On Error GoTo ErrorHandler
+    Dim docId As String
+    docId = GetNDDocIdFromTitleBar(includeVersion:=False)
+    If docId = "" Then
+        MsgBox "Could not find a NetDocuments reference in the title bar." & vbCrLf & vbCrLf & _
+               "Make sure the document is saved to NetDocuments first.", _
+               vbExclamation, "Insert ND Ref"
+        Exit Sub
+    End If
+    Dim cursorPos As Range
+    Set cursorPos = Selection.Range
+    Dim sec As Section
+    Set sec = ActiveDocument.Sections(1)
+    If Not sec.PageSetup.DifferentFirstPageHeaderFooter Then
+        sec.PageSetup.DifferentFirstPageHeaderFooter = True
+    End If
+    InsertOrReplaceInFooter sec.Footers(wdHeaderFooterPrimary), docId
+    RemoveDocRefFromFooter sec.Footers(wdHeaderFooterFirstPage)
+    cursorPos.Select
+    MsgBox "NetDocuments reference " & docId & " inserted into footer on all pages except first.", _
+           vbInformation, "Insert ND Ref"
+    Exit Sub
+ErrorHandler:
+    MsgBox "An error occurred inserting the ND reference." & vbCrLf & _
+           "Error " & Err.Number & ": " & Err.Description, _
+           vbCritical, "Insert ND Ref"
 End Sub
 
 Public Sub InsertNDDocNum()
