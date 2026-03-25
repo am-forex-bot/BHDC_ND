@@ -4,15 +4,12 @@ Option Explicit
 ' =============================================================================
 ' modInsertDocId - NetDocuments Document ID functions
 ' =============================================================================
-' AutoExec                    - Initialises app event handler on template load
-' MigrateIManageToND          - Auto-replace iManage refs with ND ref (called on doc open)
+' AutoOpen                    - Auto-replace iManage refs with ND ref on open
 ' InsertNDDocIdAllPages       - Insert ND ref into footer on all pages
 ' InsertNDDocIdFirstOnly      - Insert ND ref into first page footer only
 ' InsertNDDocIdAllButFirst    - Insert ND ref into footer on all pages except first
 ' InsertNDDocNum              - Insert ND ref at cursor position
 ' =============================================================================
-
-Private oAppEvents As clsAppEvents
 
 Private Function GetNDDocIdFromTitleBar() As String
     ' When a document is open via ndOffice, the title bar contains the ND reference
@@ -255,15 +252,8 @@ ErrorHandler:
            vbCritical, "Insert ND Ref"
 End Sub
 
-Public Sub AutoExec()
-    ' Runs when the template is loaded into Word (on startup).
-    ' Sets up the application event handler so we can detect document opens.
-    Set oAppEvents = New clsAppEvents
-    Set oAppEvents.App = Word.Application
-End Sub
-
-Public Sub MigrateIManageToND()
-    ' Called by clsAppEvents when any document is opened.
+Public Sub AutoOpen()
+    ' Runs automatically when a document is opened.
     ' If opened via ndOffice (ND ref in title bar), scans all footers for
     ' iManage doc numbers and replaces them with the NetDocuments reference.
 
