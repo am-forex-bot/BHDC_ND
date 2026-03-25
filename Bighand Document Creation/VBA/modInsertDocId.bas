@@ -27,7 +27,7 @@ Private Function GetNDDocIdFromTitleBar() As String
     regex.IgnoreCase = True
 
     ' Pattern: 4 alphanumeric chars, dash, 4, dash, 4 (optionally followed by .version)
-    regex.Pattern = "([A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4})(\.\d+)?"
+    regex.Pattern = "([A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4})([\.v]\d+)?"
 
     If regex.Test(titleText) Then
         Dim matches As Object
@@ -43,69 +43,57 @@ Private Function CreateNDRegex() As Object
     Set regex = CreateObject("VBScript.RegExp")
     regex.Global = True
     regex.IgnoreCase = True
-    regex.Pattern = "[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}(\.\d+)?"
+    ' Match ND ref: xxxx-xxxx-xxxx optionally followed by .version or vVersion
+    regex.Pattern = "[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}([\.v]\d+)?"
     Set CreateNDRegex = regex
 End Function
 
 Private Sub InsertOrReplaceInFooter(ftr As HeaderFooter, docId As String)
-    ' Inserts or replaces ONLY the ND ref in the given footer, preserving all other content
+    ' Inserts or replaces ONLY the ND ref in the given footer
+    ' Preserves all other content (logo, disclaimer, etc.)
 
     Dim regex As Object
     Set regex = CreateNDRegex()
 
-    If regex.Test(ftr.Range.Text) Then
-        ' Find the existing ND ref and replace just that text
-        Dim m As Object
-        Set m = regex.Execute(ftr.Range.Text)(0)
-        Dim replaceRange As Range
-        Set replaceRange = ftr.Range
-        replaceRange.SetRange replaceRange.Start + m.FirstIndex, _
-                              replaceRange.Start + m.FirstIndex + m.Length
-        replaceRange.Text = docId
-        replaceRange.Font.Size = 8
-        replaceRange.ParagraphFormat.Alignment = wdAlignParagraphRight
-    Else
-        ' Append ND ref on a new line at the end of footer
-        Dim insertRange As Range
-        Set insertRange = ftr.Range
-        insertRange.Collapse wdCollapseEnd
-        insertRange.InsertAfter vbCrLf & docId
-        ' Format only the newly inserted paragraph
-        insertRange.MoveStart wdCharacter, 1  ' skip past the vbCrLf
-        insertRange.MoveEnd wdParagraph, 1
-        insertRange.Font.Size = 8
-        insertRange.ParagraphFormat.Alignment = wdAlignParagraphRight
-    End If
+    ' Loop through paragraphs to find the one containing the ND ref
+    Dim para As Paragraph
+    For Each para In ftr.Range.Paragraphs
+        If regex.Test(para.Range.Text) Then
+            ' Found it - replace the entire paragraph text with the new doc ID
+            ' (the paragraph should only contain the ND ref)
+            para.Range.Text = docId & vbCr
+            para.Range.Font.Size = 8
+            para.Range.Font.Color = RGB(128, 128, 128)
+            para.Range.ParagraphFormat.Alignment = wdAlignParagraphRight
+            Exit Sub
+        End If
+    Next para
+
+    ' No existing ND ref found - append on a new paragraph at the end
+    Dim insertRange As Range
+    Set insertRange = ftr.Range
+    insertRange.Collapse wdCollapseEnd
+    insertRange.Text = vbCr & docId
+    insertRange.Font.Size = 8
+    insertRange.Font.Color = RGB(128, 128, 128)
+    insertRange.ParagraphFormat.Alignment = wdAlignParagraphRight
 End Sub
 
 Private Sub RemoveNDRefFromFooter(ftr As HeaderFooter)
-    ' Removes ONLY the ND ref from a footer, preserving all other content (logo, disclaimer, etc.)
+    ' Removes ONLY the ND ref paragraph from a footer
+    ' Preserves all other content (logo, disclaimer, etc.)
 
     Dim regex As Object
     Set regex = CreateNDRegex()
 
-    If Not regex.Test(ftr.Range.Text) Then Exit Sub
-
-    Dim m As Object
-    Set m = regex.Execute(ftr.Range.Text)(0)
-
-    Dim removeRange As Range
-    Set removeRange = ftr.Range
-    removeRange.SetRange removeRange.Start + m.FirstIndex, _
-                          removeRange.Start + m.FirstIndex + m.Length
-
-    ' Extend to include the preceding or following line break so we don't leave a blank line
-    If m.FirstIndex > 0 Then
-        ' Check for preceding line break
-        removeRange.MoveStart wdCharacter, -1
-        If Left(removeRange.Text, 1) = vbCr Or Left(removeRange.Text, 1) = Chr(13) Then
-            ' Good - we'll remove the line break too
-        Else
-            removeRange.MoveStart wdCharacter, 1  ' put it back
+    ' Loop through paragraphs to find and delete the one with the ND ref
+    Dim para As Paragraph
+    For Each para In ftr.Range.Paragraphs
+        If regex.Test(para.Range.Text) Then
+            para.Range.Delete
+            Exit Sub
         End If
-    End If
-
-    removeRange.Delete
+    Next para
 End Sub
 
 Public Sub InsertNDDocIdAllPages()
