@@ -4,19 +4,15 @@ Option Explicit
 ' =============================================================================
 ' modInsertDocId - NetDocuments Document ID functions
 ' =============================================================================
-' AutoExec                     - Starts document change monitor on template load
-' CheckActiveDocForMigration   - Polls for new documents, migrates iManage refs
-' InsertNDDocIdAllPages        - Insert ND ref (with version) into footer on all pages
-' InsertNDDocIdFirstOnly       - Insert ND ref (with version) into first page footer only
-' InsertNDDocIdAllButFirst     - Insert ND ref (with version) into footer except first
-' InsertNDDocIdAllPagesNoVer   - Insert ND ref (number only) into footer on all pages
-' InsertNDDocIdFirstOnlyNoVer  - Insert ND ref (number only) into first page footer only
-' InsertNDDocIdAllButFirstNoVer - Insert ND ref (number only) into footer except first
-' InsertNDDocNum               - Insert ND ref at cursor position
+' AutoOpen / MigrateIManageFooter - Auto-replace iManage refs with ND ref on open
+' InsertNDDocIdAllPages          - Insert ND ref (with version) into footer on all pages
+' InsertNDDocIdFirstOnly         - Insert ND ref (with version) into first page footer only
+' InsertNDDocIdAllButFirst       - Insert ND ref (with version) into footer except first
+' InsertNDDocIdAllPagesNoVer     - Insert ND ref (number only) into footer on all pages
+' InsertNDDocIdFirstOnlyNoVer    - Insert ND ref (number only) into first page footer only
+' InsertNDDocIdAllButFirstNoVer  - Insert ND ref (number only) into footer except first
+' InsertNDDocNum                 - Insert ND ref at cursor position
 ' =============================================================================
-
-' Tracks the last document we checked, so we only migrate once per document
-Private mLastCheckedDoc As String
 
 Private Function GetNDDocIdFromTitleBar(Optional includeVersion As Boolean = True) As String
     ' When a document is open via ndOffice, the title bar contains the ND reference
@@ -134,42 +130,18 @@ Private Sub RemoveDocRefFromFooter(ftr As HeaderFooter)
 End Sub
 
 ' =============================================================================
-' Auto-migration: monitors for document changes and migrates iManage refs
+' Auto-migration: replaces iManage refs when a document is opened
 ' =============================================================================
 
-Public Sub AutoExec()
-    ' Runs when the template is loaded into Word.
-    ' Starts a lightweight document change monitor that checks every 3 seconds
-    ' if the active document has changed and needs iManage-to-ND migration.
-    ' This avoids relying on AutoOpen which BigHand's own code may override.
-    mLastCheckedDoc = ""
-    ScheduleDocCheck
-End Sub
-
-Private Sub ScheduleDocCheck()
+Public Sub AutoOpen()
+    ' Runs automatically when any document is opened.
+    ' BigHand's Wallace Shared Code.dotm has no AutoOpen, so this won't conflict.
+    ' Delays 2 seconds via OnTime to give ndOffice time to update the title bar.
     On Error Resume Next
-    Application.OnTime When:=Now + TimeValue("00:00:03"), Name:="CheckActiveDocForMigration"
+    Application.OnTime When:=Now + TimeValue("00:00:02"), Name:="MigrateIManageFooter"
 End Sub
 
-Public Sub CheckActiveDocForMigration()
-    ' Called every 3 seconds by the timer. Checks if the active document
-    ' has changed and if so, attempts to migrate any iManage footer refs.
-
-    On Error GoTo Reschedule
-
-    Dim currentDoc As String
-    currentDoc = ActiveDocument.FullName
-
-    If currentDoc <> mLastCheckedDoc Then
-        mLastCheckedDoc = currentDoc
-        MigrateIManageFooter
-    End If
-
-Reschedule:
-    ScheduleDocCheck
-End Sub
-
-Private Sub MigrateIManageFooter()
+Public Sub MigrateIManageFooter()
     ' If the current document is open via ndOffice (ND ref in title bar),
     ' scans all footers for iManage doc numbers and replaces them.
 
