@@ -4,10 +4,11 @@ Option Explicit
 ' =============================================================================
 ' modInsertDocId - NetDocuments Document ID functions
 ' =============================================================================
-' InsertNDDocIdAllPages      - Insert ND ref into footer on all pages
-' InsertNDDocIdFirstOnly     - Insert ND ref into first page footer only
-' InsertNDDocIdAllButFirst   - Insert ND ref into footer on all pages except first
-' InsertNDDocNum             - Insert ND ref at cursor position
+' AutoOpen                    - Auto-replace iManage refs with ND ref on open
+' InsertNDDocIdAllPages       - Insert ND ref into footer on all pages
+' InsertNDDocIdFirstOnly      - Insert ND ref into first page footer only
+' InsertNDDocIdAllButFirst    - Insert ND ref into footer on all pages except first
+' InsertNDDocNum              - Insert ND ref at cursor position
 ' =============================================================================
 
 Private Function GetNDDocIdFromTitleBar() As String
@@ -48,19 +49,30 @@ Private Function CreateNDRegex() As Object
     Set CreateNDRegex = regex
 End Function
 
+Private Function CreateIManageRegex() As Object
+    Dim regex As Object
+    Set regex = CreateObject("VBScript.RegExp")
+    regex.Global = True
+    regex.IgnoreCase = True
+    ' Match iManage ref: 5+ digits optionally followed by v and version number (e.g. 5973487v1)
+    regex.Pattern = "\d{5,}(v\d+)?"
+    Set CreateIManageRegex = regex
+End Function
+
 Private Sub InsertOrReplaceInFooter(ftr As HeaderFooter, docId As String)
-    ' Inserts or replaces ONLY the ND ref in the given footer
+    ' Inserts or replaces an ND or iManage ref in the given footer
     ' Preserves all other content (logo, disclaimer, etc.)
 
-    Dim regex As Object
-    Set regex = CreateNDRegex()
+    Dim ndRegex As Object
+    Set ndRegex = CreateNDRegex()
+    Dim imRegex As Object
+    Set imRegex = CreateIManageRegex()
 
-    ' Loop through paragraphs to find the one containing the ND ref
+    ' Loop through paragraphs to find one containing an ND ref or iManage ref
     Dim para As Paragraph
     For Each para In ftr.Range.Paragraphs
-        If regex.Test(para.Range.Text) Then
-            ' Found it - replace the entire paragraph text with the new doc ID
-            ' (the paragraph should only contain the ND ref)
+        If ndRegex.Test(para.Range.Text) Or imRegex.Test(para.Range.Text) Then
+            ' Found it - replace the entire paragraph text with the new ND doc ID
             para.Range.Text = docId & vbCr
             para.Range.Font.Size = 8
             para.Range.Font.Color = RGB(128, 128, 128)
@@ -69,7 +81,7 @@ Private Sub InsertOrReplaceInFooter(ftr As HeaderFooter, docId As String)
         End If
     Next para
 
-    ' No existing ND ref found - append on a new paragraph at the end
+    ' No existing ref found - append on a new paragraph at the end
     Dim insertRange As Range
     Set insertRange = ftr.Range
     insertRange.Collapse wdCollapseEnd
@@ -226,6 +238,61 @@ ErrorHandler:
     MsgBox "An error occurred inserting the ND reference." & vbCrLf & _
            "Error " & Err.Number & ": " & Err.Description, _
            vbCritical, "Insert ND Ref"
+End Sub
+
+Public Sub AutoOpen()
+    ' Runs automatically when a document is opened.
+    ' If opened via ndOffice (ND ref in title bar), scans all footers for
+    ' iManage doc numbers and replaces them with the NetDocuments reference.
+
+    On Error GoTo ErrorHandler
+
+    Dim docId As String
+    docId = GetNDDocIdFromTitleBar()
+
+    ' Only proceed if this document is open via NetDocuments
+    If docId = "" Then Exit Sub
+
+    Dim imRegex As Object
+    Set imRegex = CreateIManageRegex()
+
+    Dim sec As Section
+    Set sec = ActiveDocument.Sections(1)
+
+    Dim replaced As Boolean
+    replaced = False
+
+    ' Check primary footer
+    Dim para As Paragraph
+    For Each para In sec.Footers(wdHeaderFooterPrimary).Range.Paragraphs
+        If imRegex.Test(para.Range.Text) Then
+            para.Range.Text = docId & vbCr
+            para.Range.Font.Size = 8
+            para.Range.Font.Color = RGB(128, 128, 128)
+            para.Range.ParagraphFormat.Alignment = wdAlignParagraphRight
+            replaced = True
+            Exit For
+        End If
+    Next para
+
+    ' Check first page footer if Different First Page is enabled
+    If sec.PageSetup.DifferentFirstPageHeaderFooter Then
+        For Each para In sec.Footers(wdHeaderFooterFirstPage).Range.Paragraphs
+            If imRegex.Test(para.Range.Text) Then
+                para.Range.Text = docId & vbCr
+                para.Range.Font.Size = 8
+                para.Range.Font.Color = RGB(128, 128, 128)
+                para.Range.ParagraphFormat.Alignment = wdAlignParagraphRight
+                replaced = True
+                Exit For
+            End If
+        Next para
+    End If
+
+    Exit Sub
+
+ErrorHandler:
+    ' Silently fail - don't interrupt the user opening their document
 End Sub
 
 Public Sub InsertNDDocNum()
