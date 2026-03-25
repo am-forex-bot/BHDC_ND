@@ -4,7 +4,7 @@ Option Explicit
 ' =============================================================================
 ' modInsertDocId - NetDocuments Document ID functions
 ' =============================================================================
-' AutoOpen / MigrateIManageFooter - Auto-replace iManage refs with ND ref on open
+' AutoOpen / AutoExec / PollMigration - Auto-replace iManage refs with ND ref
 ' InsertNDDocIdAllPages          - Insert ND ref (with version) into footer on all pages
 ' InsertNDDocIdFirstOnly         - Insert ND ref (with version) into first page footer only
 ' InsertNDDocIdAllButFirst       - Insert ND ref (with version) into footer except first
@@ -264,6 +264,23 @@ Public Sub AutoOpen()
     ' time to update the title bar with the NetDocuments reference.
     On Error Resume Next
     Application.OnTime When:=Now + TimeValue("00:00:02"), Name:="MigrateIManageFooter"
+End Sub
+
+Public Sub AutoExec()
+    ' Runs when Word loads this template at startup.
+    ' Kicks off a background poll that checks for iManage refs to migrate.
+    On Error Resume Next
+    Application.OnTime Now + TimeValue("00:00:05"), "PollMigration"
+End Sub
+
+Public Sub PollMigration()
+    ' Periodically checks the active document for iManage refs to replace.
+    ' Safe to call repeatedly - only replaces iManage refs, not ND refs.
+    On Error Resume Next
+    Application.ScreenUpdating = False
+    MigrateIManageFooter
+    Application.ScreenUpdating = True
+    Application.OnTime Now + TimeValue("00:00:10"), "PollMigration"
 End Sub
 
 Public Sub MigrateIManageFooter()
