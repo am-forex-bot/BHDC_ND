@@ -4,7 +4,6 @@ Option Explicit
 ' =============================================================================
 ' modInsertDocId - NetDocuments Document ID functions
 ' =============================================================================
-' AutoOpen / MigrateIManageFooter - Auto-replace iManage refs with ND ref on open
 ' InsertNDDocIdAllPages          - Insert ND ref (with version) into footer on all pages
 ' InsertNDDocIdFirstOnly         - Insert ND ref (with version) into first page footer only
 ' InsertNDDocIdAllButFirst       - Insert ND ref (with version) into footer except first
@@ -256,58 +255,6 @@ ErrorHandler:
     MsgBox "An error occurred inserting the ND reference." & vbCrLf & _
            "Error " & Err.Number & ": " & Err.Description, _
            vbCritical, "Insert ND Ref"
-End Sub
-
-Public Sub AutoOpen()
-    ' Runs automatically when a document is opened.
-    ' Schedules the migration check after a 2-second delay to give ndOffice
-    ' time to update the title bar with the NetDocuments reference.
-    On Error Resume Next
-    Application.OnTime When:=Now + TimeValue("00:00:02"), Name:="MigrateIManageFooter"
-End Sub
-
-Public Sub MigrateIManageFooter()
-    ' Called by AutoOpen after a short delay.
-    ' If opened via ndOffice (ND ref in title bar), scans all footers for
-    ' iManage doc numbers and replaces them with the NetDocuments reference.
-
-    On Error GoTo ErrorHandler
-
-    Dim docId As String
-    docId = GetNDDocIdFromTitleBar(includeVersion:=True)
-
-    ' Only proceed if this document is open via NetDocuments
-    If docId = "" Then Exit Sub
-
-    Dim imRegex As Object
-    Set imRegex = CreateIManageRegex()
-
-    Dim sec As Section
-    Set sec = ActiveDocument.Sections(1)
-
-    ' Check primary footer
-    Dim para As Paragraph
-    For Each para In sec.Footers(wdHeaderFooterPrimary).Range.Paragraphs
-        If imRegex.Test(para.Range.Text) Then
-            ReplaceParaText para, docId
-            Exit For
-        End If
-    Next para
-
-    ' Check first page footer if Different First Page is enabled
-    If sec.PageSetup.DifferentFirstPageHeaderFooter Then
-        For Each para In sec.Footers(wdHeaderFooterFirstPage).Range.Paragraphs
-            If imRegex.Test(para.Range.Text) Then
-                ReplaceParaText para, docId
-                Exit For
-            End If
-        Next para
-    End If
-
-    Exit Sub
-
-ErrorHandler:
-    ' Silently fail - don't interrupt the user opening their document
 End Sub
 
 ' === No-version variants (insert doc number only, without .1 / v1 suffix) ===
