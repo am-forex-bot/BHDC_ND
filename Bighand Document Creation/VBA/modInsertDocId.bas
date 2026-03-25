@@ -4,12 +4,15 @@ Option Explicit
 ' =============================================================================
 ' modInsertDocId - NetDocuments Document ID functions
 ' =============================================================================
-' AutoOpen                    - Auto-replace iManage refs with ND ref on open
+' AutoExec                    - Initialises app event handler on template load
+' MigrateIManageToND          - Auto-replace iManage refs with ND ref (called on doc open)
 ' InsertNDDocIdAllPages       - Insert ND ref into footer on all pages
 ' InsertNDDocIdFirstOnly      - Insert ND ref into first page footer only
 ' InsertNDDocIdAllButFirst    - Insert ND ref into footer on all pages except first
 ' InsertNDDocNum              - Insert ND ref at cursor position
 ' =============================================================================
+
+Private oAppEvents As clsAppEvents
 
 Private Function GetNDDocIdFromTitleBar() As String
     ' When a document is open via ndOffice, the title bar contains the ND reference
@@ -59,6 +62,20 @@ Private Function CreateIManageRegex() As Object
     Set CreateIManageRegex = regex
 End Function
 
+Private Sub ReplaceParaText(para As Paragraph, docId As String)
+    ' Replaces the text content of a paragraph without touching the paragraph mark
+    ' This preserves the paragraph structure and position in the footer
+    Dim rng As Range
+    Set rng = para.Range
+    ' Shrink range to exclude the trailing paragraph mark
+    rng.MoveEnd wdCharacter, -1
+    rng.Text = docId
+    ' Format the replaced text
+    rng.Font.Size = 8
+    rng.Font.Color = RGB(128, 128, 128)
+    rng.ParagraphFormat.Alignment = wdAlignParagraphRight
+End Sub
+
 Private Sub InsertOrReplaceInFooter(ftr As HeaderFooter, docId As String)
     ' Inserts or replaces an ND or iManage ref in the given footer
     ' Preserves all other content (logo, disclaimer, etc.)
@@ -72,12 +89,7 @@ Private Sub InsertOrReplaceInFooter(ftr As HeaderFooter, docId As String)
     Dim para As Paragraph
     For Each para In ftr.Range.Paragraphs
         If ndRegex.Test(para.Range.Text) Or imRegex.Test(para.Range.Text) Then
-            ' Found it - replace the paragraph text with the new ND doc ID
-            ' Don't append vbCr as the paragraph range already includes its paragraph mark
-            para.Range.Text = docId
-            para.Range.Font.Size = 8
-            para.Range.Font.Color = RGB(128, 128, 128)
-            para.Range.ParagraphFormat.Alignment = wdAlignParagraphRight
+            ReplaceParaText para, docId
             Exit Sub
         End If
     Next para
@@ -92,17 +104,19 @@ Private Sub InsertOrReplaceInFooter(ftr As HeaderFooter, docId As String)
     insertRange.ParagraphFormat.Alignment = wdAlignParagraphRight
 End Sub
 
-Private Sub RemoveNDRefFromFooter(ftr As HeaderFooter)
-    ' Removes ONLY the ND ref paragraph from a footer
+Private Sub RemoveDocRefFromFooter(ftr As HeaderFooter)
+    ' Removes an ND or iManage ref paragraph from a footer
     ' Preserves all other content (logo, disclaimer, etc.)
 
-    Dim regex As Object
-    Set regex = CreateNDRegex()
+    Dim ndRegex As Object
+    Set ndRegex = CreateNDRegex()
+    Dim imRegex As Object
+    Set imRegex = CreateIManageRegex()
 
-    ' Loop through paragraphs to find and delete the one with the ND ref
+    ' Loop through paragraphs to find and delete the one with a doc ref
     Dim para As Paragraph
     For Each para In ftr.Range.Paragraphs
-        If regex.Test(para.Range.Text) Then
+        If ndRegex.Test(para.Range.Text) Or imRegex.Test(para.Range.Text) Then
             para.Range.Delete
             Exit Sub
         End If
@@ -181,7 +195,7 @@ Public Sub InsertNDDocIdFirstOnly()
     InsertOrReplaceInFooter sec.Footers(wdHeaderFooterFirstPage), docId
 
     ' Remove ND ref from primary footer (other pages) if present
-    RemoveNDRefFromFooter sec.Footers(wdHeaderFooterPrimary)
+    RemoveDocRefFromFooter sec.Footers(wdHeaderFooterPrimary)
 
     cursorPos.Select
 
@@ -226,7 +240,7 @@ Public Sub InsertNDDocIdAllButFirst()
     InsertOrReplaceInFooter sec.Footers(wdHeaderFooterPrimary), docId
 
     ' Remove ND ref from first page footer if present
-    RemoveNDRefFromFooter sec.Footers(wdHeaderFooterFirstPage)
+    RemoveDocRefFromFooter sec.Footers(wdHeaderFooterFirstPage)
 
     cursorPos.Select
 
@@ -241,8 +255,15 @@ ErrorHandler:
            vbCritical, "Insert ND Ref"
 End Sub
 
-Public Sub AutoOpen()
-    ' Runs automatically when a document is opened.
+Public Sub AutoExec()
+    ' Runs when the template is loaded into Word (on startup).
+    ' Sets up the application event handler so we can detect document opens.
+    Set oAppEvents = New clsAppEvents
+    Set oAppEvents.App = Word.Application
+End Sub
+
+Public Sub MigrateIManageToND()
+    ' Called by clsAppEvents when any document is opened.
     ' If opened via ndOffice (ND ref in title bar), scans all footers for
     ' iManage doc numbers and replaces them with the NetDocuments reference.
 
@@ -260,18 +281,11 @@ Public Sub AutoOpen()
     Dim sec As Section
     Set sec = ActiveDocument.Sections(1)
 
-    Dim replaced As Boolean
-    replaced = False
-
     ' Check primary footer
     Dim para As Paragraph
     For Each para In sec.Footers(wdHeaderFooterPrimary).Range.Paragraphs
         If imRegex.Test(para.Range.Text) Then
-            para.Range.Text = docId
-            para.Range.Font.Size = 8
-            para.Range.Font.Color = RGB(128, 128, 128)
-            para.Range.ParagraphFormat.Alignment = wdAlignParagraphRight
-            replaced = True
+            ReplaceParaText para, docId
             Exit For
         End If
     Next para
@@ -280,11 +294,7 @@ Public Sub AutoOpen()
     If sec.PageSetup.DifferentFirstPageHeaderFooter Then
         For Each para In sec.Footers(wdHeaderFooterFirstPage).Range.Paragraphs
             If imRegex.Test(para.Range.Text) Then
-                para.Range.Text = docId
-                para.Range.Font.Size = 8
-                para.Range.Font.Color = RGB(128, 128, 128)
-                para.Range.ParagraphFormat.Alignment = wdAlignParagraphRight
-                replaced = True
+                ReplaceParaText para, docId
                 Exit For
             End If
         Next para
