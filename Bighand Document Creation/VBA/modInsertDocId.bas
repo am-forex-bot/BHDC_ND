@@ -4,7 +4,7 @@ Option Explicit
 ' =============================================================================
 ' modInsertDocId - NetDocuments Document ID functions
 ' =============================================================================
-' AutoOpen / MigrateIManageFooter - Auto-replace iManage refs with ND ref on open
+' AutoExec / CheckActiveDocForMigration - Auto-replace iManage refs with ND ref on open
 ' InsertNDDocIdAllPages          - Insert ND ref (with version) into footer on all pages
 ' InsertNDDocIdFirstOnly         - Insert ND ref (with version) into first page footer only
 ' InsertNDDocIdAllButFirst       - Insert ND ref (with version) into footer except first
@@ -130,18 +130,45 @@ Private Sub RemoveDocRefFromFooter(ftr As HeaderFooter)
 End Sub
 
 ' =============================================================================
-' Auto-migration: replaces iManage refs when a document is opened
+' Auto-migration: monitors for new documents and migrates iManage refs
+' BigHand loads templates via COM add-in, not Word's Startup mechanism,
+' so AutoOpen doesn't fire. Instead we use AutoExec + polling.
 ' =============================================================================
 
-Public Sub AutoOpen()
-    ' Runs automatically when any document is opened.
-    ' BigHand's Wallace Shared Code.dotm has no AutoOpen, so this won't conflict.
-    ' Delays 2 seconds via OnTime to give ndOffice time to update the title bar.
-    On Error Resume Next
-    Application.OnTime When:=Now + TimeValue("00:00:02"), Name:="MigrateIManageFooter"
+' Tracks the last document we checked, so we only migrate once per document
+Private mLastCheckedDoc As String
+
+Public Sub AutoExec()
+    ' Runs when the template is loaded into Word.
+    ' Starts a document change monitor that checks every 3 seconds.
+    mLastCheckedDoc = ""
+    ScheduleDocCheck
 End Sub
 
-Public Sub MigrateIManageFooter()
+Private Sub ScheduleDocCheck()
+    On Error Resume Next
+    Application.OnTime When:=Now + TimeValue("00:00:03"), Name:="CheckActiveDocForMigration"
+End Sub
+
+Public Sub CheckActiveDocForMigration()
+    ' Called every 3 seconds. If the active document has changed,
+    ' checks for iManage refs and migrates them.
+
+    On Error GoTo Reschedule
+
+    Dim currentDoc As String
+    currentDoc = ActiveDocument.FullName
+
+    If currentDoc <> mLastCheckedDoc Then
+        mLastCheckedDoc = currentDoc
+        MigrateIManageFooter
+    End If
+
+Reschedule:
+    ScheduleDocCheck
+End Sub
+
+Private Sub MigrateIManageFooter()
     ' If the current document is open via ndOffice (ND ref in title bar),
     ' scans all footers for iManage doc numbers and replaces them.
 
