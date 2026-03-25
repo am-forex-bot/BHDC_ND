@@ -38,34 +38,74 @@ Private Function GetNDDocIdFromTitleBar() As String
     GetNDDocIdFromTitleBar = docId
 End Function
 
-Private Sub InsertOrReplaceInFooter(ftr As HeaderFooter, docId As String)
-    ' Inserts or replaces an ND ref in the given footer, right-aligned, 8pt
-
-    Dim ftrRange As Range
-    Set ftrRange = ftr.Range
-
+Private Function CreateNDRegex() As Object
     Dim regex As Object
     Set regex = CreateObject("VBScript.RegExp")
     regex.Global = True
     regex.IgnoreCase = True
     regex.Pattern = "[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}(\.\d+)?"
+    Set CreateNDRegex = regex
+End Function
 
-    If regex.Test(ftrRange.Text) Then
-        ' Replace existing ND ref in footer using VBScript.RegExp
-        Dim newText As String
-        newText = regex.Replace(ftrRange.Text, docId)
-        ftrRange.Text = newText
+Private Sub InsertOrReplaceInFooter(ftr As HeaderFooter, docId As String)
+    ' Inserts or replaces ONLY the ND ref in the given footer, preserving all other content
+
+    Dim regex As Object
+    Set regex = CreateNDRegex()
+
+    If regex.Test(ftr.Range.Text) Then
+        ' Find the existing ND ref and replace just that text
+        Dim m As Object
+        Set m = regex.Execute(ftr.Range.Text)(0)
+        Dim replaceRange As Range
+        Set replaceRange = ftr.Range
+        replaceRange.SetRange replaceRange.Start + m.FirstIndex, _
+                              replaceRange.Start + m.FirstIndex + m.Length
+        replaceRange.Text = docId
+        replaceRange.Font.Size = 8
+        replaceRange.ParagraphFormat.Alignment = wdAlignParagraphRight
     Else
-        ' Append to footer
+        ' Append ND ref on a new line at the end of footer
         Dim insertRange As Range
         Set insertRange = ftr.Range
         insertRange.Collapse wdCollapseEnd
         insertRange.InsertAfter vbCrLf & docId
+        ' Format only the newly inserted paragraph
+        insertRange.MoveStart wdCharacter, 1  ' skip past the vbCrLf
+        insertRange.MoveEnd wdParagraph, 1
+        insertRange.Font.Size = 8
+        insertRange.ParagraphFormat.Alignment = wdAlignParagraphRight
+    End If
+End Sub
+
+Private Sub RemoveNDRefFromFooter(ftr As HeaderFooter)
+    ' Removes ONLY the ND ref from a footer, preserving all other content (logo, disclaimer, etc.)
+
+    Dim regex As Object
+    Set regex = CreateNDRegex()
+
+    If Not regex.Test(ftr.Range.Text) Then Exit Sub
+
+    Dim m As Object
+    Set m = regex.Execute(ftr.Range.Text)(0)
+
+    Dim removeRange As Range
+    Set removeRange = ftr.Range
+    removeRange.SetRange removeRange.Start + m.FirstIndex, _
+                          removeRange.Start + m.FirstIndex + m.Length
+
+    ' Extend to include the preceding or following line break so we don't leave a blank line
+    If m.FirstIndex > 0 Then
+        ' Check for preceding line break
+        removeRange.MoveStart wdCharacter, -1
+        If Left(removeRange.Text, 1) = vbCr Or Left(removeRange.Text, 1) = Chr(13) Then
+            ' Good - we'll remove the line break too
+        Else
+            removeRange.MoveStart wdCharacter, 1  ' put it back
+        End If
     End If
 
-    ' Right-align and set consistent font size (8pt) for the footer
-    ftr.Range.ParagraphFormat.Alignment = wdAlignParagraphRight
-    ftr.Range.Font.Size = 8
+    removeRange.Delete
 End Sub
 
 Public Sub InsertNDDocIdAllPages()
@@ -139,6 +179,9 @@ Public Sub InsertNDDocIdFirstOnly()
     ' Insert into first page footer only
     InsertOrReplaceInFooter sec.Footers(wdHeaderFooterFirstPage), docId
 
+    ' Remove ND ref from primary footer (other pages) if present
+    RemoveNDRefFromFooter sec.Footers(wdHeaderFooterPrimary)
+
     cursorPos.Select
 
     MsgBox "NetDocuments reference " & docId & " inserted into first page footer.", _
@@ -180,6 +223,9 @@ Public Sub InsertNDDocIdAllButFirst()
 
     ' Insert into primary footer only (skips first page)
     InsertOrReplaceInFooter sec.Footers(wdHeaderFooterPrimary), docId
+
+    ' Remove ND ref from first page footer if present
+    RemoveNDRefFromFooter sec.Footers(wdHeaderFooterFirstPage)
 
     cursorPos.Select
 
