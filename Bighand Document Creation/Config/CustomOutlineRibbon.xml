@@ -27,16 +27,40 @@
             <mso:control idMso="FileSaveAs" size="normal" />
             <mso:button id="BtnInsertDmsIdForm" visible="false" label="Edit footer" image="Icon_64_AddDocRef" screentip="Add or remove a DMS reference" getEnabled="InsertDocIdEnabled" size="normal" onAction="BtnInsertDocIdAction" />
             <mso:splitButton id="spltInsertFooter" size="normal" getEnabled="HasActiveDocumentCallback">
-              <mso:button id="BtnInsertDocNumAll" tag="modInsertDocId.InsertNDDocIdAllPages" label="Footer (All Pages)" keytip="DN" imageMso="NumberInsert" screentip="Insert NetDocuments reference into footer on all pages" onAction="RunMacroAction" />
+              <mso:button id="BtnInsertDocNumAll" tag="modInsertDocId.NDFooter_Ver_All_R" label="Footer (All Pages)" keytip="DN" imageMso="NumberInsert" screentip="Insert NetDocuments reference into footer on all pages (right-aligned, with version)" onAction="RunMacroAction" />
               <mso:menu id="mnuInsertFooter">
-                <mso:menuSeparator id="sepFooterVer" title="With Version" />
-                <mso:button id="BtnInsertDocNumAll2" tag="modInsertDocId.InsertNDDocIdAllPages" label="All Pages" imageMso="NumberInsert" screentip="Insert ND reference (with version) into footer on all pages" onAction="RunMacroAction" />
-                <mso:button id="BtnInsertDocNumFirst" tag="modInsertDocId.InsertNDDocIdFirstOnly" label="First Page Only" imageMso="NumberInsert" screentip="Insert ND reference (with version) into first page footer only" onAction="RunMacroAction" />
-                <mso:button id="BtnInsertDocNumNotFirst" tag="modInsertDocId.InsertNDDocIdAllButFirst" label="All Except First" imageMso="NumberInsert" screentip="Insert ND reference (with version) into footer on all pages except the first" onAction="RunMacroAction" />
                 <mso:menuSeparator id="sepFooterNoVer" title="Number Only" />
-                <mso:button id="BtnInsertDocNumAllNoVer" tag="modInsertDocId.InsertNDDocIdAllPagesNoVer" label="All Pages" imageMso="NumberInsert" screentip="Insert ND reference (number only) into footer on all pages" onAction="RunMacroAction" />
-                <mso:button id="BtnInsertDocNumFirstNoVer" tag="modInsertDocId.InsertNDDocIdFirstOnlyNoVer" label="First Page Only" imageMso="NumberInsert" screentip="Insert ND reference (number only) into first page footer only" onAction="RunMacroAction" />
-                <mso:button id="BtnInsertDocNumNotFirstNoVer" tag="modInsertDocId.InsertNDDocIdAllButFirstNoVer" label="All Except First" imageMso="NumberInsert" screentip="Insert ND reference (number only) into footer on all pages except the first" onAction="RunMacroAction" />
+                <mso:menu id="mnuNumAll" label="All Pages" imageMso="NumberInsert">
+                  <mso:button id="BtnNumAllL" tag="modInsertDocId.NDFooter_Num_All_L" label="Left" imageMso="ObjectsAlignLeft" onAction="RunMacroAction" />
+                  <mso:button id="BtnNumAllC" tag="modInsertDocId.NDFooter_Num_All_C" label="Centre" imageMso="ObjectsAlignCenterHorizontal" onAction="RunMacroAction" />
+                  <mso:button id="BtnNumAllR" tag="modInsertDocId.NDFooter_Num_All_R" label="Right" imageMso="ObjectsAlignRight" onAction="RunMacroAction" />
+                </mso:menu>
+                <mso:menu id="mnuNumFirst" label="First Page Only" imageMso="NumberInsert">
+                  <mso:button id="BtnNumFirstL" tag="modInsertDocId.NDFooter_Num_First_L" label="Left" imageMso="ObjectsAlignLeft" onAction="RunMacroAction" />
+                  <mso:button id="BtnNumFirstC" tag="modInsertDocId.NDFooter_Num_First_C" label="Centre" imageMso="ObjectsAlignCenterHorizontal" onAction="RunMacroAction" />
+                  <mso:button id="BtnNumFirstR" tag="modInsertDocId.NDFooter_Num_First_R" label="Right" imageMso="ObjectsAlignRight" onAction="RunMacroAction" />
+                </mso:menu>
+                <mso:menu id="mnuNumNotFirst" label="All Except First" imageMso="NumberInsert">
+                  <mso:button id="BtnNumNotFirstL" tag="modInsertDocId.NDFooter_Num_NotFirst_L" label="Left" imageMso="ObjectsAlignLeft" onAction="RunMacroAction" />
+                  <mso:button id="BtnNumNotFirstC" tag="modInsertDocId.NDFooter_Num_NotFirst_C" label="Centre" imageMso="ObjectsAlignCenterHorizontal" onAction="RunMacroAction" />
+                  <mso:button id="BtnNumNotFirstR" tag="modInsertDocId.NDFooter_Num_NotFirst_R" label="Right" imageMso="ObjectsAlignRight" onAction="RunMacroAction" />
+                </mso:menu>
+                <mso:menuSeparator id="sepFooterVer" title="With Version" />
+                <mso:menu id="mnuVerAll" label="All Pages" imageMso="NumberInsert">
+                  <mso:button id="BtnVerAllL" tag="modInsertDocId.NDFooter_Ver_All_L" label="Left" imageMso="ObjectsAlignLeft" onAction="RunMacroAction" />
+                  <mso:button id="BtnVerAllC" tag="modInsertDocId.NDFooter_Ver_All_C" label="Centre" imageMso="ObjectsAlignCenterHorizontal" onAction="RunMacroAction" />
+                  <mso:button id="BtnVerAllR" tag="modInsertDocId.NDFooter_Ver_All_R" label="Right" imageMso="ObjectsAlignRight" onAction="RunMacroAction" />
+                </mso:menu>
+                <mso:menu id="mnuVerFirst" label="First Page Only" imageMso="NumberInsert">
+                  <mso:button id="BtnVerFirstL" tag="modInsertDocId.NDFooter_Ver_First_L" label="Left" imageMso="ObjectsAlignLeft" onAction="RunMacroAction" />
+                  <mso:button id="BtnVerFirstC" tag="modInsertDocId.NDFooter_Ver_First_C" label="Centre" imageMso="ObjectsAlignCenterHorizontal" onAction="RunMacroAction" />
+                  <mso:button id="BtnVerFirstR" tag="modInsertDocId.NDFooter_Ver_First_R" label="Right" imageMso="ObjectsAlignRight" onAction="RunMacroAction" />
+                </mso:menu>
+                <mso:menu id="mnuVerNotFirst" label="All Except First" imageMso="NumberInsert">
+                  <mso:button id="BtnVerNotFirstL" tag="modInsertDocId.NDFooter_Ver_NotFirst_L" label="Left" imageMso="ObjectsAlignLeft" onAction="RunMacroAction" />
+                  <mso:button id="BtnVerNotFirstC" tag="modInsertDocId.NDFooter_Ver_NotFirst_C" label="Centre" imageMso="ObjectsAlignCenterHorizontal" onAction="RunMacroAction" />
+                  <mso:button id="BtnVerNotFirstR" tag="modInsertDocId.NDFooter_Ver_NotFirst_R" label="Right" imageMso="ObjectsAlignRight" onAction="RunMacroAction" />
+                </mso:menu>
               </mso:menu>
             </mso:splitButton>
             <mso:button id="BtnInsertNDRef" tag="modInsertDocId.InsertNDDocNum" label="Insert ND Ref" keytip="ND" imageMso="NumberInsert" screentip="Insert NetDocuments reference at the cursor position" getEnabled="HasActiveDocumentCallback" size="normal" onAction="RunMacroAction" />

@@ -2,32 +2,23 @@ Attribute VB_Name = "modInsertDocId"
 Option Explicit
 
 ' =============================================================================
-' modInsertDocId - NetDocuments Document ID functions
+' modInsertDocId - NetDocuments Document ID footer functions
 ' =============================================================================
-' InsertNDDocIdAllPages          - Insert ND ref (with version) into footer on all pages
-' InsertNDDocIdFirstOnly         - Insert ND ref (with version) into first page footer only
-' InsertNDDocIdAllButFirst       - Insert ND ref (with version) into footer except first
-' InsertNDDocIdAllPagesNoVer     - Insert ND ref (number only) into footer on all pages
-' InsertNDDocIdFirstOnlyNoVer    - Insert ND ref (number only) into first page footer only
-' InsertNDDocIdAllButFirstNoVer  - Insert ND ref (number only) into footer except first
-' InsertNDDocNum                 - Insert ND ref at cursor position
+' 18 public subs for ribbon: version(2) x pages(3) x alignment(3)
+' Naming: NDFooter_{Ver|Num}_{All|First|NotFirst}_{L|C|R}
+' Plus: InsertNDDocNum - insert at cursor position
 ' =============================================================================
+
+' --- Shared helpers ---
 
 Private Function GetNDDocIdFromTitleBar(Optional includeVersion As Boolean = True) As String
-    ' When a document is open via ndOffice, the title bar contains the ND reference
-    ' Typical format: "DocumentName - 1234-5678-9012.1 - NetDocuments"
-    ' Or it may appear as: "DocumentName [1234-5678-9012] - Word"
-
     Dim titleText As String
     titleText = Application.ActiveWindow.Caption
 
-    ' Try to extract ND document ID pattern (xxxx-xxxx-xxxx format)
     Dim regex As Object
     Set regex = CreateObject("VBScript.RegExp")
     regex.Global = False
     regex.IgnoreCase = True
-
-    ' Pattern: xxxx-xxxx-xxxx optionally followed by version (.1, v1, v.1, or space v.1)
     regex.Pattern = "([A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4})\s*(\.\d+|v\.?\d+)?"
 
     If regex.Test(titleText) Then
@@ -49,7 +40,6 @@ Private Function CreateNDRegex() As Object
     Set regex = CreateObject("VBScript.RegExp")
     regex.Global = True
     regex.IgnoreCase = True
-    ' Match ND ref in footer: xxxx-xxxx-xxxx optionally followed by version
     regex.Pattern = "[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}\s*(\.\d+|v\.?\d+)?"
     Set CreateNDRegex = regex
 End Function
@@ -59,63 +49,58 @@ Private Function CreateIManageRegex() As Object
     Set regex = CreateObject("VBScript.RegExp")
     regex.Global = True
     regex.IgnoreCase = True
-    ' Match iManage ref: 5+ digits optionally followed by v and version number (e.g. 5973487v1)
     regex.Pattern = "\d{5,}(v\d+)?"
     Set CreateIManageRegex = regex
 End Function
 
-Private Sub ReplaceParaText(para As Paragraph, docId As String)
-    ' Replaces the text content of a paragraph without touching the paragraph mark
-    ' This preserves the paragraph structure and position in the footer
+Private Function AlignmentConst(align As String) As Long
+    Select Case LCase(align)
+        Case "left": AlignmentConst = wdAlignParagraphLeft
+        Case "center", "centre": AlignmentConst = wdAlignParagraphCenter
+        Case Else: AlignmentConst = wdAlignParagraphRight
+    End Select
+End Function
+
+Private Sub ReplaceParaText(para As Paragraph, docId As String, align As Long)
     Dim rng As Range
     Set rng = para.Range
-    ' Shrink range to exclude the trailing paragraph mark
     rng.MoveEnd wdCharacter, -1
     rng.Text = docId
-    ' Format the replaced text
     rng.Font.Size = 8
     rng.Font.Color = RGB(128, 128, 128)
-    rng.ParagraphFormat.Alignment = wdAlignParagraphRight
+    rng.ParagraphFormat.Alignment = align
 End Sub
 
-Private Sub InsertOrReplaceInFooter(ftr As HeaderFooter, docId As String)
-    ' Inserts or replaces an ND or iManage ref in the given footer
-    ' Preserves all other content (logo, disclaimer, etc.)
-
+Private Sub InsertOrReplaceInFooter(ftr As HeaderFooter, docId As String, align As Long)
     Dim ndRegex As Object
     Set ndRegex = CreateNDRegex()
     Dim imRegex As Object
     Set imRegex = CreateIManageRegex()
 
-    ' Loop through paragraphs to find one containing an ND ref or iManage ref
     Dim para As Paragraph
     For Each para In ftr.Range.Paragraphs
         If ndRegex.Test(para.Range.Text) Or imRegex.Test(para.Range.Text) Then
-            ReplaceParaText para, docId
+            ReplaceParaText para, docId, align
             Exit Sub
         End If
     Next para
 
-    ' No existing ref found - append on a new paragraph at the end
+    ' No existing ref found - append new paragraph
     Dim insertRange As Range
     Set insertRange = ftr.Range
     insertRange.Collapse wdCollapseEnd
     insertRange.Text = vbCr & docId
     insertRange.Font.Size = 8
     insertRange.Font.Color = RGB(128, 128, 128)
-    insertRange.ParagraphFormat.Alignment = wdAlignParagraphRight
+    insertRange.ParagraphFormat.Alignment = align
 End Sub
 
 Private Sub RemoveDocRefFromFooter(ftr As HeaderFooter)
-    ' Removes an ND or iManage ref paragraph from a footer
-    ' Preserves all other content (logo, disclaimer, etc.)
-
     Dim ndRegex As Object
     Set ndRegex = CreateNDRegex()
     Dim imRegex As Object
     Set imRegex = CreateIManageRegex()
 
-    ' Loop through paragraphs to find and delete the one with a doc ref
     Dim para As Paragraph
     For Each para In ftr.Range.Paragraphs
         If ndRegex.Test(para.Range.Text) Or imRegex.Test(para.Range.Text) Then
@@ -125,13 +110,13 @@ Private Sub RemoveDocRefFromFooter(ftr As HeaderFooter)
     Next para
 End Sub
 
-Public Sub InsertNDDocIdAllPages()
-    ' Insert ND ref into footer on all pages (primary + first page if enabled)
+' --- Shared implementation ---
 
+Private Sub DoInsertFooter(includeVersion As Boolean, pageMode As String, align As String)
     On Error GoTo ErrorHandler
 
     Dim docId As String
-    docId = GetNDDocIdFromTitleBar()
+    docId = GetNDDocIdFromTitleBar(includeVersion)
 
     If docId = "" Then
         MsgBox "Could not find a NetDocuments reference in the title bar." & vbCrLf & vbCrLf & _
@@ -146,17 +131,41 @@ Public Sub InsertNDDocIdAllPages()
     Dim sec As Section
     Set sec = ActiveDocument.Sections(1)
 
-    ' Insert into primary footer (applies to all pages, or non-first pages if Different First Page is on)
-    InsertOrReplaceInFooter sec.Footers(wdHeaderFooterPrimary), docId
+    Dim al As Long
+    al = AlignmentConst(align)
 
-    ' If Different First Page is enabled, also insert into first page footer
-    If sec.PageSetup.DifferentFirstPageHeaderFooter Then
-        InsertOrReplaceInFooter sec.Footers(wdHeaderFooterFirstPage), docId
-    End If
+    Select Case LCase(pageMode)
+        Case "all"
+            InsertOrReplaceInFooter sec.Footers(wdHeaderFooterPrimary), docId, al
+            If sec.PageSetup.DifferentFirstPageHeaderFooter Then
+                InsertOrReplaceInFooter sec.Footers(wdHeaderFooterFirstPage), docId, al
+            End If
+
+        Case "first"
+            If Not sec.PageSetup.DifferentFirstPageHeaderFooter Then
+                sec.PageSetup.DifferentFirstPageHeaderFooter = True
+            End If
+            InsertOrReplaceInFooter sec.Footers(wdHeaderFooterFirstPage), docId, al
+            RemoveDocRefFromFooter sec.Footers(wdHeaderFooterPrimary)
+
+        Case "notfirst"
+            If Not sec.PageSetup.DifferentFirstPageHeaderFooter Then
+                sec.PageSetup.DifferentFirstPageHeaderFooter = True
+            End If
+            InsertOrReplaceInFooter sec.Footers(wdHeaderFooterPrimary), docId, al
+            RemoveDocRefFromFooter sec.Footers(wdHeaderFooterFirstPage)
+    End Select
 
     cursorPos.Select
 
-    MsgBox "NetDocuments reference " & docId & " inserted into footer on all pages.", _
+    Dim pageTxt As String
+    Select Case LCase(pageMode)
+        Case "all": pageTxt = "all pages"
+        Case "first": pageTxt = "first page footer"
+        Case "notfirst": pageTxt = "all pages except first"
+    End Select
+
+    MsgBox "NetDocuments reference " & docId & " inserted into " & pageTxt & ".", _
            vbInformation, "Insert ND Ref"
 
     Exit Sub
@@ -165,189 +174,129 @@ ErrorHandler:
     MsgBox "An error occurred inserting the ND reference." & vbCrLf & _
            "Error " & Err.Number & ": " & Err.Description, _
            vbCritical, "Insert ND Ref"
+End Sub
+
+' =============================================================================
+' With Version - All Pages
+' =============================================================================
+Public Sub NDFooter_Ver_All_L()
+    DoInsertFooter True, "all", "left"
+End Sub
+
+Public Sub NDFooter_Ver_All_C()
+    DoInsertFooter True, "all", "center"
+End Sub
+
+Public Sub NDFooter_Ver_All_R()
+    DoInsertFooter True, "all", "right"
+End Sub
+
+' =============================================================================
+' With Version - First Page Only
+' =============================================================================
+Public Sub NDFooter_Ver_First_L()
+    DoInsertFooter True, "first", "left"
+End Sub
+
+Public Sub NDFooter_Ver_First_C()
+    DoInsertFooter True, "first", "center"
+End Sub
+
+Public Sub NDFooter_Ver_First_R()
+    DoInsertFooter True, "first", "right"
+End Sub
+
+' =============================================================================
+' With Version - All Except First
+' =============================================================================
+Public Sub NDFooter_Ver_NotFirst_L()
+    DoInsertFooter True, "notfirst", "left"
+End Sub
+
+Public Sub NDFooter_Ver_NotFirst_C()
+    DoInsertFooter True, "notfirst", "center"
+End Sub
+
+Public Sub NDFooter_Ver_NotFirst_R()
+    DoInsertFooter True, "notfirst", "right"
+End Sub
+
+' =============================================================================
+' Number Only - All Pages
+' =============================================================================
+Public Sub NDFooter_Num_All_L()
+    DoInsertFooter False, "all", "left"
+End Sub
+
+Public Sub NDFooter_Num_All_C()
+    DoInsertFooter False, "all", "center"
+End Sub
+
+Public Sub NDFooter_Num_All_R()
+    DoInsertFooter False, "all", "right"
+End Sub
+
+' =============================================================================
+' Number Only - First Page Only
+' =============================================================================
+Public Sub NDFooter_Num_First_L()
+    DoInsertFooter False, "first", "left"
+End Sub
+
+Public Sub NDFooter_Num_First_C()
+    DoInsertFooter False, "first", "center"
+End Sub
+
+Public Sub NDFooter_Num_First_R()
+    DoInsertFooter False, "first", "right"
+End Sub
+
+' =============================================================================
+' Number Only - All Except First
+' =============================================================================
+Public Sub NDFooter_Num_NotFirst_L()
+    DoInsertFooter False, "notfirst", "left"
+End Sub
+
+Public Sub NDFooter_Num_NotFirst_C()
+    DoInsertFooter False, "notfirst", "center"
+End Sub
+
+Public Sub NDFooter_Num_NotFirst_R()
+    DoInsertFooter False, "notfirst", "right"
+End Sub
+
+' =============================================================================
+' Legacy names (keep for backward compatibility with existing ribbon tags)
+' =============================================================================
+Public Sub InsertNDDocIdAllPages()
+    DoInsertFooter True, "all", "right"
 End Sub
 
 Public Sub InsertNDDocIdFirstOnly()
-    ' Insert ND ref into first page footer only
-
-    On Error GoTo ErrorHandler
-
-    Dim docId As String
-    docId = GetNDDocIdFromTitleBar()
-
-    If docId = "" Then
-        MsgBox "Could not find a NetDocuments reference in the title bar." & vbCrLf & vbCrLf & _
-               "Make sure the document is saved to NetDocuments first.", _
-               vbExclamation, "Insert ND Ref"
-        Exit Sub
-    End If
-
-    Dim cursorPos As Range
-    Set cursorPos = Selection.Range
-
-    Dim sec As Section
-    Set sec = ActiveDocument.Sections(1)
-
-    ' Enable Different First Page if not already
-    If Not sec.PageSetup.DifferentFirstPageHeaderFooter Then
-        sec.PageSetup.DifferentFirstPageHeaderFooter = True
-    End If
-
-    ' Insert into first page footer only
-    InsertOrReplaceInFooter sec.Footers(wdHeaderFooterFirstPage), docId
-
-    ' Remove ND ref from primary footer (other pages) if present
-    RemoveDocRefFromFooter sec.Footers(wdHeaderFooterPrimary)
-
-    cursorPos.Select
-
-    MsgBox "NetDocuments reference " & docId & " inserted into first page footer.", _
-           vbInformation, "Insert ND Ref"
-
-    Exit Sub
-
-ErrorHandler:
-    MsgBox "An error occurred inserting the ND reference." & vbCrLf & _
-           "Error " & Err.Number & ": " & Err.Description, _
-           vbCritical, "Insert ND Ref"
+    DoInsertFooter True, "first", "right"
 End Sub
 
 Public Sub InsertNDDocIdAllButFirst()
-    ' Insert ND ref into footer on all pages except the first
-
-    On Error GoTo ErrorHandler
-
-    Dim docId As String
-    docId = GetNDDocIdFromTitleBar()
-
-    If docId = "" Then
-        MsgBox "Could not find a NetDocuments reference in the title bar." & vbCrLf & vbCrLf & _
-               "Make sure the document is saved to NetDocuments first.", _
-               vbExclamation, "Insert ND Ref"
-        Exit Sub
-    End If
-
-    Dim cursorPos As Range
-    Set cursorPos = Selection.Range
-
-    Dim sec As Section
-    Set sec = ActiveDocument.Sections(1)
-
-    ' Enable Different First Page if not already
-    If Not sec.PageSetup.DifferentFirstPageHeaderFooter Then
-        sec.PageSetup.DifferentFirstPageHeaderFooter = True
-    End If
-
-    ' Insert into primary footer only (skips first page)
-    InsertOrReplaceInFooter sec.Footers(wdHeaderFooterPrimary), docId
-
-    ' Remove ND ref from first page footer if present
-    RemoveDocRefFromFooter sec.Footers(wdHeaderFooterFirstPage)
-
-    cursorPos.Select
-
-    MsgBox "NetDocuments reference " & docId & " inserted into footer on all pages except first.", _
-           vbInformation, "Insert ND Ref"
-
-    Exit Sub
-
-ErrorHandler:
-    MsgBox "An error occurred inserting the ND reference." & vbCrLf & _
-           "Error " & Err.Number & ": " & Err.Description, _
-           vbCritical, "Insert ND Ref"
+    DoInsertFooter True, "notfirst", "right"
 End Sub
 
-' === No-version variants (insert doc number only, without .1 / v1 suffix) ===
-
 Public Sub InsertNDDocIdAllPagesNoVer()
-    On Error GoTo ErrorHandler
-    Dim docId As String
-    docId = GetNDDocIdFromTitleBar(includeVersion:=False)
-    If docId = "" Then
-        MsgBox "Could not find a NetDocuments reference in the title bar." & vbCrLf & vbCrLf & _
-               "Make sure the document is saved to NetDocuments first.", _
-               vbExclamation, "Insert ND Ref"
-        Exit Sub
-    End If
-    Dim cursorPos As Range
-    Set cursorPos = Selection.Range
-    Dim sec As Section
-    Set sec = ActiveDocument.Sections(1)
-    InsertOrReplaceInFooter sec.Footers(wdHeaderFooterPrimary), docId
-    If sec.PageSetup.DifferentFirstPageHeaderFooter Then
-        InsertOrReplaceInFooter sec.Footers(wdHeaderFooterFirstPage), docId
-    End If
-    cursorPos.Select
-    MsgBox "NetDocuments reference " & docId & " inserted into footer on all pages.", _
-           vbInformation, "Insert ND Ref"
-    Exit Sub
-ErrorHandler:
-    MsgBox "An error occurred inserting the ND reference." & vbCrLf & _
-           "Error " & Err.Number & ": " & Err.Description, _
-           vbCritical, "Insert ND Ref"
+    DoInsertFooter False, "all", "right"
 End Sub
 
 Public Sub InsertNDDocIdFirstOnlyNoVer()
-    On Error GoTo ErrorHandler
-    Dim docId As String
-    docId = GetNDDocIdFromTitleBar(includeVersion:=False)
-    If docId = "" Then
-        MsgBox "Could not find a NetDocuments reference in the title bar." & vbCrLf & vbCrLf & _
-               "Make sure the document is saved to NetDocuments first.", _
-               vbExclamation, "Insert ND Ref"
-        Exit Sub
-    End If
-    Dim cursorPos As Range
-    Set cursorPos = Selection.Range
-    Dim sec As Section
-    Set sec = ActiveDocument.Sections(1)
-    If Not sec.PageSetup.DifferentFirstPageHeaderFooter Then
-        sec.PageSetup.DifferentFirstPageHeaderFooter = True
-    End If
-    InsertOrReplaceInFooter sec.Footers(wdHeaderFooterFirstPage), docId
-    RemoveDocRefFromFooter sec.Footers(wdHeaderFooterPrimary)
-    cursorPos.Select
-    MsgBox "NetDocuments reference " & docId & " inserted into first page footer.", _
-           vbInformation, "Insert ND Ref"
-    Exit Sub
-ErrorHandler:
-    MsgBox "An error occurred inserting the ND reference." & vbCrLf & _
-           "Error " & Err.Number & ": " & Err.Description, _
-           vbCritical, "Insert ND Ref"
+    DoInsertFooter False, "first", "right"
 End Sub
 
 Public Sub InsertNDDocIdAllButFirstNoVer()
-    On Error GoTo ErrorHandler
-    Dim docId As String
-    docId = GetNDDocIdFromTitleBar(includeVersion:=False)
-    If docId = "" Then
-        MsgBox "Could not find a NetDocuments reference in the title bar." & vbCrLf & vbCrLf & _
-               "Make sure the document is saved to NetDocuments first.", _
-               vbExclamation, "Insert ND Ref"
-        Exit Sub
-    End If
-    Dim cursorPos As Range
-    Set cursorPos = Selection.Range
-    Dim sec As Section
-    Set sec = ActiveDocument.Sections(1)
-    If Not sec.PageSetup.DifferentFirstPageHeaderFooter Then
-        sec.PageSetup.DifferentFirstPageHeaderFooter = True
-    End If
-    InsertOrReplaceInFooter sec.Footers(wdHeaderFooterPrimary), docId
-    RemoveDocRefFromFooter sec.Footers(wdHeaderFooterFirstPage)
-    cursorPos.Select
-    MsgBox "NetDocuments reference " & docId & " inserted into footer on all pages except first.", _
-           vbInformation, "Insert ND Ref"
-    Exit Sub
-ErrorHandler:
-    MsgBox "An error occurred inserting the ND reference." & vbCrLf & _
-           "Error " & Err.Number & ": " & Err.Description, _
-           vbCritical, "Insert ND Ref"
+    DoInsertFooter False, "notfirst", "right"
 End Sub
 
+' =============================================================================
+' Insert at cursor position
+' =============================================================================
 Public Sub InsertNDDocNum()
-    ' Reads ND document number from title bar and inserts at current cursor position
-
     On Error GoTo ErrorHandler
 
     Dim docId As String
@@ -360,7 +309,6 @@ Public Sub InsertNDDocNum()
         Exit Sub
     End If
 
-    ' Insert at current cursor position
     Selection.TypeText Text:=docId
 
     Exit Sub
