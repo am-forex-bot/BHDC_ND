@@ -2,7 +2,7 @@ Attribute VB_Name = "modAutoMigrate"
 Option Explicit
 
 ' =============================================================================
-' modAutoMigrate - Auto-migrate iManage doc refs to NetDocuments on document open
+' modAutoMigrate - Auto-update footer doc refs on document open
 ' =============================================================================
 ' Import this module into Normal.dotm (NOT the BigHand template).
 ' Normal.dotm is always loaded by Word, so AutoOpen always fires.
@@ -11,8 +11,9 @@ Option Explicit
 '   1. AutoOpen fires when any document is opened
 '   2. After a 2-second delay (gives ndOffice time to update the title bar),
 '      MigrateIManageToND checks the title bar for a NetDocuments reference
-'   3. If found, scans all footers for iManage doc numbers (e.g. 5973487v1)
-'      and replaces them with the NetDocuments reference
+'   3. If found, scans all footers for:
+'      - iManage doc numbers (e.g. 5973487v1) and replaces with ND ref
+'      - Outdated ND refs (e.g. v.1 when title bar says v.2) and updates
 '   4. Preserves all other footer content (logos, disclaimers, etc.)
 '
 ' To install:
@@ -55,35 +56,30 @@ Public Sub MigrateIManageToND()
         docId = docId & ndMatches(0).SubMatches(1)
     End If
 
-    ' --- Build iManage regex ---
+    ' --- Build regexes ---
     Dim imRegex As Object
     Set imRegex = CreateObject("VBScript.RegExp")
     imRegex.Global = True
     imRegex.IgnoreCase = True
     imRegex.Pattern = "\d{5,}(v\d+)?"
 
+    ' ND regex to detect existing ND refs in footer (may have old version)
+    Dim footerNdRegex As Object
+    Set footerNdRegex = CreateObject("VBScript.RegExp")
+    footerNdRegex.Global = True
+    footerNdRegex.IgnoreCase = True
+    footerNdRegex.Pattern = "[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}\s*(\.\d+|v\.?\d+)?"
+
     ' --- Scan and replace in footers ---
     Dim sec As Section
     Set sec = ActiveDocument.Sections(1)
 
-    Dim para As Paragraph
-
     ' Check primary footer
-    For Each para In sec.Footers(wdHeaderFooterPrimary).Range.Paragraphs
-        If imRegex.Test(para.Range.Text) Then
-            ReplaceMigratePara para, docId
-            Exit For
-        End If
-    Next para
+    CheckAndUpdateFooter sec.Footers(wdHeaderFooterPrimary), docId, imRegex, footerNdRegex
 
     ' Check first page footer if Different First Page is enabled
     If sec.PageSetup.DifferentFirstPageHeaderFooter Then
-        For Each para In sec.Footers(wdHeaderFooterFirstPage).Range.Paragraphs
-            If imRegex.Test(para.Range.Text) Then
-                ReplaceMigratePara para, docId
-                Exit For
-            End If
-        Next para
+        CheckAndUpdateFooter sec.Footers(wdHeaderFooterFirstPage), docId, imRegex, footerNdRegex
     End If
 
     Exit Sub
@@ -92,12 +88,40 @@ ErrorHandler:
     ' Silently fail - don't interrupt the user opening their document
 End Sub
 
+Private Sub CheckAndUpdateFooter(ftr As HeaderFooter, docId As String, imRegex As Object, footerNdRegex As Object)
+    Dim para As Paragraph
+    For Each para In ftr.Range.Paragraphs
+        Dim paraText As String
+        paraText = para.Range.Text
+
+        ' Check for iManage ref first
+        If imRegex.Test(paraText) Then
+            ReplaceMigratePara para, docId
+            Exit Sub
+        End If
+
+        ' Check for existing ND ref that doesn't match current version
+        If footerNdRegex.Test(paraText) Then
+            Dim footerMatches As Object
+            Set footerMatches = footerNdRegex.Execute(paraText)
+            ' Only replace if the ref is different (e.g. old version)
+            If footerMatches(0).Value <> docId Then
+                ReplaceMigratePara para, docId
+            End If
+            Exit Sub
+        End If
+    Next para
+End Sub
+
 Private Sub ReplaceMigratePara(para As Paragraph, docId As String)
     Dim rng As Range
     Set rng = para.Range
+    ' Preserve existing alignment
+    Dim existingAlign As Long
+    existingAlign = rng.ParagraphFormat.Alignment
     rng.MoveEnd wdCharacter, -1
     rng.Text = docId
     rng.Font.Size = 8
     rng.Font.Color = RGB(128, 128, 128)
-    rng.ParagraphFormat.Alignment = wdAlignParagraphRight
+    rng.ParagraphFormat.Alignment = existingAlign
 End Sub
