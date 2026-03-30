@@ -2,19 +2,21 @@ Attribute VB_Name = "modAutoMigrate"
 Option Explicit
 
 ' =============================================================================
-' modAutoMigrate - Auto-update footer doc refs on document open
+' modAutoMigrate - Auto-update footer doc refs on open and save
 ' =============================================================================
 ' Import this module into Normal.dotm (NOT the BigHand template).
-' Normal.dotm is always loaded by Word, so AutoOpen always fires.
+' Normal.dotm is always loaded by Word, so auto macros always fire.
 '
-' How it works:
-'   1. AutoOpen fires when any document is opened
-'   2. After a 2-second delay (gives ndOffice time to update the title bar),
-'      MigrateIManageToND checks the title bar for a NetDocuments reference
-'   3. If found, scans all footers for:
-'      - iManage doc numbers (e.g. 5973487v1) and replaces with ND ref
-'      - Outdated ND refs (e.g. v.1 when title bar says v.2) and updates
-'   4. Preserves all other footer content (logos, disclaimers, etc.)
+' Hooks:
+'   AutoOpen   - fires when a document is opened
+'   FileSave   - fires on Ctrl+S / Save
+'   FileSaveAs - fires on Save As (e.g. creating a new version in ND)
+'
+' After each event, schedules MigrateIManageToND with a short delay
+' to give ndOffice time to update the title bar, then:
+'   - Replaces iManage doc numbers (e.g. 5973487v1) with ND ref
+'   - Updates outdated ND version numbers (e.g. v.1 -> v.2)
+'   - Preserves all other footer content and alignment
 '
 ' To install:
 '   1. Open Word
@@ -28,6 +30,20 @@ Option Explicit
 Public Sub AutoOpen()
     On Error Resume Next
     Application.OnTime When:=Now + TimeValue("00:00:02"), Name:="MigrateIManageToND"
+End Sub
+
+Public Sub FileSave()
+    ' Let the normal save happen first, then check for version updates
+    On Error Resume Next
+    ActiveDocument.Save
+    Application.OnTime Now + TimeValue("00:00:03"), "MigrateIManageToND"
+End Sub
+
+Public Sub FileSaveAs()
+    ' Let the normal Save As happen first (ndOffice intercepts this for versioning)
+    On Error Resume Next
+    Dialogs(wdDialogFileSaveAs).Show
+    Application.OnTime Now + TimeValue("00:00:03"), "MigrateIManageToND"
 End Sub
 
 Public Sub MigrateIManageToND()
