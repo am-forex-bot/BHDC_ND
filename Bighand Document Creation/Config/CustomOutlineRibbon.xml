@@ -64,6 +64,7 @@
               </mso:menu>
             </mso:splitButton>
             <mso:button id="BtnInsertNDRef" tag="modInsertDocId.InsertNDDocNum" label="Insert ND Ref" keytip="ND" imageMso="NumberInsert" screentip="Insert NetDocuments reference at the cursor position" getEnabled="HasActiveDocumentCallback" size="normal" onAction="RunMacroAction" />
+            <mso:button id="BtnRefreshFooter" tag="modInsertDocId.RefreshFooterVersion" label="Refresh Footer" keytip="RF" imageMso="RecurrenceEdit" screentip="Update footer version to match current NetDocuments version (use after Save As New Version)" getEnabled="HasActiveDocumentCallback" size="normal" onAction="RunMacroAction" />
           </mso:box>
           <mso:splitButton id="BtnDocIdOptions" visible="false" getEnabled="InsertDocIdEnabled" size="large">
             <mso:button id="BtnInsertDocId" label="Doc ID Options" image="Icon_64_AddDocRef" onAction="BtnInsertDocIdAction" />

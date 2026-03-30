@@ -294,6 +294,75 @@ Public Sub InsertNDDocIdAllButFirstNoVer()
 End Sub
 
 ' =============================================================================
+' Refresh footer version
+' =============================================================================
+Public Sub RefreshFooterVersion()
+    ' Updates existing ND ref in footer to match current title bar version.
+    ' Use after Save As / New Version in NetDocuments.
+
+    On Error GoTo ErrorHandler
+
+    Dim docId As String
+    docId = GetNDDocIdFromTitleBar(includeVersion:=True)
+
+    If docId = "" Then
+        MsgBox "Could not find a NetDocuments reference in the title bar." & vbCrLf & vbCrLf & _
+               "Make sure the document is saved to NetDocuments first.", _
+               vbExclamation, "Refresh Footer"
+        Exit Sub
+    End If
+
+    Dim ndRegex As Object
+    Set ndRegex = CreateNDRegex()
+    Dim imRegex As Object
+    Set imRegex = CreateIManageRegex()
+
+    Dim sec As Section
+    Set sec = ActiveDocument.Sections(1)
+    Dim updated As Boolean
+    updated = False
+
+    ' Check primary footer
+    Dim para As Paragraph
+    For Each para In sec.Footers(wdHeaderFooterPrimary).Range.Paragraphs
+        If ndRegex.Test(para.Range.Text) Or imRegex.Test(para.Range.Text) Then
+            Dim existingAlign As Long
+            existingAlign = para.Range.ParagraphFormat.Alignment
+            ReplaceParaText para, docId, existingAlign
+            updated = True
+            Exit For
+        End If
+    Next para
+
+    ' Check first page footer
+    If sec.PageSetup.DifferentFirstPageHeaderFooter Then
+        For Each para In sec.Footers(wdHeaderFooterFirstPage).Range.Paragraphs
+            If ndRegex.Test(para.Range.Text) Or imRegex.Test(para.Range.Text) Then
+                Dim existingAlign2 As Long
+                existingAlign2 = para.Range.ParagraphFormat.Alignment
+                ReplaceParaText para, docId, existingAlign2
+                updated = True
+                Exit For
+            End If
+        Next para
+    End If
+
+    If updated Then
+        MsgBox "Footer updated to " & docId & ".", vbInformation, "Refresh Footer"
+    Else
+        MsgBox "No existing document reference found in the footer.", _
+               vbExclamation, "Refresh Footer"
+    End If
+
+    Exit Sub
+
+ErrorHandler:
+    MsgBox "An error occurred refreshing the footer." & vbCrLf & _
+           "Error " & Err.Number & ": " & Err.Description, _
+           vbCritical, "Refresh Footer"
+End Sub
+
+' =============================================================================
 ' Insert at cursor position
 ' =============================================================================
 Public Sub InsertNDDocNum()
