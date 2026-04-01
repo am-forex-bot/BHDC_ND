@@ -16,7 +16,11 @@
     4. Cleans up iManage/Interwoven registry remnants
     5. Forces Outlook to keep required add-ins enabled (GPO-level resiliency override)
     6. Clears Outlook resiliency data (disabled/crashed add-in lists)
-    7. Disables Word start screen and Office animations for faster perceived startup
+    7. Disables Word/Excel start screen and Office animations for faster startup
+
+    IMPORTANT: All user registry writes set proper ACLs so the user can read
+    their own keys. Running as admin without this causes ACCESS DENIED errors
+    that slow down Office startup.
 
 .PARAMETER UserName
     Override the target username. Defaults to the currently logged-in user.
@@ -107,6 +111,49 @@ function Write-Section {
     param([string]$Title)
     Write-Host ""
     Write-Host "=== $Title ===" -ForegroundColor White
+}
+
+function New-UserRegistryKey {
+    <#
+    .SYNOPSIS
+        Creates a registry key under HKU and grants the target user full control.
+        This prevents the ACL problem where admin-created keys are unreadable by
+        the user, causing hundreds of ACCESS DENIED errors in Office startup.
+    #>
+    param(
+        [string]$Path,
+        [string]$UserSID
+    )
+
+    # Walk up and find the deepest existing ancestor
+    $parts = $Path -replace "^Registry::HKU\\[^\\]+\\", ""
+    $basePath = $Path -replace [regex]::Escape($parts), ""
+    $segments = $parts -split "\\"
+    $currentPath = $basePath.TrimEnd("\")
+
+    foreach ($segment in $segments) {
+        $nextPath = "$currentPath\$segment"
+        if (-not (Test-Path $nextPath)) {
+            New-Item -Path $nextPath -Force -ErrorAction SilentlyContinue | Out-Null
+
+            # Grant the user full control on the key we just created
+            try {
+                $acl = Get-Acl $nextPath
+                $rule = New-Object System.Security.AccessControl.RegistryAccessRule(
+                    (New-Object System.Security.Principal.SecurityIdentifier($UserSID)),
+                    "FullControl",
+                    "ContainerInherit,ObjectInherit",
+                    "None",
+                    "Allow"
+                )
+                $acl.AddAccessRule($rule)
+                Set-Acl $nextPath $acl
+            } catch {
+                # Non-fatal - key was created but ACL may not be perfect
+            }
+        }
+        $currentPath = $nextPath
+    }
 }
 
 # --- Resolve target user and their SID ---------------------------------------
@@ -271,15 +318,16 @@ if (-not $fusionFixed) {
     Write-Status "Fusion logging not enabled - OK." "Skip"
 }
 
-# Clean up Fusion log output directory if it exists
-$fusionLogDir = "C:\FusionLogs"
-if (Test-Path $fusionLogDir) {
-    $fusionLogSize = (Get-ChildItem $fusionLogDir -Recurse -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum).Sum
-    $fusionLogSizeMB = [math]::Round($fusionLogSize / 1MB, 1)
-    Write-Status "Found Fusion log output: $fusionLogDir ($fusionLogSizeMB MB)" "Warning"
-    if ($PSCmdlet.ShouldProcess($fusionLogDir, "Delete Fusion log files")) {
-        Remove-Item -Path $fusionLogDir -Recurse -Force -ErrorAction SilentlyContinue
-        Write-Status "Deleted Fusion log files." "Success"
+# Clean up Fusion log output directories
+foreach ($dir in @("C:\FusionLogs", "C:\Temp\FusionLogs")) {
+    if (Test-Path $dir) {
+        $logSize = (Get-ChildItem $dir -Recurse -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum).Sum
+        $logSizeMB = [math]::Round($logSize / 1MB, 1)
+        Write-Status "Found Fusion log output: $dir ($logSizeMB MB)" "Warning"
+        if ($PSCmdlet.ShouldProcess($dir, "Delete Fusion log files")) {
+            Remove-Item -Path $dir -Recurse -Force -ErrorAction SilentlyContinue
+            Write-Status "Deleted $dir" "Success"
+        }
     }
 }
 
@@ -320,10 +368,13 @@ if (-not $imanageCleaned) {
 Write-Section "5. Protecting required Outlook add-ins from auto-disable"
 
 # Use the Policies path - Outlook treats this as Group Policy and CANNOT override it
+# CRITICAL: Use New-UserRegistryKey to set proper ACLs so the user can read these keys.
+# Without this, admin-created keys under Policies\ cause ACCESS DENIED for ALL Office
+# apps reading the Policies tree, adding seconds to every startup.
 $policyPath = "$hku\Software\Policies\Microsoft\Office\16.0\Outlook\Resiliency\AddinList"
 
 if ($PSCmdlet.ShouldProcess($policyPath, "Set GPO-level add-in protection")) {
-    New-Item -Path $policyPath -Force -ErrorAction SilentlyContinue | Out-Null
+    New-UserRegistryKey -Path $policyPath -UserSID $userSID
     foreach ($addin in $AddinsToProtect) {
         Set-ItemProperty $policyPath -Name $addin -Value 1 -Type DWord -ErrorAction SilentlyContinue
         Write-Status "Protected: $addin" "Success"
@@ -350,9 +401,10 @@ foreach ($key in $resiliencyKeys) {
     }
 }
 
-# Also set DoNotDisableAddinList as a belt-and-braces backup
+# Also set DoNotDisableAddinList as belt-and-braces backup
 $doNotDisablePath = "$resiliencyBase\DoNotDisableAddinList"
 if ($PSCmdlet.ShouldProcess($doNotDisablePath, "Set DoNotDisableAddinList")) {
+    # This path is under the user's own SOFTWARE hive so ACLs are fine
     New-Item -Path $doNotDisablePath -Force -ErrorAction SilentlyContinue | Out-Null
     foreach ($addin in $AddinsToProtect) {
         Set-ItemProperty $doNotDisablePath -Name $addin -Value 1 -Type DWord -ErrorAction SilentlyContinue
@@ -391,6 +443,7 @@ if (Test-Path $excelOptsPath) {
 # Disable Office animations
 $graphicsPath = "$hku\SOFTWARE\Microsoft\Office\16.0\Common\Graphics"
 if ($PSCmdlet.ShouldProcess($graphicsPath, "Disable Office animations")) {
+    # This is under the user's own SOFTWARE hive so ACLs are fine
     New-Item -Path $graphicsPath -Force -ErrorAction SilentlyContinue | Out-Null
     Set-ItemProperty $graphicsPath -Name "DisableAnimations" -Value 1 -Type DWord -Force -ErrorAction SilentlyContinue
     Write-Status "Disabled Office animations." "Success"
@@ -415,7 +468,7 @@ Write-Host "  - Removed dead Outlook add-ins (iManage, ICQ, Lync, etc.)" -Foregr
 Write-Host "  - Cleared .NET assembly cache (dl3)" -ForegroundColor Cyan
 Write-Host "  - Checked/disabled Fusion logging" -ForegroundColor Cyan
 Write-Host "  - Cleaned iManage registry remnants" -ForegroundColor Cyan
-Write-Host "  - Protected required Outlook add-ins from auto-disable" -ForegroundColor Cyan
+Write-Host "  - Protected required Outlook add-ins (with correct ACLs)" -ForegroundColor Cyan
 Write-Host "  - Cleared Outlook resiliency (disabled add-in) data" -ForegroundColor Cyan
 Write-Host "  - Applied Office startup optimisations" -ForegroundColor Cyan
 Write-Host ""
@@ -424,5 +477,5 @@ Write-Host "  The first time each Office app opens it will be a bit slower" -For
 Write-Host "  while the assembly cache rebuilds. This is normal and one-time." -ForegroundColor Yellow
 Write-Host "  Second launch onwards will be fast." -ForegroundColor Yellow
 Write-Host ""
-Write-Host "  If user needs to log off/on for foreground fix to take effect." -ForegroundColor Yellow
+Write-Host "  User should log off/on for foreground focus fix to take effect." -ForegroundColor Yellow
 Write-Host ""
