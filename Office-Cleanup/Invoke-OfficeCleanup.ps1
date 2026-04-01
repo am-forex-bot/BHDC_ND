@@ -5,23 +5,28 @@
     Fixes common causes of slow Word, Excel, and Outlook startup.
 
 .DESCRIPTION
-    This script performs the following cleanup tasks:
+    Run this as admin on a user's machine (while they are logged in) to fix
+    Office startup slowness. The script auto-detects the logged-in user and
+    writes to their registry hive via HKU\<SID>.
+
+    What it does:
     1. Removes dead/unwanted Outlook COM add-ins (iManage, ICQ, Lync, etc.)
-    2. Clears the .NET assembly download cache (dl3) which accumulates stale DLLs
+    2. Clears the .NET assembly download cache (dl3) - stale DLLs cause slow startup
     3. Disables .NET Fusion assembly binding logging if enabled (massive perf killer)
     4. Cleans up iManage/Interwoven registry remnants
-    5. Prevents Outlook from auto-disabling required add-ins (Workshare, Litera, etc.)
+    5. Forces Outlook to keep required add-ins enabled (GPO-level resiliency override)
+    6. Clears Outlook resiliency data (disabled/crashed add-in lists)
+    7. Disables Word start screen and Office animations for faster perceived startup
 
 .PARAMETER UserName
-    The username whose profile to clean. Defaults to the currently logged-in user.
-    Use this when running as a different admin account.
+    Override the target username. Defaults to the currently logged-in user.
 
 .PARAMETER WhatIf
     Shows what would be changed without making any changes.
 
 .EXAMPLE
     .\Invoke-OfficeCleanup.ps1
-    Runs cleanup for the current user.
+    Runs cleanup for the currently logged-in user.
 
 .EXAMPLE
     .\Invoke-OfficeCleanup.ps1 -UserName "john.smith"
@@ -41,7 +46,8 @@ param(
 $ErrorActionPreference = "Continue"
 
 # --- Configuration -----------------------------------------------------------
-# Add-ins to REMOVE (dead/legacy/unwanted)
+
+# Add-ins to REMOVE from Outlook (dead/legacy/unwanted)
 $AddinsToRemove = @(
     "ADXForm",
     "ColleagueImport.ColleagueImportAddin",
@@ -59,14 +65,15 @@ $AddinsToRemove = @(
     "OneNote.OutlookAddin"
 )
 
-# Add-ins that Outlook must NOT auto-disable (resiliency protection)
+# Add-ins to force-enable via GPO-level policy (Outlook cannot override these)
 $AddinsToProtect = @(
     "Workshare.OutlookRibbon.Addin",
     "zzzDocsCorp.pdfDocs.OutlookAddIn",
     "MetaCompliance.Reporter.Email",
     "MimecastServicesForOutlook.Connect",
     "zzz.SafeSend",
-    "TeamsAddin.FastConnect"
+    "TeamsAddin.FastConnect",
+    "NetDocuments.Client.OutlookAddIn"
 )
 
 # Registry paths where Outlook add-ins can be registered
@@ -102,19 +109,19 @@ function Write-Section {
     Write-Host "=== $Title ===" -ForegroundColor White
 }
 
-# --- Resolve target user profile path ----------------------------------------
+# --- Resolve target user and their SID ---------------------------------------
 
 if ($UserName) {
+    $resolvedUser = $UserName
     $userProfile = "C:\Users\$UserName"
 } else {
-    # Get the logged-in user (not the admin running the script)
     $loggedInUser = (Get-CimInstance -ClassName Win32_ComputerSystem).UserName
     if ($loggedInUser -and $loggedInUser -match "\\(.+)$") {
         $resolvedUser = $Matches[1]
         $userProfile = "C:\Users\$resolvedUser"
     } else {
-        $userProfile = $env:USERPROFILE
-        $resolvedUser = $env:USERNAME
+        Write-Host "ERROR: Could not detect logged-in user. Use -UserName parameter." -ForegroundColor Red
+        exit 1
     }
 }
 
@@ -123,9 +130,27 @@ if (-not (Test-Path $userProfile)) {
     exit 1
 }
 
+# Resolve SID for HKU access
+try {
+    $domainUser = if ($loggedInUser -and -not $UserName) { $loggedInUser } else { $resolvedUser }
+    $userSID = (New-Object System.Security.Principal.NTAccount($domainUser)).Translate(
+        [System.Security.Principal.SecurityIdentifier]).Value
+    $hku = "Registry::HKU\$userSID"
+
+    if (-not (Test-Path $hku)) {
+        Write-Host "ERROR: HKU hive not accessible for SID $userSID. Is the user logged in?" -ForegroundColor Red
+        exit 1
+    }
+} catch {
+    Write-Host "ERROR: Could not resolve SID for $domainUser. Is the user logged in?" -ForegroundColor Red
+    exit 1
+}
+
 Write-Host ""
 Write-Host "Wallace Office Startup Cleanup" -ForegroundColor White
-Write-Host "Target user profile: $userProfile" -ForegroundColor Cyan
+Write-Host "Target user: $resolvedUser ($userSID)" -ForegroundColor Cyan
+Write-Host "Profile path: $userProfile" -ForegroundColor Cyan
+Write-Host "Registry hive: $hku" -ForegroundColor Cyan
 if ($WhatIfPreference) {
     Write-Host "*** WHATIF MODE - no changes will be made ***" -ForegroundColor Yellow
 }
@@ -160,6 +185,7 @@ Write-Section "1. Removing unwanted Outlook add-ins"
 
 $removedCount = 0
 foreach ($addin in $AddinsToRemove) {
+    # Check HKLM paths
     foreach ($basePath in $OutlookAddinPaths) {
         $fullPath = Join-Path $basePath $addin
         if (Test-Path $fullPath) {
@@ -174,12 +200,12 @@ foreach ($addin in $AddinsToRemove) {
             }
         }
     }
-    # Also check HKCU
-    $hkcuPath = "HKCU:\SOFTWARE\Microsoft\Office\Outlook\Addins\$addin"
+    # Check user's HKCU via HKU
+    $hkcuPath = "$hku\SOFTWARE\Microsoft\Office\Outlook\Addins\$addin"
     if (Test-Path $hkcuPath) {
         if ($PSCmdlet.ShouldProcess($hkcuPath, "Remove add-in")) {
             Remove-Item -Path $hkcuPath -Force -ErrorAction SilentlyContinue
-            Write-Status "Removed: $addin (from HKCU)" "Success"
+            Write-Status "Removed: $addin (from user hive)" "Success"
             $removedCount++
         }
     }
@@ -205,9 +231,8 @@ if (Test-Path $dl3Path) {
         Remove-Item -Path $dl3Path -Recurse -Force -ErrorAction SilentlyContinue
         if (-not (Test-Path $dl3Path)) {
             Write-Status "Cleared dl3 cache ($dl3SizeMB MB freed)." "Success"
-            Write-Status "NOTE: First app launch will be slower as cache rebuilds. Second launch will be fast." "Warning"
         } else {
-            Write-Status "Partial clear - some files were locked. A reboot may be needed." "Warning"
+            Write-Status "Partial clear - some files were locked (Office still running?)." "Warning"
         }
     }
 } else {
@@ -246,7 +271,7 @@ if (-not $fusionFixed) {
     Write-Status "Fusion logging not enabled - OK." "Skip"
 }
 
-# Also clean up Fusion log output directory if it exists
+# Clean up Fusion log output directory if it exists
 $fusionLogDir = "C:\FusionLogs"
 if (Test-Path $fusionLogDir) {
     $fusionLogSize = (Get-ChildItem $fusionLogDir -Recurse -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum).Sum
@@ -265,10 +290,10 @@ Write-Section "4. Cleaning up iManage/Interwoven registry remnants"
 $imanagePaths = @(
     "HKLM:\SOFTWARE\Interwoven",
     "HKLM:\SOFTWARE\WOW6432Node\Interwoven",
-    "HKCU:\SOFTWARE\Interwoven",
+    "$hku\SOFTWARE\Interwoven",
     "HKLM:\SOFTWARE\iManage",
     "HKLM:\SOFTWARE\WOW6432Node\iManage",
-    "HKCU:\SOFTWARE\iManage"
+    "$hku\SOFTWARE\iManage"
 )
 
 $imanageCleaned = $false
@@ -290,62 +315,94 @@ if (-not $imanageCleaned) {
     Write-Status "No iManage remnants found." "Skip"
 }
 
-# --- 5. Protect required add-ins from Outlook resiliency --------------------
+# --- 5. Protect required add-ins (GPO-level enforcement) --------------------
 
-Write-Section "5. Protecting required add-ins from auto-disable"
+Write-Section "5. Protecting required Outlook add-ins from auto-disable"
 
-# Load the target user's HKCU hive if running as a different admin
-$useHKU = $false
-$hkuPath = ""
-if ($UserName -and $UserName -ne $env:USERNAME) {
-    # Try to find the user's SID
-    try {
-        $userSID = (New-Object System.Security.Principal.NTAccount($UserName)).Translate(
-            [System.Security.Principal.SecurityIdentifier]).Value
-        $hkuPath = "Registry::HKU\$userSID"
-        if (Test-Path $hkuPath) {
-            $useHKU = $true
-        } else {
-            # Need to load the hive
-            $ntUserDat = Join-Path $userProfile "NTUSER.DAT"
-            if (Test-Path $ntUserDat) {
-                $tempKey = "HKU\TempCleanup_$UserName"
-                reg load $tempKey $ntUserDat 2>$null
-                $hkuPath = "Registry::$tempKey"
-                $useHKU = $true
-                Write-Status "Loaded user registry hive for $UserName" "Info"
-            }
-        }
-    } catch {
-        Write-Status "Cannot access $UserName's HKCU - resiliency fix will apply to current admin only" "Warning"
+# Use the Policies path - Outlook treats this as Group Policy and CANNOT override it
+$policyPath = "$hku\Software\Policies\Microsoft\Office\16.0\Outlook\Resiliency\AddinList"
+
+if ($PSCmdlet.ShouldProcess($policyPath, "Set GPO-level add-in protection")) {
+    New-Item -Path $policyPath -Force -ErrorAction SilentlyContinue | Out-Null
+    foreach ($addin in $AddinsToProtect) {
+        Set-ItemProperty $policyPath -Name $addin -Value 1 -Type DWord -ErrorAction SilentlyContinue
+        Write-Status "Protected: $addin" "Success"
     }
 }
 
-$resiliencyBase = if ($useHKU) { "$hkuPath\SOFTWARE\Microsoft\Office\16.0\Outlook\Resiliency" }
-                  else { "HKCU:\SOFTWARE\Microsoft\Office\16.0\Outlook\Resiliency" }
+# --- 6. Clear Outlook resiliency data (disabled/crashed add-in lists) -------
 
+Write-Section "6. Clearing Outlook resiliency data"
+
+$resiliencyBase = "$hku\SOFTWARE\Microsoft\Office\16.0\Outlook\Resiliency"
+
+$resiliencyKeys = @("DisabledItems", "CrashingAddinList", "NotificationReminderAddinData")
+$resiliencyCleared = $false
+
+foreach ($key in $resiliencyKeys) {
+    $fullPath = "$resiliencyBase\$key"
+    if (Test-Path $fullPath) {
+        if ($PSCmdlet.ShouldProcess($fullPath, "Clear resiliency data")) {
+            Remove-Item $fullPath -Force -ErrorAction SilentlyContinue
+            Write-Status "Cleared: $key" "Success"
+            $resiliencyCleared = $true
+        }
+    }
+}
+
+# Also set DoNotDisableAddinList as a belt-and-braces backup
 $doNotDisablePath = "$resiliencyBase\DoNotDisableAddinList"
-
-if ($PSCmdlet.ShouldProcess($doNotDisablePath, "Set add-in protection")) {
+if ($PSCmdlet.ShouldProcess($doNotDisablePath, "Set DoNotDisableAddinList")) {
     New-Item -Path $doNotDisablePath -Force -ErrorAction SilentlyContinue | Out-Null
     foreach ($addin in $AddinsToProtect) {
         Set-ItemProperty $doNotDisablePath -Name $addin -Value 1 -Type DWord -ErrorAction SilentlyContinue
-        Write-Status "Protected: $addin" "Success"
     }
+    Write-Status "DoNotDisableAddinList set as backup." "Success"
+}
 
-    # Clear any existing disabled items list
-    $disabledItemsPath = "$resiliencyBase\DisabledItems"
-    if (Test-Path $disabledItemsPath) {
-        Remove-Item $disabledItemsPath -Force -ErrorAction SilentlyContinue
-        Write-Status "Cleared disabled items list." "Success"
+if (-not $resiliencyCleared) {
+    Write-Status "No resiliency data to clear." "Skip"
+}
+
+# --- 7. Word/Office startup optimisations -----------------------------------
+
+Write-Section "7. Applying Office startup optimisations"
+
+# Disable Word start screen
+$wordOptsPath = "$hku\SOFTWARE\Microsoft\Office\16.0\Word\Options"
+if (Test-Path $wordOptsPath) {
+    if ($PSCmdlet.ShouldProcess($wordOptsPath, "Disable Word start screen")) {
+        Set-ItemProperty $wordOptsPath -Name "DisableBootToOfficeStart" -Value 1 -Type DWord -Force -ErrorAction SilentlyContinue
+        Write-Status "Disabled Word start screen." "Success"
+    }
+} else {
+    Write-Status "Word options key not found - Word may not have been opened yet." "Skip"
+}
+
+# Disable Excel start screen
+$excelOptsPath = "$hku\SOFTWARE\Microsoft\Office\16.0\Excel\Options"
+if (Test-Path $excelOptsPath) {
+    if ($PSCmdlet.ShouldProcess($excelOptsPath, "Disable Excel start screen")) {
+        Set-ItemProperty $excelOptsPath -Name "DisableBootToOfficeStart" -Value 1 -Type DWord -Force -ErrorAction SilentlyContinue
+        Write-Status "Disabled Excel start screen." "Success"
     }
 }
 
-# Unload temp hive if we loaded one
-if ($useHKU -and $hkuPath -match "TempCleanup") {
-    $tempKey = $hkuPath -replace "Registry::", ""
-    [gc]::Collect()
-    reg unload $tempKey 2>$null
+# Disable Office animations
+$graphicsPath = "$hku\SOFTWARE\Microsoft\Office\16.0\Common\Graphics"
+if ($PSCmdlet.ShouldProcess($graphicsPath, "Disable Office animations")) {
+    New-Item -Path $graphicsPath -Force -ErrorAction SilentlyContinue | Out-Null
+    Set-ItemProperty $graphicsPath -Name "DisableAnimations" -Value 1 -Type DWord -Force -ErrorAction SilentlyContinue
+    Write-Status "Disabled Office animations." "Success"
+}
+
+# Fix window focus - stop splash screens appearing behind other windows
+$desktopPath = "$hku\Control Panel\Desktop"
+if (Test-Path $desktopPath) {
+    if ($PSCmdlet.ShouldProcess($desktopPath, "Fix foreground window focus")) {
+        Set-ItemProperty $desktopPath -Name "ForegroundLockTimeout" -Value 0 -Type DWord -ErrorAction SilentlyContinue
+        Write-Status "Fixed foreground window focus (ForegroundLockTimeout=0)." "Success"
+    }
 }
 
 # --- Summary -----------------------------------------------------------------
@@ -353,9 +410,19 @@ if ($useHKU -and $hkuPath -match "TempCleanup") {
 Write-Host ""
 Write-Host "=== CLEANUP COMPLETE ===" -ForegroundColor Green
 Write-Host ""
-Write-Host "  Next steps:" -ForegroundColor White
-Write-Host "  1. Open each Office app once to rebuild the assembly cache." -ForegroundColor Cyan
-Write-Host "     First launch will be a bit slower, second launch will be fast." -ForegroundColor Cyan
-Write-Host "  2. Open Outlook and verify add-ins are correct:" -ForegroundColor Cyan
-Write-Host "     File > Options > Add-ins > COM Add-ins > Go" -ForegroundColor Cyan
+Write-Host "  What was done:" -ForegroundColor White
+Write-Host "  - Removed dead Outlook add-ins (iManage, ICQ, Lync, etc.)" -ForegroundColor Cyan
+Write-Host "  - Cleared .NET assembly cache (dl3)" -ForegroundColor Cyan
+Write-Host "  - Checked/disabled Fusion logging" -ForegroundColor Cyan
+Write-Host "  - Cleaned iManage registry remnants" -ForegroundColor Cyan
+Write-Host "  - Protected required Outlook add-ins from auto-disable" -ForegroundColor Cyan
+Write-Host "  - Cleared Outlook resiliency (disabled add-in) data" -ForegroundColor Cyan
+Write-Host "  - Applied Office startup optimisations" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "  IMPORTANT - First launch after cleanup:" -ForegroundColor Yellow
+Write-Host "  The first time each Office app opens it will be a bit slower" -ForegroundColor Yellow
+Write-Host "  while the assembly cache rebuilds. This is normal and one-time." -ForegroundColor Yellow
+Write-Host "  Second launch onwards will be fast." -ForegroundColor Yellow
+Write-Host ""
+Write-Host "  If user needs to log off/on for foreground fix to take effect." -ForegroundColor Yellow
 Write-Host ""
