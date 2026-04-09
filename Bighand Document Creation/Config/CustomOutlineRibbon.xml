@@ -61,6 +61,54 @@
                   <mso:button id="BtnVerNotFirstC" tag="modInsertDocId.NDFooter_Ver_NotFirst_C" label="Centre" imageMso="ObjectsAlignCenterHorizontal" onAction="RunMacroAction" />
                   <mso:button id="BtnVerNotFirstR" tag="modInsertDocId.NDFooter_Ver_NotFirst_R" label="Right" imageMso="ObjectsAlignRight" onAction="RunMacroAction" />
                 </mso:menu>
+                <mso:menuSeparator id="sepFooterName" title="Name Only" />
+                <mso:menu id="mnuNameAll" label="All Pages" imageMso="NumberInsert">
+                  <mso:button id="BtnNameAllL" tag="modInsertDocId.NDFooter_Name_All_L" label="Left" imageMso="ObjectsAlignLeft" onAction="RunMacroAction" />
+                  <mso:button id="BtnNameAllC" tag="modInsertDocId.NDFooter_Name_All_C" label="Centre" imageMso="ObjectsAlignCenterHorizontal" onAction="RunMacroAction" />
+                  <mso:button id="BtnNameAllR" tag="modInsertDocId.NDFooter_Name_All_R" label="Right" imageMso="ObjectsAlignRight" onAction="RunMacroAction" />
+                </mso:menu>
+                <mso:menu id="mnuNameFirst" label="First Page Only" imageMso="NumberInsert">
+                  <mso:button id="BtnNameFirstL" tag="modInsertDocId.NDFooter_Name_First_L" label="Left" imageMso="ObjectsAlignLeft" onAction="RunMacroAction" />
+                  <mso:button id="BtnNameFirstC" tag="modInsertDocId.NDFooter_Name_First_C" label="Centre" imageMso="ObjectsAlignCenterHorizontal" onAction="RunMacroAction" />
+                  <mso:button id="BtnNameFirstR" tag="modInsertDocId.NDFooter_Name_First_R" label="Right" imageMso="ObjectsAlignRight" onAction="RunMacroAction" />
+                </mso:menu>
+                <mso:menu id="mnuNameNotFirst" label="All Except First" imageMso="NumberInsert">
+                  <mso:button id="BtnNameNotFirstL" tag="modInsertDocId.NDFooter_Name_NotFirst_L" label="Left" imageMso="ObjectsAlignLeft" onAction="RunMacroAction" />
+                  <mso:button id="BtnNameNotFirstC" tag="modInsertDocId.NDFooter_Name_NotFirst_C" label="Centre" imageMso="ObjectsAlignCenterHorizontal" onAction="RunMacroAction" />
+                  <mso:button id="BtnNameNotFirstR" tag="modInsertDocId.NDFooter_Name_NotFirst_R" label="Right" imageMso="ObjectsAlignRight" onAction="RunMacroAction" />
+                </mso:menu>
+                <mso:menuSeparator id="sepFooterNameNum" title="Name + Number" />
+                <mso:menu id="mnuNameNumAll" label="All Pages" imageMso="NumberInsert">
+                  <mso:button id="BtnNameNumAllL" tag="modInsertDocId.NDFooter_NameNum_All_L" label="Left" imageMso="ObjectsAlignLeft" onAction="RunMacroAction" />
+                  <mso:button id="BtnNameNumAllC" tag="modInsertDocId.NDFooter_NameNum_All_C" label="Centre" imageMso="ObjectsAlignCenterHorizontal" onAction="RunMacroAction" />
+                  <mso:button id="BtnNameNumAllR" tag="modInsertDocId.NDFooter_NameNum_All_R" label="Right" imageMso="ObjectsAlignRight" onAction="RunMacroAction" />
+                </mso:menu>
+                <mso:menu id="mnuNameNumFirst" label="First Page Only" imageMso="NumberInsert">
+                  <mso:button id="BtnNameNumFirstL" tag="modInsertDocId.NDFooter_NameNum_First_L" label="Left" imageMso="ObjectsAlignLeft" onAction="RunMacroAction" />
+                  <mso:button id="BtnNameNumFirstC" tag="modInsertDocId.NDFooter_NameNum_First_C" label="Centre" imageMso="ObjectsAlignCenterHorizontal" onAction="RunMacroAction" />
+                  <mso:button id="BtnNameNumFirstR" tag="modInsertDocId.NDFooter_NameNum_First_R" label="Right" imageMso="ObjectsAlignRight" onAction="RunMacroAction" />
+                </mso:menu>
+                <mso:menu id="mnuNameNumNotFirst" label="All Except First" imageMso="NumberInsert">
+                  <mso:button id="BtnNameNumNotFirstL" tag="modInsertDocId.NDFooter_NameNum_NotFirst_L" label="Left" imageMso="ObjectsAlignLeft" onAction="RunMacroAction" />
+                  <mso:button id="BtnNameNumNotFirstC" tag="modInsertDocId.NDFooter_NameNum_NotFirst_C" label="Centre" imageMso="ObjectsAlignCenterHorizontal" onAction="RunMacroAction" />
+                  <mso:button id="BtnNameNumNotFirstR" tag="modInsertDocId.NDFooter_NameNum_NotFirst_R" label="Right" imageMso="ObjectsAlignRight" onAction="RunMacroAction" />
+                </mso:menu>
+                <mso:menuSeparator id="sepFooterNameNumVer" title="Name + Number + Version" />
+                <mso:menu id="mnuNameNumVerAll" label="All Pages" imageMso="NumberInsert">
+                  <mso:button id="BtnNameNumVerAllL" tag="modInsertDocId.NDFooter_NameNumVer_All_L" label="Left" imageMso="ObjectsAlignLeft" onAction="RunMacroAction" />
+                  <mso:button id="BtnNameNumVerAllC" tag="modInsertDocId.NDFooter_NameNumVer_All_C" label="Centre" imageMso="ObjectsAlignCenterHorizontal" onAction="RunMacroAction" />
+                  <mso:button id="BtnNameNumVerAllR" tag="modInsertDocId.NDFooter_NameNumVer_All_R" label="Right" imageMso="ObjectsAlignRight" onAction="RunMacroAction" />
+                </mso:menu>
+                <mso:menu id="mnuNameNumVerFirst" label="First Page Only" imageMso="NumberInsert">
+                  <mso:button id="BtnNameNumVerFirstL" tag="modInsertDocId.NDFooter_NameNumVer_First_L" label="Left" imageMso="ObjectsAlignLeft" onAction="RunMacroAction" />
+                  <mso:button id="BtnNameNumVerFirstC" tag="modInsertDocId.NDFooter_NameNumVer_First_C" label="Centre" imageMso="ObjectsAlignCenterHorizontal" onAction="RunMacroAction" />
+                  <mso:button id="BtnNameNumVerFirstR" tag="modInsertDocId.NDFooter_NameNumVer_First_R" label="Right" imageMso="ObjectsAlignRight" onAction="RunMacroAction" />
+                </mso:menu>
+                <mso:menu id="mnuNameNumVerNotFirst" label="All Except First" imageMso="NumberInsert">
+                  <mso:button id="BtnNameNumVerNotFirstL" tag="modInsertDocId.NDFooter_NameNumVer_NotFirst_L" label="Left" imageMso="ObjectsAlignLeft" onAction="RunMacroAction" />
+                  <mso:button id="BtnNameNumVerNotFirstC" tag="modInsertDocId.NDFooter_NameNumVer_NotFirst_C" label="Centre" imageMso="ObjectsAlignCenterHorizontal" onAction="RunMacroAction" />
+                  <mso:button id="BtnNameNumVerNotFirstR" tag="modInsertDocId.NDFooter_NameNumVer_NotFirst_R" label="Right" imageMso="ObjectsAlignRight" onAction="RunMacroAction" />
+                </mso:menu>
               </mso:menu>
             </mso:splitButton>
             <mso:button id="BtnInsertNDRef" tag="modInsertDocId.InsertNDDocNum" label="Insert ND Ref" keytip="ND" imageMso="NumberInsert" screentip="Insert NetDocuments reference at the cursor position" getEnabled="HasActiveDocumentCallback" size="normal" onAction="RunMacroAction" />
