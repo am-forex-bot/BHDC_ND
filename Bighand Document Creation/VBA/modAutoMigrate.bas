@@ -86,17 +86,15 @@ Public Sub MigrateIManageToND()
     footerNdRegex.IgnoreCase = True
     footerNdRegex.Pattern = "[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}\s*(\.\d+|v\.?\d+)?"
 
-    ' --- Scan and replace in footers ---
+    ' --- Scan and replace in footers (all sections) ---
     Dim sec As Section
-    Set sec = ActiveDocument.Sections(1)
+    For Each sec In ActiveDocument.Sections
+        CheckAndUpdateFooter sec.Footers(wdHeaderFooterPrimary), docId, imRegex, footerNdRegex
 
-    ' Check primary footer
-    CheckAndUpdateFooter sec.Footers(wdHeaderFooterPrimary), docId, imRegex, footerNdRegex
-
-    ' Check first page footer if Different First Page is enabled
-    If sec.PageSetup.DifferentFirstPageHeaderFooter Then
-        CheckAndUpdateFooter sec.Footers(wdHeaderFooterFirstPage), docId, imRegex, footerNdRegex
-    End If
+        If sec.PageSetup.DifferentFirstPageHeaderFooter Then
+            CheckAndUpdateFooter sec.Footers(wdHeaderFooterFirstPage), docId, imRegex, footerNdRegex
+        End If
+    Next sec
 
     Exit Sub
 

@@ -8,6 +8,10 @@ Option Explicit
 ' Formats: Num, Ver, Name, NameNum, NameNumVer
 ' Naming: NDFooter_{format}_{All|First|NotFirst}_{L|C|R}
 ' Plus: InsertNDDocNum - insert at cursor position
+'
+' Multi-section support: if a document has more than one section, the user
+' is shown a picker listing page ranges, break types and link status so
+' they can choose which sections to update.
 ' =============================================================================
 
 ' --- Shared helpers ---
@@ -40,7 +44,6 @@ Private Function GetDocNameFromTitleBar() As String
     Dim titleText As String
     titleText = Application.ActiveWindow.Caption
 
-    ' Strip trailing " - Microsoft Word" (or localized app name)
     Dim appSuffix As String
     appSuffix = " - " & Application.Name
     If Len(titleText) > Len(appSuffix) And _
@@ -48,7 +51,6 @@ Private Function GetDocNameFromTitleBar() As String
         titleText = Left(titleText, Len(titleText) - Len(appSuffix))
     End If
 
-    ' Remove ND doc ID and optional version
     Dim regex As Object
     Set regex = CreateObject("VBScript.RegExp")
     regex.Global = True
@@ -56,7 +58,6 @@ Private Function GetDocNameFromTitleBar() As String
     regex.Pattern = "[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}\s*(\.\d+|v\.?\d+)?"
     titleText = regex.Replace(titleText, "")
 
-    ' Clean up residual separators and whitespace
     titleText = Trim(titleText)
     If Len(titleText) > 0 And (Left(titleText, 1) = "-" Or Left(titleText, 1) = ChrW(&H2013)) Then
         titleText = Trim(Mid(titleText, 2))
@@ -104,7 +105,6 @@ Private Function BuildFooterText(mode As String) As String
         Case "ver"
             BuildFooterText = GetNDDocIdFromTitleBar(includeVersion:=True)
         Case "name"
-            ' Verify doc is in NetDocuments before extracting name
             If GetNDDocIdFromTitleBar(False) = "" Then
                 BuildFooterText = ""
             Else
@@ -134,14 +134,11 @@ Private Function BuildFooterText(mode As String) As String
 End Function
 
 Private Function BuildRefreshText(existingText As String, newDocId As String) As String
-    ' Detect if the existing footer has a name prefix before the doc ID
-    ' and rebuild accordingly, preserving the name
     Dim ndRegex As Object
     Set ndRegex = CreateNDRegex()
 
     Dim cleanText As String
     cleanText = existingText
-    ' Remove trailing paragraph mark
     If Len(cleanText) > 0 Then
         If Asc(Right(cleanText, 1)) = 13 Then
             cleanText = Left(cleanText, Len(cleanText) - 1)
@@ -152,7 +149,6 @@ Private Function BuildRefreshText(existingText As String, newDocId As String) As
         Dim matches As Object
         Set matches = ndRegex.Execute(cleanText)
         If matches(0).FirstIndex > 0 Then
-            ' Text exists before the doc ID - rebuild with fresh name
             Dim docName As String
             docName = GetDocNameFromTitleBar()
             If docName <> "" Then
@@ -162,9 +158,111 @@ Private Function BuildRefreshText(existingText As String, newDocId As String) As
         End If
     End If
 
-    ' No name prefix - just use the doc ID
     BuildRefreshText = newDocId
 End Function
+
+' --- Section helpers ---
+
+Private Function GetSectionInfo() As String
+    Dim info As String
+    Dim sec As Section
+    Dim i As Long
+    Dim rng As Range
+    Dim startPage As Long
+    Dim endPage As Long
+    Dim pageStr As String
+    Dim details As String
+
+    i = 0
+    For Each sec In ActiveDocument.Sections
+        i = i + 1
+
+        Set rng = sec.Range
+        rng.Collapse wdCollapseStart
+        startPage = rng.Information(wdActiveEndPageNumber)
+
+        Set rng = sec.Range
+        rng.Collapse wdCollapseEnd
+        endPage = rng.Information(wdActiveEndPageNumber)
+
+        If startPage = endPage Then
+            pageStr = "p." & startPage
+        Else
+            pageStr = "pp." & startPage & "-" & endPage
+        End If
+
+        details = ""
+        If i > 1 Then
+            Select Case sec.PageSetup.SectionStart
+                Case wdSectionNewPage: details = "New Page"
+                Case wdSectionContinuous: details = "Continuous"
+                Case wdSectionEvenPage: details = "Even Page"
+                Case wdSectionOddPage: details = "Odd Page"
+            End Select
+
+            If sec.Footers(wdHeaderFooterPrimary).LinkToPrevious Then
+                If details <> "" Then details = details & ", "
+                details = details & "linked"
+            Else
+                If details <> "" Then details = details & ", "
+                details = details & "independent"
+            End If
+        End If
+
+        info = info & "  " & i & ". " & pageStr
+        If details <> "" Then info = info & " (" & details & ")"
+        info = info & vbCrLf
+    Next sec
+
+    GetSectionInfo = info
+End Function
+
+Private Function ParseSectionSelection(userInput As String, sectionCount As Long) As Collection
+    Dim result As New Collection
+    Dim inp As String
+    Dim parts() As String
+    Dim part As Variant
+    Dim trimmed As String
+    Dim rangeParts() As String
+    Dim startNum As Long
+    Dim endNum As Long
+    Dim k As Long
+    Dim num As Long
+
+    inp = Trim(LCase(userInput))
+
+    If inp = "all" Then
+        For k = 1 To sectionCount
+            result.Add k
+        Next k
+        Set ParseSectionSelection = result
+        Exit Function
+    End If
+
+    parts = Split(inp, ",")
+    For Each part In parts
+        trimmed = Trim(CStr(part))
+        If InStr(trimmed, "-") > 0 Then
+            rangeParts = Split(trimmed, "-")
+            If UBound(rangeParts) = 1 Then
+                If IsNumeric(Trim(rangeParts(0))) And IsNumeric(Trim(rangeParts(1))) Then
+                    startNum = CLng(Trim(rangeParts(0)))
+                    endNum = CLng(Trim(rangeParts(1)))
+                    For k = startNum To endNum
+                        If k >= 1 And k <= sectionCount Then result.Add k
+                    Next k
+                End If
+            End If
+        ElseIf IsNumeric(trimmed) Then
+            num = CLng(trimmed)
+            If num >= 1 And num <= sectionCount Then result.Add num
+        End If
+    Next part
+
+    Set ParseSectionSelection = result
+End Function
+
+' --- Footer manipulation ---
 
 Private Sub ReplaceParaText(para As Paragraph, docId As String, align As Long)
     Dim rng As Range
@@ -182,7 +280,6 @@ Private Sub InsertOrReplaceInFooter(ftr As HeaderFooter, footerText As String, a
     Dim imRegex As Object
     Set imRegex = CreateIManageRegex()
 
-    ' First pass: check for ND/iManage doc ID patterns
     Dim para As Paragraph
     For Each para In ftr.Range.Paragraphs
         If ndRegex.Test(para.Range.Text) Or imRegex.Test(para.Range.Text) Then
@@ -191,7 +288,7 @@ Private Sub InsertOrReplaceInFooter(ftr As HeaderFooter, footerText As String, a
         End If
     Next para
 
-    ' Second pass: check for previously inserted ref (size 8, grey text)
+    ' Second pass: previously inserted ref (size 8, grey text)
     For Each para In ftr.Range.Paragraphs
         Dim rng As Range
         Set rng = para.Range
@@ -226,7 +323,6 @@ Private Sub RemoveDocRefFromFooter(ftr As HeaderFooter)
         End If
     Next para
 
-    ' Also check for previously inserted ref (name-only mode: size 8, grey)
     For Each para In ftr.Range.Paragraphs
         Dim rng As Range
         Set rng = para.Range
@@ -236,6 +332,54 @@ Private Sub RemoveDocRefFromFooter(ftr As HeaderFooter)
             Exit Sub
         End If
     Next para
+End Sub
+
+Private Sub SweepStaleWatermarks(hdr As HeaderFooter)
+    ' When DifferentFirstPageHeaderFooter is flipped from False to True,
+    ' the first-page header story becomes visible. It may contain stale
+    ' watermark shapes from the template. Remove them - but only if the
+    ' header is not linked to a previous section (to avoid deleting
+    ' intentional watermarks from an earlier section).
+    On Error Resume Next
+    Dim shp As Shape
+    Dim i As Long
+    For i = hdr.Shapes.Count To 1 Step -1
+        Set shp = hdr.Shapes(i)
+        If InStr(1, shp.Name, "PowerPlusWaterMarkObject", vbTextCompare) = 1 Then
+            shp.Delete
+        End If
+    Next i
+    On Error GoTo 0
+End Sub
+
+Private Sub ApplyFooterToSection(sec As Section, footerText As String, pageMode As String, al As Long)
+    Select Case LCase(pageMode)
+        Case "all"
+            InsertOrReplaceInFooter sec.Footers(wdHeaderFooterPrimary), footerText, al
+            If sec.PageSetup.DifferentFirstPageHeaderFooter Then
+                InsertOrReplaceInFooter sec.Footers(wdHeaderFooterFirstPage), footerText, al
+            End If
+
+        Case "first"
+            If Not sec.PageSetup.DifferentFirstPageHeaderFooter Then
+                sec.PageSetup.DifferentFirstPageHeaderFooter = True
+                If sec.Index = 1 Or Not sec.Headers(wdHeaderFooterFirstPage).LinkToPrevious Then
+                    SweepStaleWatermarks sec.Headers(wdHeaderFooterFirstPage)
+                End If
+            End If
+            InsertOrReplaceInFooter sec.Footers(wdHeaderFooterFirstPage), footerText, al
+            RemoveDocRefFromFooter sec.Footers(wdHeaderFooterPrimary)
+
+        Case "notfirst"
+            If Not sec.PageSetup.DifferentFirstPageHeaderFooter Then
+                sec.PageSetup.DifferentFirstPageHeaderFooter = True
+                If sec.Index = 1 Or Not sec.Headers(wdHeaderFooterFirstPage).LinkToPrevious Then
+                    SweepStaleWatermarks sec.Headers(wdHeaderFooterFirstPage)
+                End If
+            End If
+            InsertOrReplaceInFooter sec.Footers(wdHeaderFooterPrimary), footerText, al
+            RemoveDocRefFromFooter sec.Footers(wdHeaderFooterFirstPage)
+    End Select
 End Sub
 
 ' --- Shared implementation ---
@@ -256,33 +400,38 @@ Private Sub DoInsertFooter(mode As String, pageMode As String, align As String)
     Dim cursorPos As Range
     Set cursorPos = Selection.Range
 
-    Dim sec As Section
-    Set sec = ActiveDocument.Sections(1)
-
     Dim al As Long
     al = AlignmentConst(align)
 
-    Select Case LCase(pageMode)
-        Case "all"
-            InsertOrReplaceInFooter sec.Footers(wdHeaderFooterPrimary), footerText, al
-            If sec.PageSetup.DifferentFirstPageHeaderFooter Then
-                InsertOrReplaceInFooter sec.Footers(wdHeaderFooterFirstPage), footerText, al
-            End If
+    Dim sectionCount As Long
+    sectionCount = ActiveDocument.Sections.Count
 
-        Case "first"
-            If Not sec.PageSetup.DifferentFirstPageHeaderFooter Then
-                sec.PageSetup.DifferentFirstPageHeaderFooter = True
-            End If
-            InsertOrReplaceInFooter sec.Footers(wdHeaderFooterFirstPage), footerText, al
-            RemoveDocRefFromFooter sec.Footers(wdHeaderFooterPrimary)
+    If sectionCount = 1 Then
+        ApplyFooterToSection ActiveDocument.Sections(1), footerText, pageMode, al
+    Else
+        Dim info As String
+        info = "This document has " & sectionCount & " sections:" & vbCrLf & vbCrLf
+        info = info & GetSectionInfo()
+        info = info & vbCrLf & "Enter sections to update (e.g. ""1,3"" or ""2-4"" or ""all""):"
 
-        Case "notfirst"
-            If Not sec.PageSetup.DifferentFirstPageHeaderFooter Then
-                sec.PageSetup.DifferentFirstPageHeaderFooter = True
-            End If
-            InsertOrReplaceInFooter sec.Footers(wdHeaderFooterPrimary), footerText, al
-            RemoveDocRefFromFooter sec.Footers(wdHeaderFooterFirstPage)
-    End Select
+        Dim userInput As String
+        userInput = InputBox(info, "Select Sections", "all")
+
+        If Len(userInput) = 0 Then Exit Sub
+
+        Dim selectedSections As Collection
+        Set selectedSections = ParseSectionSelection(userInput, sectionCount)
+
+        If selectedSections.Count = 0 Then
+            MsgBox "No valid sections selected.", vbExclamation, "Insert ND Ref"
+            Exit Sub
+        End If
+
+        Dim idx As Variant
+        For Each idx In selectedSections
+            ApplyFooterToSection ActiveDocument.Sections(CLng(idx)), footerText, pageMode, al
+        Next idx
+    End If
 
     cursorPos.Select
 
@@ -558,13 +707,9 @@ Public Sub InsertNDDocIdAllButFirstNoVer()
 End Sub
 
 ' =============================================================================
-' Refresh footer version
+' Refresh footer version (all sections)
 ' =============================================================================
 Public Sub RefreshFooterVersion()
-    ' Updates existing ND ref in footer to match current title bar version.
-    ' Preserves doc name prefix if present.
-    ' Use after Save As / New Version in NetDocuments.
-
     On Error GoTo ErrorHandler
 
     Dim docId As String
@@ -583,38 +728,35 @@ Public Sub RefreshFooterVersion()
     Set imRegex = CreateIManageRegex()
 
     Dim sec As Section
-    Set sec = ActiveDocument.Sections(1)
     Dim updated As Boolean
     updated = False
-
-    ' Check primary footer
     Dim para As Paragraph
-    For Each para In sec.Footers(wdHeaderFooterPrimary).Range.Paragraphs
-        If ndRegex.Test(para.Range.Text) Or imRegex.Test(para.Range.Text) Then
-            Dim existingAlign As Long
-            existingAlign = para.Range.ParagraphFormat.Alignment
-            Dim refreshText As String
-            refreshText = BuildRefreshText(para.Range.Text, docId)
-            ReplaceParaText para, refreshText, existingAlign
-            updated = True
-            Exit For
-        End If
-    Next para
+    Dim existingAlign As Long
+    Dim refreshText As String
 
-    ' Check first page footer
-    If sec.PageSetup.DifferentFirstPageHeaderFooter Then
-        For Each para In sec.Footers(wdHeaderFooterFirstPage).Range.Paragraphs
+    For Each sec In ActiveDocument.Sections
+        For Each para In sec.Footers(wdHeaderFooterPrimary).Range.Paragraphs
             If ndRegex.Test(para.Range.Text) Or imRegex.Test(para.Range.Text) Then
-                Dim existingAlign2 As Long
-                existingAlign2 = para.Range.ParagraphFormat.Alignment
-                Dim refreshText2 As String
-                refreshText2 = BuildRefreshText(para.Range.Text, docId)
-                ReplaceParaText para, refreshText2, existingAlign2
+                existingAlign = para.Range.ParagraphFormat.Alignment
+                refreshText = BuildRefreshText(para.Range.Text, docId)
+                ReplaceParaText para, refreshText, existingAlign
                 updated = True
                 Exit For
             End If
         Next para
-    End If
+
+        If sec.PageSetup.DifferentFirstPageHeaderFooter Then
+            For Each para In sec.Footers(wdHeaderFooterFirstPage).Range.Paragraphs
+                If ndRegex.Test(para.Range.Text) Or imRegex.Test(para.Range.Text) Then
+                    existingAlign = para.Range.ParagraphFormat.Alignment
+                    refreshText = BuildRefreshText(para.Range.Text, docId)
+                    ReplaceParaText para, refreshText, existingAlign
+                    updated = True
+                    Exit For
+                End If
+            Next para
+        End If
+    Next sec
 
     If updated Then
         MsgBox "Footer updated to " & docId & ".", vbInformation, "Refresh Footer"
