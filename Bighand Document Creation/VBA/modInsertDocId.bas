@@ -925,8 +925,7 @@ Public Sub EmailDocLink()
     Set olMail = olApp.CreateItem(0)
 
     olMail.Subject = docName
-    olMail.HTMLBody = "<p>Please see the document linked below:</p>" & _
-                      "<p><a href=""" & ndUrl & """>" & docName & " (" & docId & ")</a></p>"
+    olMail.Body = docName & " (" & docId & ")" & vbCrLf & ndUrl
     olMail.Display
 
     Exit Sub
