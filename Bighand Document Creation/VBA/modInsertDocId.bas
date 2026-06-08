@@ -427,9 +427,37 @@ Private Sub DoInsertFooter(mode As String, pageMode As String, align As String)
             Exit Sub
         End If
 
+        ' Build lookup of selected indices
+        Dim isSelected() As Boolean
+        ReDim isSelected(1 To sectionCount)
+        Dim s As Variant
+        For Each s In selectedSections
+            isSelected(CLng(s)) = True
+        Next s
+
         Dim idx As Variant
         For Each idx In selectedSections
-            ApplyFooterToSection ActiveDocument.Sections(CLng(idx)), footerText, pageMode, al
+            Dim secIdx As Long
+            secIdx = CLng(idx)
+            Dim sec As Section
+            Set sec = ActiveDocument.Sections(secIdx)
+
+            ' Unlink from previous section if it wasn't selected,
+            ' so changes only affect the chosen section
+            If secIdx > 1 Then
+                If Not isSelected(secIdx - 1) Then
+                    If sec.Footers(wdHeaderFooterPrimary).LinkToPrevious Then
+                        sec.Footers(wdHeaderFooterPrimary).LinkToPrevious = False
+                    End If
+                    If sec.PageSetup.DifferentFirstPageHeaderFooter Then
+                        If sec.Footers(wdHeaderFooterFirstPage).LinkToPrevious Then
+                            sec.Footers(wdHeaderFooterFirstPage).LinkToPrevious = False
+                        End If
+                    End If
+                End If
+            End If
+
+            ApplyFooterToSection sec, footerText, pageMode, al
         Next idx
     End If
 
