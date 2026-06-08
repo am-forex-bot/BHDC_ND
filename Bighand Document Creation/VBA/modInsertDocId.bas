@@ -152,7 +152,7 @@ Private Function BuildNDLinkCard(docName As String, ndUrl As String) As String
         "border-collapse:collapse;font-family:Segoe UI,Arial,sans-serif;" & _
         "max-width:520px;background-color:#f5f5f5;'>"
     h = h & "<tr>"
-    h = h & "<td style='padding:10px 14px;font-size:13px;color:#333;font-weight:600;'>" & displayName & "</td>"
+    h = h & "<td style='padding:10px 14px;font-size:13px;color:#333;font-weight:500;'>" & displayName & "</td>"
     h = h & "<td style='padding:10px 14px;text-align:right;white-space:nowrap;'>"
     h = h & "<a href='" & ndUrl & "' style='color:#0563C1;text-decoration:none;" & _
         "font-size:11px;font-weight:bold;letter-spacing:0.5px;'>OPEN</a>"
@@ -933,7 +933,7 @@ Public Sub EmailDocLink()
     End If
 
     Dim ndUrl As String
-    ndUrl = "https://eu.netdocuments.com/neWeb2/goid.aspx?id=" & docId
+    ndUrl = "https://eu.netdocuments.com/neWeb2/searchRes.aspx?newSearch=E&filter=%3D999%28" & docId & "%29&open=1"
 
     Dim docName As String
     docName = GetDocNameFromTitleBar()
