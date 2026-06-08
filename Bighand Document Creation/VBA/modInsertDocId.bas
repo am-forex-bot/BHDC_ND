@@ -142,21 +142,21 @@ Private Function BuildFooterText(mode As String) As String
 End Function
 
 Private Function BuildNDLinkCard(docName As String, ndUrl As String) As String
+    ' Include file extension for the email card display
+    Dim displayName As String
+    displayName = ActiveDocument.Name
+    If displayName = "" Then displayName = docName
+
     Dim h As String
     h = "<table cellpadding='0' cellspacing='0' style='border:1px solid #d0d0d0;" & _
-        "border-collapse:collapse;font-family:Segoe UI,Arial,sans-serif;max-width:520px;'>"
+        "border-collapse:collapse;font-family:Segoe UI,Arial,sans-serif;" & _
+        "max-width:520px;background-color:#f5f5f5;'>"
     h = h & "<tr>"
-    h = h & "<td style='padding:10px 14px;font-size:13px;color:#333;'>" & docName & "</td>"
+    h = h & "<td style='padding:10px 14px;font-size:13px;color:#333;font-weight:600;'>" & displayName & "</td>"
     h = h & "<td style='padding:10px 14px;text-align:right;white-space:nowrap;'>"
     h = h & "<a href='" & ndUrl & "' style='color:#0563C1;text-decoration:none;" & _
-        "font-size:11px;font-weight:bold;letter-spacing:0.5px;margin-left:18px;'>OPEN</a>"
-    h = h & "<a href='" & ndUrl & "' style='color:#0563C1;text-decoration:none;" & _
-        "font-size:11px;font-weight:bold;letter-spacing:0.5px;margin-left:18px;'>VIEW</a>"
-    h = h & "<a href='" & ndUrl & "' style='color:#0563C1;text-decoration:none;" & _
-        "font-size:11px;font-weight:bold;letter-spacing:0.5px;margin-left:18px;'>GO TO</a>"
+        "font-size:11px;font-weight:bold;letter-spacing:0.5px;'>OPEN</a>"
     h = h & "</td></tr>"
-    h = h & "<tr><td colspan='2' style='padding:2px 14px 8px;font-size:10px;color:#999;'>"
-    h = h & "Secured by NetDocuments&reg;</td></tr>"
     h = h & "</table>"
     BuildNDLinkCard = h
 End Function
