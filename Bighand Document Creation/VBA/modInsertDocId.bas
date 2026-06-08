@@ -841,10 +841,18 @@ End Sub
 Public Sub EmailDocCopy()
     On Error GoTo ErrorHandler
 
+    ' Document must be saved to a file before we can attach it
+    If ActiveDocument.Path = "" Then
+        MsgBox "This document hasn't been saved yet." & vbCrLf & vbCrLf & _
+               "Please save it to NetDocuments first, then try again.", _
+               vbExclamation, "Email a Copy"
+        Exit Sub
+    End If
+
     Dim response As VbMsgBoxResult
-    response = MsgBox("Save the document before emailing?" & vbCrLf & vbCrLf & _
+    response = MsgBox("Save latest changes before emailing?" & vbCrLf & vbCrLf & _
                       "Yes = Save first, then email" & vbCrLf & _
-                      "No = Email the current version without saving", _
+                      "No = Email the last saved version", _
                       vbYesNoCancel + vbQuestion, "Email a Copy")
 
     If response = vbCancel Then Exit Sub
@@ -872,7 +880,6 @@ Public Sub EmailDocCopy()
     docName = GetDocNameFromTitleBar()
     If docName = "" Then
         docName = ActiveDocument.Name
-        ' Strip extension from filename
         Dim dotPos As Long
         dotPos = InStrRev(docName, ".")
         If dotPos > 1 Then docName = Left(docName, dotPos - 1)
