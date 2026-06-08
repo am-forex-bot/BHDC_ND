@@ -142,10 +142,16 @@ Private Function BuildFooterText(mode As String) As String
 End Function
 
 Private Function BuildNDLinkCard(docName As String, ndUrl As String) As String
-    ' Include file extension for the email card display
+    ' Show doc name with extension but without ND doc number
     Dim displayName As String
-    displayName = ActiveDocument.Name
-    If displayName = "" Then displayName = docName
+    displayName = GetDocNameFromTitleBar()
+    ' Add back the file extension
+    Dim dotPos As Long
+    dotPos = InStrRev(ActiveDocument.Name, ".")
+    If dotPos > 0 Then
+        displayName = displayName & Mid(ActiveDocument.Name, dotPos)
+    End If
+    If displayName = "" Then displayName = ActiveDocument.Name
 
     Dim h As String
     h = "<table cellpadding='0' cellspacing='0' style='border:1px solid #d0d0d0;" & _

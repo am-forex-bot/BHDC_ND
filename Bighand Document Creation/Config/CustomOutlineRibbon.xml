@@ -16,16 +16,18 @@
           </mso:dialogBoxLauncher>
         </mso:group>
         <mso:group idQ="outline:GrpDMSToolsDMS" insertBeforeQ="outline:GrpDesigner" label="DMS">
-          <mso:box id="boxDMSOpts1" boxStyle="vertical">
+          <mso:box id="boxFileOps" boxStyle="vertical">
             <mso:control idMso="FileOpen" size="normal" />
             <mso:control idMso="FileClose" size="normal" />
             <mso:control idMso="FileSave" size="normal" />
           </mso:box>
-          <mso:box id="boxDMSOpts12" boxStyle="vertical">
+          <mso:box id="boxFileOps2" boxStyle="vertical">
+            <mso:control idMso="FileSaveAs" size="normal" />
             <mso:editBox id="QuickOpen" tag="openDmsDocument" keytip="OO" screentip="Enter a DMS document number to open" getEnabled="RunCommandEnabled" sizeString="12345678901234567" onChange="RunCommandActionOnChange" />
             <mso:button id="EditProfile" tag="editDmsProfile" visible="false" label="Edit Profile" keytip="OP" imageMso="FileProperties" screentip="Edit the document's DMS profile" getEnabled="RunCommandEnabled" size="normal" onAction="RunCommandAction" />
-            <mso:control idMso="FileSaveAs" size="normal" />
-            <mso:button id="BtnInsertDmsIdForm" visible="false" label="Edit footer" image="Icon_64_AddDocRef" screentip="Add or remove a DMS reference" getEnabled="InsertDocIdEnabled" size="normal" onAction="BtnInsertDocIdAction" />
+          </mso:box>
+          <mso:separator id="sepFileFooter" />
+          <mso:box id="boxFooterOps" boxStyle="vertical">
             <mso:splitButton id="spltInsertFooter" size="normal" getEnabled="HasActiveDocumentCallback">
               <mso:button id="BtnInsertDocNumAll" tag="modInsertDocId.NDFooter_Ver_All_R" label="Footer (All Pages)" keytip="DN" imageMso="NumberInsert" screentip="Insert NetDocuments reference into footer on all pages (right-aligned, with version)" onAction="RunMacroAction" />
               <mso:menu id="mnuInsertFooter">
@@ -113,9 +115,13 @@
             </mso:splitButton>
             <mso:button id="BtnInsertNDRef" tag="modInsertDocId.InsertNDDocNum" label="Insert ND Ref" keytip="ND" imageMso="NumberInsert" screentip="Insert NetDocuments reference at the cursor position" getEnabled="HasActiveDocumentCallback" size="normal" onAction="RunMacroAction" />
             <mso:button id="BtnRefreshFooter" tag="modInsertDocId.RefreshFooterVersion" label="Refresh Footer" keytip="RF" imageMso="RecurrenceEdit" screentip="Update footer version to match current NetDocuments version (use after Save As New Version)" getEnabled="HasActiveDocumentCallback" size="normal" onAction="RunMacroAction" />
+          </mso:box>
+          <mso:separator id="sepFooterEmail" />
+          <mso:box id="boxEmailOps" boxStyle="vertical">
             <mso:button id="BtnEmailCopy" tag="modInsertDocId.EmailDocCopy" label="Email Copy" keytip="EC" imageMso="FileSendAsAttachment" screentip="Email a copy of this document as an attachment (option to save first)" getEnabled="HasActiveDocumentCallback" size="normal" onAction="RunMacroAction" />
             <mso:button id="BtnEmailLink" tag="modInsertDocId.EmailDocLink" label="Email Link" keytip="EL" imageMso="HyperlinkInsert" screentip="Email a NetDocuments link to this document" getEnabled="HasActiveDocumentCallback" size="normal" onAction="RunMacroAction" />
           </mso:box>
+          <mso:button id="BtnInsertDmsIdForm" visible="false" label="Edit footer" image="Icon_64_AddDocRef" screentip="Add or remove a DMS reference" getEnabled="InsertDocIdEnabled" size="normal" onAction="BtnInsertDocIdAction" />
           <mso:splitButton id="BtnDocIdOptions" visible="false" getEnabled="InsertDocIdEnabled" size="large">
             <mso:button id="BtnInsertDocId" label="Doc ID Options" image="Icon_64_AddDocRef" onAction="BtnInsertDocIdAction" />
             <mso:menu id="MnuInsertDocId">
