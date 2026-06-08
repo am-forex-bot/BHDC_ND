@@ -834,3 +834,98 @@ ErrorHandler:
            "Error " & Err.Number & ": " & Err.Description, _
            vbCritical, "Insert ND Doc Number"
 End Sub
+
+' =============================================================================
+' Email a copy of the current document
+' =============================================================================
+Public Sub EmailDocCopy()
+    On Error GoTo ErrorHandler
+
+    Dim response As VbMsgBoxResult
+    response = MsgBox("Save the document before emailing?" & vbCrLf & vbCrLf & _
+                      "Yes = Save first, then email" & vbCrLf & _
+                      "No = Email the current version without saving", _
+                      vbYesNoCancel + vbQuestion, "Email a Copy")
+
+    If response = vbCancel Then Exit Sub
+
+    If response = vbYes Then
+        On Error Resume Next
+        ActiveDocument.Save
+        If Err.Number <> 0 Then
+            MsgBox "Could not save the document." & vbCrLf & _
+                   "Error " & Err.Number & ": " & Err.Description, _
+                   vbExclamation, "Email a Copy"
+            Err.Clear
+        End If
+        On Error GoTo ErrorHandler
+    End If
+
+    Dim olApp As Object
+    Set olApp = CreateObject("Outlook.Application")
+    Dim olMail As Object
+    Set olMail = olApp.CreateItem(0)
+
+    olMail.Attachments.Add ActiveDocument.FullName
+
+    Dim docName As String
+    docName = GetDocNameFromTitleBar()
+    If docName = "" Then
+        docName = ActiveDocument.Name
+        ' Strip extension from filename
+        Dim dotPos As Long
+        dotPos = InStrRev(docName, ".")
+        If dotPos > 1 Then docName = Left(docName, dotPos - 1)
+    End If
+
+    olMail.Subject = docName
+    olMail.Display
+
+    Exit Sub
+
+ErrorHandler:
+    MsgBox "An error occurred creating the email." & vbCrLf & _
+           "Error " & Err.Number & ": " & Err.Description, _
+           vbCritical, "Email a Copy"
+End Sub
+
+' =============================================================================
+' Email a NetDocuments link to the current document
+' =============================================================================
+Public Sub EmailDocLink()
+    On Error GoTo ErrorHandler
+
+    Dim docId As String
+    docId = GetNDDocIdFromTitleBar(includeVersion:=False)
+
+    If docId = "" Then
+        MsgBox "Could not find a NetDocuments reference in the title bar." & vbCrLf & vbCrLf & _
+               "Make sure the document is saved to NetDocuments first.", _
+               vbExclamation, "Email Link"
+        Exit Sub
+    End If
+
+    Dim ndUrl As String
+    ndUrl = "https://eu.netdocuments.com/neWeb2/goid.aspx?id=" & docId
+
+    Dim docName As String
+    docName = GetDocNameFromTitleBar()
+    If docName = "" Then docName = docId
+
+    Dim olApp As Object
+    Set olApp = CreateObject("Outlook.Application")
+    Dim olMail As Object
+    Set olMail = olApp.CreateItem(0)
+
+    olMail.Subject = docName
+    olMail.HTMLBody = "<p>Please see the document linked below:</p>" & _
+                      "<p><a href=""" & ndUrl & """>" & docName & " (" & docId & ")</a></p>"
+    olMail.Display
+
+    Exit Sub
+
+ErrorHandler:
+    MsgBox "An error occurred creating the email." & vbCrLf & _
+           "Error " & Err.Number & ": " & Err.Description, _
+           vbCritical, "Email Link"
+End Sub

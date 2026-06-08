@@ -113,6 +113,8 @@
             </mso:splitButton>
             <mso:button id="BtnInsertNDRef" tag="modInsertDocId.InsertNDDocNum" label="Insert ND Ref" keytip="ND" imageMso="NumberInsert" screentip="Insert NetDocuments reference at the cursor position" getEnabled="HasActiveDocumentCallback" size="normal" onAction="RunMacroAction" />
             <mso:button id="BtnRefreshFooter" tag="modInsertDocId.RefreshFooterVersion" label="Refresh Footer" keytip="RF" imageMso="RecurrenceEdit" screentip="Update footer version to match current NetDocuments version (use after Save As New Version)" getEnabled="HasActiveDocumentCallback" size="normal" onAction="RunMacroAction" />
+            <mso:button id="BtnEmailCopy" tag="modInsertDocId.EmailDocCopy" label="Email Copy" keytip="EC" imageMso="FileSendAsAttachment" screentip="Email a copy of this document as an attachment (option to save first)" getEnabled="HasActiveDocumentCallback" size="normal" onAction="RunMacroAction" />
+            <mso:button id="BtnEmailLink" tag="modInsertDocId.EmailDocLink" label="Email Link" keytip="EL" imageMso="HyperlinkInsert" screentip="Email a NetDocuments link to this document" getEnabled="HasActiveDocumentCallback" size="normal" onAction="RunMacroAction" />
           </mso:box>
           <mso:splitButton id="BtnDocIdOptions" visible="false" getEnabled="InsertDocIdEnabled" size="large">
             <mso:button id="BtnInsertDocId" label="Doc ID Options" image="Icon_64_AddDocRef" onAction="BtnInsertDocIdAction" />
@@ -205,6 +207,12 @@
           <mso:dialogBoxLauncher>
             <mso:button id="AboutOutline" keytip="B" screentip="About Outline" onAction="AboutOutline" />
           </mso:dialogBoxLauncher>
+        </mso:group>
+      </mso:tab>
+      <mso:tab idMso="TabHome">
+        <mso:group id="grpNDEmail" label="NetDocuments" insertAfterMso="GroupClipboard">
+          <mso:button id="BtnEmailCopyHome" tag="modInsertDocId.EmailDocCopy" label="Email Copy" imageMso="FileSendAsAttachment" screentip="Email a copy of this document as an attachment (option to save first)" getEnabled="HasActiveDocumentCallback" size="large" onAction="RunMacroAction" />
+          <mso:button id="BtnEmailLinkHome" tag="modInsertDocId.EmailDocLink" label="Email Link" imageMso="HyperlinkInsert" screentip="Email a NetDocuments link to this document" getEnabled="HasActiveDocumentCallback" size="large" onAction="RunMacroAction" />
         </mso:group>
       </mso:tab>
     </mso:tabs>
