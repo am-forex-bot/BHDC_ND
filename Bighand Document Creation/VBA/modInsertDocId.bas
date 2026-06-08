@@ -164,7 +164,22 @@ Private Function BuildNDLinkCard(docName As String, ndUrl As String) As String
         "font-size:11px;font-weight:bold;letter-spacing:0.5px;'>OPEN</a>"
     h = h & "</td></tr>"
     h = h & "</table>"
+    ' Trailing empty paragraph so the cursor lands below the table,
+    ' not trapped inside it (matches ndOffice's own behaviour)
+    h = h & "<p style='margin:0;'>&nbsp;</p>"
     BuildNDLinkCard = h
+End Function
+
+Private Function SanitizeFileName(name As String) As String
+    Dim bad As Variant
+    bad = Array("\", "/", ":", "*", "?", """", "<", ">", "|")
+    Dim i As Long
+    Dim result As String
+    result = name
+    For i = LBound(bad) To UBound(bad)
+        result = Replace(result, CStr(bad(i)), "")
+    Next i
+    SanitizeFileName = Trim(result)
 End Function
 
 Private Function BuildRefreshText(existingText As String, newDocId As String) As String
@@ -895,20 +910,50 @@ Public Sub EmailDocCopy()
         On Error GoTo ErrorHandler
     End If
 
+    ' Build a clean name without the ND doc number
+    Dim docName As String
+    docName = GetDocNameFromTitleBar()
+    If docName = "" Then
+        docName = ActiveDocument.Name
+        Dim dp As Long
+        dp = InStrRev(docName, ".")
+        If dp > 1 Then docName = Left(docName, dp - 1)
+    End If
+
+    ' Preserve the original file extension
+    Dim ext As String
+    Dim dotPos As Long
+    dotPos = InStrRev(ActiveDocument.Name, ".")
+    If dotPos > 0 Then ext = Mid(ActiveDocument.Name, dotPos)
+
     Dim olApp As Object
     Set olApp = CreateObject("Outlook.Application")
     Dim olMail As Object
     Set olMail = olApp.CreateItem(0)
 
-    olMail.Attachments.Add ActiveDocument.FullName
+    ' Attach a temp copy named without the ND number, so the recipient
+    ' sees a clean filename rather than the NetDocuments reference
+    Dim cleanName As String
+    cleanName = SanitizeFileName(docName)
+    Dim attached As Boolean
+    attached = False
+    If cleanName <> "" Then
+        Dim tempPath As String
+        tempPath = Environ$("TEMP") & "\" & cleanName & ext
+        On Error Resume Next
+        If Dir(tempPath) <> "" Then Kill tempPath
+        FileCopy ActiveDocument.FullName, tempPath
+        If Err.Number = 0 And Dir(tempPath) <> "" Then
+            olMail.Attachments.Add tempPath
+            attached = True
+        End If
+        Err.Clear
+        On Error GoTo ErrorHandler
+    End If
 
-    Dim docName As String
-    docName = GetDocNameFromTitleBar()
-    If docName = "" Then
-        docName = ActiveDocument.Name
-        Dim dotPos As Long
-        dotPos = InStrRev(docName, ".")
-        If dotPos > 1 Then docName = Left(docName, dotPos - 1)
+    ' Fall back to attaching the original file if the temp copy failed
+    If Not attached Then
+        olMail.Attachments.Add ActiveDocument.FullName
     End If
 
     olMail.Subject = docName
