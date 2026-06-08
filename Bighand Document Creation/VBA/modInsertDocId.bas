@@ -931,30 +931,12 @@ Public Sub EmailDocCopy()
     Dim olMail As Object
     Set olMail = olApp.CreateItem(0)
 
-    ' Attach a temp copy named without the ND number, so the recipient
-    ' sees a clean filename rather than the NetDocuments reference
+    ' Attach the file with a clean display name (no ND doc number).
+    ' The 4th parameter of Attachments.Add sets the name the recipient sees.
     Dim cleanName As String
-    cleanName = SanitizeFileName(docName)
-    Dim attached As Boolean
-    attached = False
-    If cleanName <> "" Then
-        Dim tempPath As String
-        tempPath = Environ$("TEMP") & "\" & cleanName & ext
-        On Error Resume Next
-        If Dir(tempPath) <> "" Then Kill tempPath
-        FileCopy ActiveDocument.FullName, tempPath
-        If Err.Number = 0 And Dir(tempPath) <> "" Then
-            olMail.Attachments.Add tempPath
-            attached = True
-        End If
-        Err.Clear
-        On Error GoTo ErrorHandler
-    End If
-
-    ' Fall back to attaching the original file if the temp copy failed
-    If Not attached Then
-        olMail.Attachments.Add ActiveDocument.FullName
-    End If
+    cleanName = SanitizeFileName(docName) & ext
+    If cleanName = ext Or cleanName = "" Then cleanName = ActiveDocument.Name
+    olMail.Attachments.Add ActiveDocument.FullName, , , cleanName
 
     olMail.Subject = docName
     olMail.Display
@@ -998,6 +980,19 @@ Public Sub EmailDocLink()
     olMail.Subject = docName
     olMail.HTMLBody = BuildNDLinkCard(docName, ndUrl)
     olMail.Display
+
+    ' Use Outlook's WordEditor to place the cursor below the table,
+    ' so pressing Enter doesn't extend the card
+    On Error Resume Next
+    Dim wdDoc As Object
+    Set wdDoc = olMail.GetInspector.WordEditor
+    If Not wdDoc Is Nothing Then
+        Dim rng As Object
+        Set rng = wdDoc.Content
+        rng.Collapse 0
+        rng.Select
+    End If
+    On Error GoTo ErrorHandler
 
     Exit Sub
 
