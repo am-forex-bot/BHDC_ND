@@ -164,9 +164,11 @@ Private Function BuildNDLinkCard(docName As String, ndUrl As String) As String
         "font-size:11px;font-weight:bold;letter-spacing:0.5px;'>OPEN</a>"
     h = h & "</td></tr>"
     h = h & "</table>"
-    ' Trailing empty paragraph so the cursor lands below the table,
-    ' not trapped inside it (matches ndOffice's own behaviour)
-    h = h & "<p style='margin:0;'>&nbsp;</p>"
+    ' Trailing paragraph with an explicit reset background, so the cursor
+    ' lands below the table on a clean line and pressing Enter can't pull
+    ' the grey card background down with it
+    h = h & "<p style='margin:0;padding:0;background:#ffffff;" & _
+        "font-family:Segoe UI,Arial,sans-serif;font-size:11pt;color:#000000;'>&nbsp;</p>"
     BuildNDLinkCard = h
 End Function
 
