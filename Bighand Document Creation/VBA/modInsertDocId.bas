@@ -58,6 +58,14 @@ Private Function GetDocNameFromTitleBar() As String
     regex.Pattern = "[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}\s*(\.\d+|v\.?\d+)?"
     titleText = regex.Replace(titleText, "")
 
+    ' Strip file extension
+    Dim extRegex As Object
+    Set extRegex = CreateObject("VBScript.RegExp")
+    extRegex.Global = False
+    extRegex.IgnoreCase = True
+    extRegex.Pattern = "\.(docx?|dotx?|docm|dotm|rtf|pdf|xlsx?|xlsm|pptx?|pptm)$"
+    titleText = extRegex.Replace(Trim(titleText), "")
+
     titleText = Trim(titleText)
     If Len(titleText) > 0 And (Left(titleText, 1) = "-" Or Left(titleText, 1) = ChrW(&H2013)) Then
         titleText = Trim(Mid(titleText, 2))
