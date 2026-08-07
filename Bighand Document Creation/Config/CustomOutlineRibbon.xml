@@ -29,7 +29,7 @@
           <mso:separator id="sepFileFooter" />
           <mso:box id="boxFooterOps" boxStyle="vertical">
             <mso:splitButton id="spltInsertFooter" size="normal" getEnabled="HasActiveDocumentCallback">
-              <mso:button id="BtnInsertDocNumAll" tag="modInsertDocId.NDFooter_Ver_All_R" label="Footer (All Pages)" keytip="DN" imageMso="NumberInsert" screentip="Insert NetDocuments reference into footer on all pages (right-aligned, with version)" onAction="RunMacroAction" />
+              <mso:button id="BtnInsertDocNumAll" tag="modInsertDocId.NDFooter_Ver_All_R" label="Insert Footer" keytip="DN" imageMso="NumberInsert" screentip="Insert NetDocuments reference into the footer (default: all pages, right-aligned, with version - use the dropdown for other options)" onAction="RunMacroAction" />
               <mso:menu id="mnuInsertFooter">
                 <mso:menuSeparator id="sepFooterNoVer" title="Number Only" />
                 <mso:menu id="mnuNumAll" label="All Pages" imageMso="NumberInsert">
@@ -115,6 +115,45 @@
             </mso:splitButton>
             <mso:button id="BtnInsertNDRef" tag="modInsertDocId.InsertNDDocNum" label="Insert ND Ref" keytip="ND" imageMso="NumberInsert" screentip="Insert NetDocuments reference at the cursor position" getEnabled="HasActiveDocumentCallback" size="normal" onAction="RunMacroAction" />
             <mso:button id="BtnRefreshFooter" tag="modInsertDocId.RefreshFooterVersion" label="Refresh Footer" keytip="RF" imageMso="RecurrenceEdit" screentip="Update footer version to match current NetDocuments version (use after Save As New Version)" getEnabled="HasActiveDocumentCallback" size="normal" onAction="RunMacroAction" />
+          </mso:box>
+          <mso:box id="boxPageNumOps" boxStyle="vertical">
+            <mso:splitButton id="spltPageNum" size="normal" getEnabled="HasActiveDocumentCallback">
+              <mso:button id="BtnPageNumMain" tag="modInsertDocId.NDPageNum_Num_All_C" label="Page Numbers" keytip="PN" imageMso="PageNumbersInFooterInsertGallery" screentip="Insert page numbers into the footer (default: all pages, centred - use the dropdown for other options)" onAction="RunMacroAction" />
+              <mso:menu id="mnuPageNum">
+                <mso:menuSeparator id="sepPgNumOnly" title="Number Only" />
+                <mso:menu id="mnuPgNumAll" label="All Pages" imageMso="PageNumbersInFooterInsertGallery">
+                  <mso:button id="BtnPgNumAllL" tag="modInsertDocId.NDPageNum_Num_All_L" label="Left" imageMso="ObjectsAlignLeft" onAction="RunMacroAction" />
+                  <mso:button id="BtnPgNumAllC" tag="modInsertDocId.NDPageNum_Num_All_C" label="Centre" imageMso="ObjectsAlignCenterHorizontal" onAction="RunMacroAction" />
+                  <mso:button id="BtnPgNumAllR" tag="modInsertDocId.NDPageNum_Num_All_R" label="Right" imageMso="ObjectsAlignRight" onAction="RunMacroAction" />
+                </mso:menu>
+                <mso:menu id="mnuPgNumFirst" label="First Page Only" imageMso="PageNumbersInFooterInsertGallery">
+                  <mso:button id="BtnPgNumFirstL" tag="modInsertDocId.NDPageNum_Num_First_L" label="Left" imageMso="ObjectsAlignLeft" onAction="RunMacroAction" />
+                  <mso:button id="BtnPgNumFirstC" tag="modInsertDocId.NDPageNum_Num_First_C" label="Centre" imageMso="ObjectsAlignCenterHorizontal" onAction="RunMacroAction" />
+                  <mso:button id="BtnPgNumFirstR" tag="modInsertDocId.NDPageNum_Num_First_R" label="Right" imageMso="ObjectsAlignRight" onAction="RunMacroAction" />
+                </mso:menu>
+                <mso:menu id="mnuPgNumNotFirst" label="All Except First" imageMso="PageNumbersInFooterInsertGallery">
+                  <mso:button id="BtnPgNumNotFirstL" tag="modInsertDocId.NDPageNum_Num_NotFirst_L" label="Left" imageMso="ObjectsAlignLeft" onAction="RunMacroAction" />
+                  <mso:button id="BtnPgNumNotFirstC" tag="modInsertDocId.NDPageNum_Num_NotFirst_C" label="Centre" imageMso="ObjectsAlignCenterHorizontal" onAction="RunMacroAction" />
+                  <mso:button id="BtnPgNumNotFirstR" tag="modInsertDocId.NDPageNum_Num_NotFirst_R" label="Right" imageMso="ObjectsAlignRight" onAction="RunMacroAction" />
+                </mso:menu>
+                <mso:menuSeparator id="sepPgNumOfTotal" title="Page X of Y" />
+                <mso:menu id="mnuPgTotAll" label="All Pages" imageMso="PageNumbersInFooterInsertGallery">
+                  <mso:button id="BtnPgTotAllL" tag="modInsertDocId.NDPageNum_OfTotal_All_L" label="Left" imageMso="ObjectsAlignLeft" onAction="RunMacroAction" />
+                  <mso:button id="BtnPgTotAllC" tag="modInsertDocId.NDPageNum_OfTotal_All_C" label="Centre" imageMso="ObjectsAlignCenterHorizontal" onAction="RunMacroAction" />
+                  <mso:button id="BtnPgTotAllR" tag="modInsertDocId.NDPageNum_OfTotal_All_R" label="Right" imageMso="ObjectsAlignRight" onAction="RunMacroAction" />
+                </mso:menu>
+                <mso:menu id="mnuPgTotFirst" label="First Page Only" imageMso="PageNumbersInFooterInsertGallery">
+                  <mso:button id="BtnPgTotFirstL" tag="modInsertDocId.NDPageNum_OfTotal_First_L" label="Left" imageMso="ObjectsAlignLeft" onAction="RunMacroAction" />
+                  <mso:button id="BtnPgTotFirstC" tag="modInsertDocId.NDPageNum_OfTotal_First_C" label="Centre" imageMso="ObjectsAlignCenterHorizontal" onAction="RunMacroAction" />
+                  <mso:button id="BtnPgTotFirstR" tag="modInsertDocId.NDPageNum_OfTotal_First_R" label="Right" imageMso="ObjectsAlignRight" onAction="RunMacroAction" />
+                </mso:menu>
+                <mso:menu id="mnuPgTotNotFirst" label="All Except First" imageMso="PageNumbersInFooterInsertGallery">
+                  <mso:button id="BtnPgTotNotFirstL" tag="modInsertDocId.NDPageNum_OfTotal_NotFirst_L" label="Left" imageMso="ObjectsAlignLeft" onAction="RunMacroAction" />
+                  <mso:button id="BtnPgTotNotFirstC" tag="modInsertDocId.NDPageNum_OfTotal_NotFirst_C" label="Centre" imageMso="ObjectsAlignCenterHorizontal" onAction="RunMacroAction" />
+                  <mso:button id="BtnPgTotNotFirstR" tag="modInsertDocId.NDPageNum_OfTotal_NotFirst_R" label="Right" imageMso="ObjectsAlignRight" onAction="RunMacroAction" />
+                </mso:menu>
+              </mso:menu>
+            </mso:splitButton>
           </mso:box>
           <mso:separator id="sepFooterEmail" />
           <mso:box id="boxEmailOps" boxStyle="vertical">

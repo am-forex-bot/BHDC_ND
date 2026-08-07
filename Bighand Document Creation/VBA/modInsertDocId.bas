@@ -313,6 +313,85 @@ Private Function ParseSectionSelection(userInput As String, sectionCount As Long
     Set ParseSectionSelection = result
 End Function
 
+Private Function PickSectionsForUpdate(dlgTitle As String) As Collection
+    ' Shows the section picker for multi-section documents.
+    ' Returns a Collection of section indices, or Nothing if cancelled/invalid.
+    Dim sectionCount As Long
+    sectionCount = ActiveDocument.Sections.Count
+
+    Dim result As Collection
+
+    If sectionCount = 1 Then
+        Set result = New Collection
+        result.Add 1
+        Set PickSectionsForUpdate = result
+        Exit Function
+    End If
+
+    Dim info As String
+    info = "This document has " & sectionCount & " sections:" & vbCrLf & vbCrLf
+    info = info & GetSectionInfo()
+    info = info & vbCrLf & "Enter sections to update (e.g. ""1,3"" or ""2-4"" or ""all""):"
+
+    Dim userInput As String
+    userInput = InputBox(info, dlgTitle, "all")
+    If Len(userInput) = 0 Then Exit Function
+
+    Set result = ParseSectionSelection(userInput, sectionCount)
+    If result.Count = 0 Then
+        MsgBox "No valid sections selected.", vbExclamation, dlgTitle
+        Exit Function
+    End If
+
+    Set PickSectionsForUpdate = result
+End Function
+
+Private Sub UnlinkSectionFooters(sec As Section)
+    If sec.Index = 1 Then Exit Sub
+    If sec.Footers(wdHeaderFooterPrimary).LinkToPrevious Then
+        sec.Footers(wdHeaderFooterPrimary).LinkToPrevious = False
+    End If
+    If sec.Footers(wdHeaderFooterFirstPage).LinkToPrevious Then
+        sec.Footers(wdHeaderFooterFirstPage).LinkToPrevious = False
+    End If
+End Sub
+
+Private Sub UnlinkUnselectedNeighbours(selectedSections As Collection)
+    ' Linked footers share storage, so a change to one section shows in its
+    ' linked neighbours. Break the link in BOTH directions at every boundary
+    ' between a selected and an unselected section:
+    '  - a selected section linked to an unselected previous one would
+    '    otherwise rewrite the previous section's footer
+    '  - an unselected next section linked to a selected one would otherwise
+    '    pick up the change
+    Dim sectionCount As Long
+    sectionCount = ActiveDocument.Sections.Count
+    If sectionCount = 1 Then Exit Sub
+
+    Dim isSelected() As Boolean
+    ReDim isSelected(1 To sectionCount)
+    Dim s As Variant
+    For Each s In selectedSections
+        isSelected(CLng(s)) = True
+    Next s
+
+    Dim i As Long
+    For i = 1 To sectionCount
+        If isSelected(i) Then
+            If i > 1 Then
+                If Not isSelected(i - 1) Then
+                    UnlinkSectionFooters ActiveDocument.Sections(i)
+                End If
+            End If
+            If i < sectionCount Then
+                If Not isSelected(i + 1) Then
+                    UnlinkSectionFooters ActiveDocument.Sections(i + 1)
+                End If
+            End If
+        End If
+    Next i
+End Sub
+
 ' --- Footer manipulation ---
 
 Private Sub ReplaceParaText(para As Paragraph, docId As String, align As Long)
@@ -433,6 +512,137 @@ Private Sub ApplyFooterToSection(sec As Section, footerText As String, pageMode 
     End Select
 End Sub
 
+' --- Page numbers ---
+
+Private Function ParaHasPageField(para As Paragraph) As Boolean
+    Dim f As Field
+    For Each f In para.Range.Fields
+        If f.Type = wdFieldPage Or f.Type = wdFieldNumPages Then
+            ParaHasPageField = True
+            Exit Function
+        End If
+    Next f
+End Function
+
+Private Sub RemovePageNumFromFooter(ftr As HeaderFooter)
+    Dim i As Long
+    For i = ftr.Range.Paragraphs.Count To 1 Step -1
+        If ParaHasPageField(ftr.Range.Paragraphs(i)) Then
+            ftr.Range.Paragraphs(i).Range.Delete
+        End If
+    Next i
+End Sub
+
+Private Sub InsertPageNumInFooter(ftr As HeaderFooter, fmt As String, al As Long)
+    ' Replace any existing page number, then append a new paragraph with
+    ' PAGE (and NUMPAGES for "Page X of Y") fields
+    RemovePageNumFromFooter ftr
+
+    Dim insertRange As Range
+    Set insertRange = ftr.Range
+    insertRange.Collapse wdCollapseEnd
+
+    Dim basePos As Long
+    Dim fldRng As Range
+
+    If LCase(fmt) = "oftotal" Then
+        insertRange.Text = vbCr & "Page  of "
+        basePos = insertRange.Start
+
+        ' Add NUMPAGES at the end first so the earlier position stays valid
+        Set fldRng = ftr.Range.Duplicate
+        fldRng.Start = insertRange.End
+        fldRng.End = insertRange.End
+        ftr.Range.Fields.Add fldRng, wdFieldNumPages
+
+        ' PAGE field after "Page " (vbCr + 5 characters)
+        Set fldRng = ftr.Range.Duplicate
+        fldRng.Start = basePos + 6
+        fldRng.End = basePos + 6
+        ftr.Range.Fields.Add fldRng, wdFieldPage
+    Else
+        insertRange.Text = vbCr
+        Set fldRng = ftr.Range.Duplicate
+        fldRng.Start = insertRange.End
+        fldRng.End = insertRange.End
+        ftr.Range.Fields.Add fldRng, wdFieldPage
+    End If
+
+    Dim lastPara As Paragraph
+    Set lastPara = ftr.Range.Paragraphs(ftr.Range.Paragraphs.Count)
+    lastPara.Range.ParagraphFormat.Alignment = al
+End Sub
+
+Private Sub ApplyPageNumToSection(sec As Section, fmt As String, pageMode As String, al As Long)
+    Select Case LCase(pageMode)
+        Case "all"
+            InsertPageNumInFooter sec.Footers(wdHeaderFooterPrimary), fmt, al
+            If sec.PageSetup.DifferentFirstPageHeaderFooter Then
+                InsertPageNumInFooter sec.Footers(wdHeaderFooterFirstPage), fmt, al
+            End If
+
+        Case "first"
+            If Not sec.PageSetup.DifferentFirstPageHeaderFooter Then
+                sec.PageSetup.DifferentFirstPageHeaderFooter = True
+                If sec.Index = 1 Or Not sec.Headers(wdHeaderFooterFirstPage).LinkToPrevious Then
+                    SweepStaleWatermarks sec.Headers(wdHeaderFooterFirstPage)
+                End If
+            End If
+            InsertPageNumInFooter sec.Footers(wdHeaderFooterFirstPage), fmt, al
+            RemovePageNumFromFooter sec.Footers(wdHeaderFooterPrimary)
+
+        Case "notfirst"
+            If Not sec.PageSetup.DifferentFirstPageHeaderFooter Then
+                sec.PageSetup.DifferentFirstPageHeaderFooter = True
+                If sec.Index = 1 Or Not sec.Headers(wdHeaderFooterFirstPage).LinkToPrevious Then
+                    SweepStaleWatermarks sec.Headers(wdHeaderFooterFirstPage)
+                End If
+            End If
+            InsertPageNumInFooter sec.Footers(wdHeaderFooterPrimary), fmt, al
+            RemovePageNumFromFooter sec.Footers(wdHeaderFooterFirstPage)
+    End Select
+End Sub
+
+Private Sub DoInsertPageNumbers(fmt As String, pageMode As String, align As String)
+    On Error GoTo ErrorHandler
+
+    Dim cursorPos As Range
+    Set cursorPos = Selection.Range
+
+    Dim al As Long
+    al = AlignmentConst(align)
+
+    Dim selectedSections As Collection
+    Set selectedSections = PickSectionsForUpdate("Page Numbers")
+    If selectedSections Is Nothing Then Exit Sub
+
+    UnlinkUnselectedNeighbours selectedSections
+
+    Dim idx As Variant
+    For Each idx In selectedSections
+        ApplyPageNumToSection ActiveDocument.Sections(CLng(idx)), fmt, pageMode, al
+    Next idx
+
+    cursorPos.Select
+
+    Dim pageTxt As String
+    Select Case LCase(pageMode)
+        Case "all": pageTxt = "all pages"
+        Case "first": pageTxt = "first page footer"
+        Case "notfirst": pageTxt = "all pages except first"
+    End Select
+
+    MsgBox "Page numbers inserted into " & pageTxt & ".", _
+           vbInformation, "Page Numbers"
+
+    Exit Sub
+
+ErrorHandler:
+    MsgBox "An error occurred inserting page numbers." & vbCrLf & _
+           "Error " & Err.Number & ": " & Err.Description, _
+           vbCritical, "Page Numbers"
+End Sub
+
 ' --- Shared implementation ---
 
 Private Sub DoInsertFooter(mode As String, pageMode As String, align As String)
@@ -454,63 +664,16 @@ Private Sub DoInsertFooter(mode As String, pageMode As String, align As String)
     Dim al As Long
     al = AlignmentConst(align)
 
-    Dim sectionCount As Long
-    sectionCount = ActiveDocument.Sections.Count
+    Dim selectedSections As Collection
+    Set selectedSections = PickSectionsForUpdate("Insert ND Ref")
+    If selectedSections Is Nothing Then Exit Sub
 
-    If sectionCount = 1 Then
-        ApplyFooterToSection ActiveDocument.Sections(1), footerText, pageMode, al
-    Else
-        Dim info As String
-        info = "This document has " & sectionCount & " sections:" & vbCrLf & vbCrLf
-        info = info & GetSectionInfo()
-        info = info & vbCrLf & "Enter sections to update (e.g. ""1,3"" or ""2-4"" or ""all""):"
+    UnlinkUnselectedNeighbours selectedSections
 
-        Dim userInput As String
-        userInput = InputBox(info, "Select Sections", "all")
-
-        If Len(userInput) = 0 Then Exit Sub
-
-        Dim selectedSections As Collection
-        Set selectedSections = ParseSectionSelection(userInput, sectionCount)
-
-        If selectedSections.Count = 0 Then
-            MsgBox "No valid sections selected.", vbExclamation, "Insert ND Ref"
-            Exit Sub
-        End If
-
-        ' Build lookup of selected indices
-        Dim isSelected() As Boolean
-        ReDim isSelected(1 To sectionCount)
-        Dim s As Variant
-        For Each s In selectedSections
-            isSelected(CLng(s)) = True
-        Next s
-
-        Dim idx As Variant
-        For Each idx In selectedSections
-            Dim secIdx As Long
-            secIdx = CLng(idx)
-            Dim sec As Section
-            Set sec = ActiveDocument.Sections(secIdx)
-
-            ' Unlink from previous section if it wasn't selected,
-            ' so changes only affect the chosen section
-            If secIdx > 1 Then
-                If Not isSelected(secIdx - 1) Then
-                    If sec.Footers(wdHeaderFooterPrimary).LinkToPrevious Then
-                        sec.Footers(wdHeaderFooterPrimary).LinkToPrevious = False
-                    End If
-                    If sec.PageSetup.DifferentFirstPageHeaderFooter Then
-                        If sec.Footers(wdHeaderFooterFirstPage).LinkToPrevious Then
-                            sec.Footers(wdHeaderFooterFirstPage).LinkToPrevious = False
-                        End If
-                    End If
-                End If
-            End If
-
-            ApplyFooterToSection sec, footerText, pageMode, al
-        Next idx
-    End If
+    Dim idx As Variant
+    For Each idx In selectedSections
+        ApplyFooterToSection ActiveDocument.Sections(CLng(idx)), footerText, pageMode, al
+    Next idx
 
     cursorPos.Select
 
@@ -783,6 +946,84 @@ End Sub
 
 Public Sub InsertNDDocIdAllButFirstNoVer()
     DoInsertFooter "num", "notfirst", "right"
+End Sub
+
+' =============================================================================
+' Page Numbers - Number Only
+' =============================================================================
+Public Sub NDPageNum_Num_All_L()
+    DoInsertPageNumbers "num", "all", "left"
+End Sub
+
+Public Sub NDPageNum_Num_All_C()
+    DoInsertPageNumbers "num", "all", "center"
+End Sub
+
+Public Sub NDPageNum_Num_All_R()
+    DoInsertPageNumbers "num", "all", "right"
+End Sub
+
+Public Sub NDPageNum_Num_First_L()
+    DoInsertPageNumbers "num", "first", "left"
+End Sub
+
+Public Sub NDPageNum_Num_First_C()
+    DoInsertPageNumbers "num", "first", "center"
+End Sub
+
+Public Sub NDPageNum_Num_First_R()
+    DoInsertPageNumbers "num", "first", "right"
+End Sub
+
+Public Sub NDPageNum_Num_NotFirst_L()
+    DoInsertPageNumbers "num", "notfirst", "left"
+End Sub
+
+Public Sub NDPageNum_Num_NotFirst_C()
+    DoInsertPageNumbers "num", "notfirst", "center"
+End Sub
+
+Public Sub NDPageNum_Num_NotFirst_R()
+    DoInsertPageNumbers "num", "notfirst", "right"
+End Sub
+
+' =============================================================================
+' Page Numbers - Page X of Y
+' =============================================================================
+Public Sub NDPageNum_OfTotal_All_L()
+    DoInsertPageNumbers "oftotal", "all", "left"
+End Sub
+
+Public Sub NDPageNum_OfTotal_All_C()
+    DoInsertPageNumbers "oftotal", "all", "center"
+End Sub
+
+Public Sub NDPageNum_OfTotal_All_R()
+    DoInsertPageNumbers "oftotal", "all", "right"
+End Sub
+
+Public Sub NDPageNum_OfTotal_First_L()
+    DoInsertPageNumbers "oftotal", "first", "left"
+End Sub
+
+Public Sub NDPageNum_OfTotal_First_C()
+    DoInsertPageNumbers "oftotal", "first", "center"
+End Sub
+
+Public Sub NDPageNum_OfTotal_First_R()
+    DoInsertPageNumbers "oftotal", "first", "right"
+End Sub
+
+Public Sub NDPageNum_OfTotal_NotFirst_L()
+    DoInsertPageNumbers "oftotal", "notfirst", "left"
+End Sub
+
+Public Sub NDPageNum_OfTotal_NotFirst_C()
+    DoInsertPageNumbers "oftotal", "notfirst", "center"
+End Sub
+
+Public Sub NDPageNum_OfTotal_NotFirst_R()
+    DoInsertPageNumbers "oftotal", "notfirst", "right"
 End Sub
 
 ' =============================================================================
