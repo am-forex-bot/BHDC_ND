@@ -152,6 +152,12 @@
                   <mso:button id="BtnPgTotNotFirstC" tag="modInsertDocId.NDPageNum_OfTotal_NotFirst_C" label="Centre" imageMso="ObjectsAlignCenterHorizontal" onAction="RunMacroAction" />
                   <mso:button id="BtnPgTotNotFirstR" tag="modInsertDocId.NDPageNum_OfTotal_NotFirst_R" label="Right" imageMso="ObjectsAlignRight" onAction="RunMacroAction" />
                 </mso:menu>
+                <mso:menuSeparator id="sepPgNumbering" title="Numbering" />
+                <mso:button id="BtnPgRestart1" tag="modInsertDocId.NDPageNum_RestartAt1" label="Restart Section at 1" imageMso="PageNumberFormatDialog" screentip="Make the chosen section(s) restart page numbering at 1" onAction="RunMacroAction" />
+                <mso:button id="BtnPgStartAt" tag="modInsertDocId.NDPageNum_StartAt" label="Start at Number..." imageMso="PageNumberFormatDialog" screentip="Make the chosen section(s) start page numbering at a number you enter" onAction="RunMacroAction" />
+                <mso:button id="BtnPgContinue" tag="modInsertDocId.NDPageNum_Continue" label="Continue from Previous" imageMso="PageNumberFormatDialog" screentip="Make the chosen section(s) continue page numbering from the previous section (fixes unexpected restarts)" onAction="RunMacroAction" />
+                <mso:menuSeparator id="sepPgRemove" />
+                <mso:button id="BtnPgRemove" tag="modInsertDocId.NDPageNum_RemoveAll" label="Remove Page Numbers" imageMso="PageNumbersRemove" screentip="Remove ALL page numbers from the whole document (all sections, headers and footers) and reset numbering to continuous" onAction="RunMacroAction" />
               </mso:menu>
             </mso:splitButton>
           </mso:box>

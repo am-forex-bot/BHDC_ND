@@ -260,6 +260,12 @@ Private Function GetSectionInfo() As String
             End If
         End If
 
+        If sec.Footers(wdHeaderFooterPrimary).PageNumbers.RestartNumberingAtSection Then
+            If details <> "" Then details = details & ", "
+            details = details & "numbering restarts at " & _
+                      sec.Footers(wdHeaderFooterPrimary).PageNumbers.StartingNumber
+        End If
+
         info = info & "  " & i & ". " & pageStr
         If details <> "" Then info = info & " (" & details & ")"
         info = info & vbCrLf
@@ -524,14 +530,69 @@ Private Function ParaHasPageField(para As Paragraph) As Boolean
     Next f
 End Function
 
+Private Function ParaIsOnlyPageNumber(para As Paragraph) As Boolean
+    ' True if the paragraph contains nothing but page-number content:
+    ' PAGE/NUMPAGES field results plus words like "Page"/"of" and digits
+    Dim t As String
+    t = LCase(para.Range.Text)
+    t = Replace(t, "page", "")
+    t = Replace(t, "of", "")
+
+    Dim k As Long
+    For k = 1 To Len(t)
+        If Mid(t, k, 1) Like "[a-z]" Then
+            ParaIsOnlyPageNumber = False
+            Exit Function
+        End If
+    Next k
+    ParaIsOnlyPageNumber = True
+End Function
+
 Private Sub RemovePageNumFromFooter(ftr As HeaderFooter)
     Dim i As Long
+    Dim para As Paragraph
     For i = ftr.Range.Paragraphs.Count To 1 Step -1
-        If ParaHasPageField(ftr.Range.Paragraphs(i)) Then
-            ftr.Range.Paragraphs(i).Range.Delete
+        Set para = ftr.Range.Paragraphs(i)
+        If ParaHasPageField(para) Then
+            If ParaIsOnlyPageNumber(para) Then
+                para.Range.Delete
+            Else
+                ' Paragraph has other content (e.g. doc ref on the same
+                ' line) - surgically delete just the page fields
+                Dim j As Long
+                For j = para.Range.Fields.Count To 1 Step -1
+                    If para.Range.Fields(j).Type = wdFieldPage Or _
+                       para.Range.Fields(j).Type = wdFieldNumPages Then
+                        para.Range.Fields(j).Delete
+                    End If
+                Next j
+            End If
         End If
     Next i
 End Sub
+
+Private Function RemoveAllPageNumbers() As Long
+    ' Sweeps every header and footer story in every section, including
+    ' first-page and even-page variants, and resets numbering back to
+    ' continuous so a future insert behaves predictably.
+    ' Returns the number of sections processed.
+    Dim sec As Section
+    Dim hfTypes As Variant
+    hfTypes = Array(wdHeaderFooterPrimary, wdHeaderFooterFirstPage, wdHeaderFooterEvenPages)
+    Dim v As Variant
+    Dim n As Long
+
+    For Each sec In ActiveDocument.Sections
+        For Each v In hfTypes
+            RemovePageNumFromFooter sec.Footers(CLng(v))
+            RemovePageNumFromFooter sec.Headers(CLng(v))
+        Next v
+        sec.Footers(wdHeaderFooterPrimary).PageNumbers.RestartNumberingAtSection = False
+        n = n + 1
+    Next sec
+
+    RemoveAllPageNumbers = n
+End Function
 
 Private Sub InsertPageNumInFooter(ftr As HeaderFooter, fmt As String, al As Long)
     ' Replace any existing page number, then append a new paragraph with
@@ -542,11 +603,20 @@ Private Sub InsertPageNumInFooter(ftr As HeaderFooter, fmt As String, al As Long
     Set insertRange = ftr.Range
     insertRange.Collapse wdCollapseEnd
 
+    ' If the footer is empty, use its existing paragraph rather than
+    ' appending a new one (avoids a stray blank line above the number)
+    Dim prefix As String
+    If Len(ftr.Range.Text) <= 1 Then
+        prefix = ""
+    Else
+        prefix = vbCr
+    End If
+
     Dim basePos As Long
     Dim fldRng As Range
 
     If LCase(fmt) = "oftotal" Then
-        insertRange.Text = vbCr & "Page  of "
+        insertRange.Text = prefix & "Page  of "
         basePos = insertRange.Start
 
         ' Add NUMPAGES at the end first so the earlier position stays valid
@@ -555,13 +625,13 @@ Private Sub InsertPageNumInFooter(ftr As HeaderFooter, fmt As String, al As Long
         fldRng.End = insertRange.End
         ftr.Range.Fields.Add fldRng, wdFieldNumPages
 
-        ' PAGE field after "Page " (vbCr + 5 characters)
+        ' PAGE field goes after "Page "
         Set fldRng = ftr.Range.Duplicate
-        fldRng.Start = basePos + 6
-        fldRng.End = basePos + 6
+        fldRng.Start = basePos + Len(prefix) + 5
+        fldRng.End = basePos + Len(prefix) + 5
         ftr.Range.Fields.Add fldRng, wdFieldPage
     Else
-        insertRange.Text = vbCr
+        If prefix <> "" Then insertRange.Text = prefix
         Set fldRng = ftr.Range.Duplicate
         fldRng.Start = insertRange.End
         fldRng.End = insertRange.End
@@ -574,11 +644,19 @@ Private Sub InsertPageNumInFooter(ftr As HeaderFooter, fmt As String, al As Long
 End Sub
 
 Private Sub ApplyPageNumToSection(sec As Section, fmt As String, pageMode As String, al As Long)
+    ' Documents with "Different Odd & Even Pages" keep a separate even-page
+    ' footer story - cover it too, or even pages silently get no number
+    Dim hasEvenPages As Boolean
+    hasEvenPages = sec.PageSetup.OddAndEvenPagesHeaderFooter
+
     Select Case LCase(pageMode)
         Case "all"
             InsertPageNumInFooter sec.Footers(wdHeaderFooterPrimary), fmt, al
             If sec.PageSetup.DifferentFirstPageHeaderFooter Then
                 InsertPageNumInFooter sec.Footers(wdHeaderFooterFirstPage), fmt, al
+            End If
+            If hasEvenPages Then
+                InsertPageNumInFooter sec.Footers(wdHeaderFooterEvenPages), fmt, al
             End If
 
         Case "first"
@@ -590,6 +668,9 @@ Private Sub ApplyPageNumToSection(sec As Section, fmt As String, pageMode As Str
             End If
             InsertPageNumInFooter sec.Footers(wdHeaderFooterFirstPage), fmt, al
             RemovePageNumFromFooter sec.Footers(wdHeaderFooterPrimary)
+            If hasEvenPages Then
+                RemovePageNumFromFooter sec.Footers(wdHeaderFooterEvenPages)
+            End If
 
         Case "notfirst"
             If Not sec.PageSetup.DifferentFirstPageHeaderFooter Then
@@ -599,6 +680,9 @@ Private Sub ApplyPageNumToSection(sec As Section, fmt As String, pageMode As Str
                 End If
             End If
             InsertPageNumInFooter sec.Footers(wdHeaderFooterPrimary), fmt, al
+            If hasEvenPages Then
+                InsertPageNumInFooter sec.Footers(wdHeaderFooterEvenPages), fmt, al
+            End If
             RemovePageNumFromFooter sec.Footers(wdHeaderFooterFirstPage)
     End Select
 End Sub
@@ -1024,6 +1108,97 @@ End Sub
 
 Public Sub NDPageNum_OfTotal_NotFirst_R()
     DoInsertPageNumbers "oftotal", "notfirst", "right"
+End Sub
+
+' =============================================================================
+' Page Numbers - Numbering control (restart / continue / remove)
+' =============================================================================
+Private Sub DoSetNumbering(dlgTitle As String, restart As Boolean, Optional startNum As Long = 1)
+    On Error GoTo ErrorHandler
+
+    Dim selectedSections As Collection
+    Set selectedSections = PickSectionsForUpdate(dlgTitle)
+    If selectedSections Is Nothing Then Exit Sub
+
+    Dim idx As Variant
+    Dim sec As Section
+    For Each idx In selectedSections
+        Set sec = ActiveDocument.Sections(CLng(idx))
+        If restart Then
+            sec.Footers(wdHeaderFooterPrimary).PageNumbers.StartingNumber = startNum
+            sec.Footers(wdHeaderFooterPrimary).PageNumbers.RestartNumberingAtSection = True
+        Else
+            sec.Footers(wdHeaderFooterPrimary).PageNumbers.RestartNumberingAtSection = False
+        End If
+    Next idx
+
+    If restart Then
+        MsgBox "Page numbering will restart at " & startNum & _
+               " in the selected section(s).", vbInformation, dlgTitle
+    Else
+        MsgBox "Page numbering will continue from the previous section " & _
+               "in the selected section(s).", vbInformation, dlgTitle
+    End If
+
+    Exit Sub
+
+ErrorHandler:
+    MsgBox "An error occurred updating page numbering." & vbCrLf & _
+           "Error " & Err.Number & ": " & Err.Description, _
+           vbCritical, dlgTitle
+End Sub
+
+Public Sub NDPageNum_RestartAt1()
+    DoSetNumbering "Restart Page Numbering", True, 1
+End Sub
+
+Public Sub NDPageNum_StartAt()
+    Dim userInput As String
+    userInput = InputBox("Start page numbering at:", "Start at Number", "1")
+    If Len(userInput) = 0 Then Exit Sub
+
+    If Not IsNumeric(userInput) Or CLng(Val(userInput)) < 0 Then
+        MsgBox "Please enter a whole number (0 or higher).", _
+               vbExclamation, "Start at Number"
+        Exit Sub
+    End If
+
+    DoSetNumbering "Start at Number", True, CLng(Val(userInput))
+End Sub
+
+Public Sub NDPageNum_Continue()
+    DoSetNumbering "Continue Page Numbering", False
+End Sub
+
+Public Sub NDPageNum_RemoveAll()
+    On Error GoTo ErrorHandler
+
+    Dim response As VbMsgBoxResult
+    response = MsgBox("Remove ALL page numbers from every section of this document?" & _
+                      vbCrLf & vbCrLf & _
+                      "This clears page numbers from all headers and footers " & _
+                      "(including first-page and even-page variants) and resets " & _
+                      "numbering back to continuous.", _
+                      vbYesNo + vbQuestion, "Remove Page Numbers")
+    If response <> vbYes Then Exit Sub
+
+    Dim cursorPos As Range
+    Set cursorPos = Selection.Range
+
+    Dim n As Long
+    n = RemoveAllPageNumbers()
+
+    cursorPos.Select
+
+    MsgBox "Page numbers removed from " & n & " section(s).", _
+           vbInformation, "Remove Page Numbers"
+
+    Exit Sub
+
+ErrorHandler:
+    MsgBox "An error occurred removing page numbers." & vbCrLf & _
+           "Error " & Err.Number & ": " & Err.Description, _
+           vbCritical, "Remove Page Numbers"
 End Sub
 
 ' =============================================================================
