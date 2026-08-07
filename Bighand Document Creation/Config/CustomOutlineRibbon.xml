@@ -152,11 +152,35 @@
                   <mso:button id="BtnPgTotNotFirstC" tag="modInsertDocId.NDPageNum_OfTotal_NotFirst_C" label="Centre" imageMso="ObjectsAlignCenterHorizontal" onAction="RunMacroAction" />
                   <mso:button id="BtnPgTotNotFirstR" tag="modInsertDocId.NDPageNum_OfTotal_NotFirst_R" label="Right" imageMso="ObjectsAlignRight" onAction="RunMacroAction" />
                 </mso:menu>
+                <mso:menuSeparator id="sepPgSection" title="Page X of Y (This Section)" />
+                <mso:menu id="mnuPgSecAll" label="All Pages" imageMso="PageNumbersInFooterInsertGallery">
+                  <mso:button id="BtnPgSecAllL" tag="modInsertDocId.NDPageNum_OfSection_All_L" label="Left" imageMso="ObjectsAlignLeft" onAction="RunMacroAction" />
+                  <mso:button id="BtnPgSecAllC" tag="modInsertDocId.NDPageNum_OfSection_All_C" label="Centre" imageMso="ObjectsAlignCenterHorizontal" onAction="RunMacroAction" />
+                  <mso:button id="BtnPgSecAllR" tag="modInsertDocId.NDPageNum_OfSection_All_R" label="Right" imageMso="ObjectsAlignRight" onAction="RunMacroAction" />
+                </mso:menu>
+                <mso:menu id="mnuPgSecFirst" label="First Page Only" imageMso="PageNumbersInFooterInsertGallery">
+                  <mso:button id="BtnPgSecFirstL" tag="modInsertDocId.NDPageNum_OfSection_First_L" label="Left" imageMso="ObjectsAlignLeft" onAction="RunMacroAction" />
+                  <mso:button id="BtnPgSecFirstC" tag="modInsertDocId.NDPageNum_OfSection_First_C" label="Centre" imageMso="ObjectsAlignCenterHorizontal" onAction="RunMacroAction" />
+                  <mso:button id="BtnPgSecFirstR" tag="modInsertDocId.NDPageNum_OfSection_First_R" label="Right" imageMso="ObjectsAlignRight" onAction="RunMacroAction" />
+                </mso:menu>
+                <mso:menu id="mnuPgSecNotFirst" label="All Except First" imageMso="PageNumbersInFooterInsertGallery">
+                  <mso:button id="BtnPgSecNotFirstL" tag="modInsertDocId.NDPageNum_OfSection_NotFirst_L" label="Left" imageMso="ObjectsAlignLeft" onAction="RunMacroAction" />
+                  <mso:button id="BtnPgSecNotFirstC" tag="modInsertDocId.NDPageNum_OfSection_NotFirst_C" label="Centre" imageMso="ObjectsAlignCenterHorizontal" onAction="RunMacroAction" />
+                  <mso:button id="BtnPgSecNotFirstR" tag="modInsertDocId.NDPageNum_OfSection_NotFirst_R" label="Right" imageMso="ObjectsAlignRight" onAction="RunMacroAction" />
+                </mso:menu>
                 <mso:menuSeparator id="sepPgNumbering" title="Numbering" />
                 <mso:button id="BtnPgRestart1" tag="modInsertDocId.NDPageNum_RestartAt1" label="Restart Section at 1" imageMso="PageNumberFormatDialog" screentip="Make the chosen section(s) restart page numbering at 1" onAction="RunMacroAction" />
                 <mso:button id="BtnPgStartAt" tag="modInsertDocId.NDPageNum_StartAt" label="Start at Number..." imageMso="PageNumberFormatDialog" screentip="Make the chosen section(s) start page numbering at a number you enter" onAction="RunMacroAction" />
                 <mso:button id="BtnPgContinue" tag="modInsertDocId.NDPageNum_Continue" label="Continue from Previous" imageMso="PageNumberFormatDialog" screentip="Make the chosen section(s) continue page numbering from the previous section (fixes unexpected restarts)" onAction="RunMacroAction" />
-                <mso:menuSeparator id="sepPgRemove" />
+                <mso:menu id="mnuPgFormat" label="Number Format" imageMso="PageNumberFormatDialog" screentip="Change the page number style for the chosen section(s) - e.g. roman numerals for an index, letters for appendices">
+                  <mso:button id="BtnPgFmtArabic" tag="modInsertDocId.NDPageNum_Fmt_Arabic" label="1, 2, 3" onAction="RunMacroAction" />
+                  <mso:button id="BtnPgFmtRomanLower" tag="modInsertDocId.NDPageNum_Fmt_RomanLower" label="i, ii, iii" onAction="RunMacroAction" />
+                  <mso:button id="BtnPgFmtRomanUpper" tag="modInsertDocId.NDPageNum_Fmt_RomanUpper" label="I, II, III" onAction="RunMacroAction" />
+                  <mso:button id="BtnPgFmtLetterLower" tag="modInsertDocId.NDPageNum_Fmt_LetterLower" label="a, b, c" onAction="RunMacroAction" />
+                  <mso:button id="BtnPgFmtLetterUpper" tag="modInsertDocId.NDPageNum_Fmt_LetterUpper" label="A, B, C" onAction="RunMacroAction" />
+                </mso:menu>
+                <mso:menuSeparator id="sepPgTools" />
+                <mso:button id="BtnPgCheck" tag="modInsertDocId.NDPageNum_Check" label="Check Numbering" imageMso="SpellingAndGrammar" screentip="Show a report of page numbering across all sections and flag likely problems (missing numbers, duplicates, unexpected restarts)" onAction="RunMacroAction" />
                 <mso:button id="BtnPgRemove" tag="modInsertDocId.NDPageNum_RemoveAll" label="Remove Page Numbers" imageMso="PageNumbersRemove" screentip="Remove ALL page numbers from the whole document (all sections, headers and footers) and reset numbering to continuous" onAction="RunMacroAction" />
               </mso:menu>
             </mso:splitButton>

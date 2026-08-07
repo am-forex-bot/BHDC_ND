@@ -266,6 +266,11 @@ Private Function GetSectionInfo() As String
                       sec.Footers(wdHeaderFooterPrimary).PageNumbers.StartingNumber
         End If
 
+        If sec.Footers(wdHeaderFooterPrimary).PageNumbers.NumberStyle <> wdPageNumberStyleArabic Then
+            If details <> "" Then details = details & ", "
+            details = details & "format " & PageNumStyleName(sec)
+        End If
+
         info = info & "  " & i & ". " & pageStr
         If details <> "" Then info = info & " (" & details & ")"
         info = info & vbCrLf
@@ -523,11 +528,72 @@ End Sub
 Private Function ParaHasPageField(para As Paragraph) As Boolean
     Dim f As Field
     For Each f In para.Range.Fields
-        If f.Type = wdFieldPage Or f.Type = wdFieldNumPages Then
+        If f.Type = wdFieldPage Or f.Type = wdFieldNumPages Or _
+           f.Type = wdFieldSectionPages Then
             ParaHasPageField = True
             Exit Function
         End If
     Next f
+End Function
+
+Private Function StoryHasPageField(hf As HeaderFooter) As Boolean
+    Dim f As Field
+    For Each f In hf.Range.Fields
+        If f.Type = wdFieldPage Then
+            StoryHasPageField = True
+            Exit Function
+        End If
+    Next f
+End Function
+
+Private Function PageNumStyleName(sec As Section) As String
+    Select Case sec.Footers(wdHeaderFooterPrimary).PageNumbers.NumberStyle
+        Case wdPageNumberStyleLowercaseRoman: PageNumStyleName = "i, ii, iii"
+        Case wdPageNumberStyleUppercaseRoman: PageNumStyleName = "I, II, III"
+        Case wdPageNumberStyleLowercaseLetter: PageNumStyleName = "a, b, c"
+        Case wdPageNumberStyleUppercaseLetter: PageNumStyleName = "A, B, C"
+        Case Else: PageNumStyleName = "1, 2, 3"
+    End Select
+End Function
+
+Private Function DescribePageNumLocations(sec As Section) As String
+    ' Lists the active header/footer stories that contain page numbers
+    Dim parts As String
+
+    If StoryHasPageField(sec.Footers(wdHeaderFooterPrimary)) Then
+        parts = "footer"
+    End If
+    If sec.PageSetup.DifferentFirstPageHeaderFooter Then
+        If StoryHasPageField(sec.Footers(wdHeaderFooterFirstPage)) Then
+            If parts <> "" Then parts = parts & ", "
+            parts = parts & "first-page footer"
+        End If
+    End If
+    If sec.PageSetup.OddAndEvenPagesHeaderFooter Then
+        If StoryHasPageField(sec.Footers(wdHeaderFooterEvenPages)) Then
+            If parts <> "" Then parts = parts & ", "
+            parts = parts & "even-page footer"
+        End If
+    End If
+
+    If StoryHasPageField(sec.Headers(wdHeaderFooterPrimary)) Then
+        If parts <> "" Then parts = parts & ", "
+        parts = parts & "header"
+    End If
+    If sec.PageSetup.DifferentFirstPageHeaderFooter Then
+        If StoryHasPageField(sec.Headers(wdHeaderFooterFirstPage)) Then
+            If parts <> "" Then parts = parts & ", "
+            parts = parts & "first-page header"
+        End If
+    End If
+    If sec.PageSetup.OddAndEvenPagesHeaderFooter Then
+        If StoryHasPageField(sec.Headers(wdHeaderFooterEvenPages)) Then
+            If parts <> "" Then parts = parts & ", "
+            parts = parts & "even-page header"
+        End If
+    End If
+
+    DescribePageNumLocations = parts
 End Function
 
 Private Function ParaIsOnlyPageNumber(para As Paragraph) As Boolean
@@ -562,7 +628,8 @@ Private Sub RemovePageNumFromFooter(ftr As HeaderFooter)
                 Dim j As Long
                 For j = para.Range.Fields.Count To 1 Step -1
                     If para.Range.Fields(j).Type = wdFieldPage Or _
-                       para.Range.Fields(j).Type = wdFieldNumPages Then
+                       para.Range.Fields(j).Type = wdFieldNumPages Or _
+                       para.Range.Fields(j).Type = wdFieldSectionPages Then
                         para.Range.Fields(j).Delete
                     End If
                 Next j
@@ -615,15 +682,24 @@ Private Sub InsertPageNumInFooter(ftr As HeaderFooter, fmt As String, al As Long
     Dim basePos As Long
     Dim fldRng As Range
 
-    If LCase(fmt) = "oftotal" Then
+    If LCase(fmt) = "oftotal" Or LCase(fmt) = "ofsection" Then
+        ' "oftotal" counts the whole document (NUMPAGES);
+        ' "ofsection" counts just this section (SECTIONPAGES)
+        Dim totalFieldType As Long
+        If LCase(fmt) = "ofsection" Then
+            totalFieldType = wdFieldSectionPages
+        Else
+            totalFieldType = wdFieldNumPages
+        End If
+
         insertRange.Text = prefix & "Page  of "
         basePos = insertRange.Start
 
-        ' Add NUMPAGES at the end first so the earlier position stays valid
+        ' Add the total field at the end first so the earlier position stays valid
         Set fldRng = ftr.Range.Duplicate
         fldRng.Start = insertRange.End
         fldRng.End = insertRange.End
-        ftr.Range.Fields.Add fldRng, wdFieldNumPages
+        ftr.Range.Fields.Add fldRng, totalFieldType
 
         ' PAGE field goes after "Page "
         Set fldRng = ftr.Range.Duplicate
@@ -706,6 +782,38 @@ Private Sub DoInsertPageNumbers(fmt As String, pageMode As String, align As Stri
     For Each idx In selectedSections
         ApplyPageNumToSection ActiveDocument.Sections(CLng(idx)), fmt, pageMode, al
     Next idx
+
+    ' "Page X of Y (this section)" reads wrong unless the section restarts
+    ' numbering at 1 (e.g. "Page 5 of 3") - offer to fix it
+    If LCase(fmt) = "ofsection" Then
+        Dim needsRestart As Boolean
+        For Each idx In selectedSections
+            If CLng(idx) > 1 Then
+                If Not ActiveDocument.Sections(CLng(idx)).Footers(wdHeaderFooterPrimary) _
+                       .PageNumbers.RestartNumberingAtSection Then
+                    needsRestart = True
+                End If
+            End If
+        Next idx
+
+        If needsRestart Then
+            If MsgBox("""Page X of Y"" for a section usually reads best when the " & _
+                      "section restarts numbering at 1 (otherwise you can get " & _
+                      """Page 5 of 3"")." & vbCrLf & vbCrLf & _
+                      "Restart the selected section(s) at 1?", _
+                      vbYesNo + vbQuestion, "Page Numbers") = vbYes Then
+                For Each idx In selectedSections
+                    If CLng(idx) > 1 Then
+                        With ActiveDocument.Sections(CLng(idx)) _
+                                 .Footers(wdHeaderFooterPrimary).PageNumbers
+                            .StartingNumber = 1
+                            .RestartNumberingAtSection = True
+                        End With
+                    End If
+                Next idx
+            End If
+        End If
+    End If
 
     cursorPos.Select
 
@@ -1108,6 +1216,224 @@ End Sub
 
 Public Sub NDPageNum_OfTotal_NotFirst_R()
     DoInsertPageNumbers "oftotal", "notfirst", "right"
+End Sub
+
+' =============================================================================
+' Page Numbers - Page X of Y (This Section)
+' =============================================================================
+Public Sub NDPageNum_OfSection_All_L()
+    DoInsertPageNumbers "ofsection", "all", "left"
+End Sub
+
+Public Sub NDPageNum_OfSection_All_C()
+    DoInsertPageNumbers "ofsection", "all", "center"
+End Sub
+
+Public Sub NDPageNum_OfSection_All_R()
+    DoInsertPageNumbers "ofsection", "all", "right"
+End Sub
+
+Public Sub NDPageNum_OfSection_First_L()
+    DoInsertPageNumbers "ofsection", "first", "left"
+End Sub
+
+Public Sub NDPageNum_OfSection_First_C()
+    DoInsertPageNumbers "ofsection", "first", "center"
+End Sub
+
+Public Sub NDPageNum_OfSection_First_R()
+    DoInsertPageNumbers "ofsection", "first", "right"
+End Sub
+
+Public Sub NDPageNum_OfSection_NotFirst_L()
+    DoInsertPageNumbers "ofsection", "notfirst", "left"
+End Sub
+
+Public Sub NDPageNum_OfSection_NotFirst_C()
+    DoInsertPageNumbers "ofsection", "notfirst", "center"
+End Sub
+
+Public Sub NDPageNum_OfSection_NotFirst_R()
+    DoInsertPageNumbers "ofsection", "notfirst", "right"
+End Sub
+
+' =============================================================================
+' Page Numbers - Number format (per section)
+' =============================================================================
+Private Sub DoSetNumberFormat(styleVal As Long, styleLabel As String)
+    On Error GoTo ErrorHandler
+
+    Dim selectedSections As Collection
+    Set selectedSections = PickSectionsForUpdate("Number Format")
+    If selectedSections Is Nothing Then Exit Sub
+
+    Dim idx As Variant
+    For Each idx In selectedSections
+        ActiveDocument.Sections(CLng(idx)).Footers(wdHeaderFooterPrimary) _
+            .PageNumbers.NumberStyle = styleVal
+    Next idx
+
+    MsgBox "Page number format set to """ & styleLabel & """ for the " & _
+           "selected section(s).", vbInformation, "Number Format"
+
+    Exit Sub
+
+ErrorHandler:
+    MsgBox "An error occurred setting the number format." & vbCrLf & _
+           "Error " & Err.Number & ": " & Err.Description, _
+           vbCritical, "Number Format"
+End Sub
+
+Public Sub NDPageNum_Fmt_Arabic()
+    DoSetNumberFormat wdPageNumberStyleArabic, "1, 2, 3"
+End Sub
+
+Public Sub NDPageNum_Fmt_RomanLower()
+    DoSetNumberFormat wdPageNumberStyleLowercaseRoman, "i, ii, iii"
+End Sub
+
+Public Sub NDPageNum_Fmt_RomanUpper()
+    DoSetNumberFormat wdPageNumberStyleUppercaseRoman, "I, II, III"
+End Sub
+
+Public Sub NDPageNum_Fmt_LetterLower()
+    DoSetNumberFormat wdPageNumberStyleLowercaseLetter, "a, b, c"
+End Sub
+
+Public Sub NDPageNum_Fmt_LetterUpper()
+    DoSetNumberFormat wdPageNumberStyleUppercaseLetter, "A, B, C"
+End Sub
+
+' =============================================================================
+' Page Numbers - Check / diagnose
+' =============================================================================
+Public Sub NDPageNum_Check()
+    On Error GoTo ErrorHandler
+
+    Dim report As String
+    Dim warnings As String
+    Dim sec As Section
+    Dim i As Long
+    Dim sectionCount As Long
+    sectionCount = ActiveDocument.Sections.Count
+
+    Dim hasNum() As Boolean
+    ReDim hasNum(1 To sectionCount)
+    Dim anyHave As Boolean
+
+    For Each sec In ActiveDocument.Sections
+        i = sec.Index
+
+        ' Page range
+        Dim rng As Range
+        Set rng = sec.Range
+        rng.Collapse wdCollapseStart
+        Dim startPage As Long
+        startPage = rng.Information(wdActiveEndPageNumber)
+        Set rng = sec.Range
+        rng.Collapse wdCollapseEnd
+        Dim endPage As Long
+        endPage = rng.Information(wdActiveEndPageNumber)
+
+        Dim pageStr As String
+        If startPage = endPage Then
+            pageStr = "p." & startPage
+        Else
+            pageStr = "pp." & startPage & "-" & endPage
+        End If
+
+        Dim locations As String
+        locations = DescribePageNumLocations(sec)
+        hasNum(i) = (locations <> "")
+        If hasNum(i) Then anyHave = True
+
+        Dim line As String
+        line = "Section " & i & " (" & pageStr & "): "
+        If locations = "" Then
+            line = line & "no page numbers"
+        Else
+            line = line & "numbers in " & locations
+        End If
+
+        line = line & "; format " & PageNumStyleName(sec)
+
+        If sec.Footers(wdHeaderFooterPrimary).PageNumbers.RestartNumberingAtSection Then
+            line = line & "; RESTARTS at " & _
+                   sec.Footers(wdHeaderFooterPrimary).PageNumbers.StartingNumber
+        ElseIf i > 1 Then
+            line = line & "; continues from previous"
+        End If
+
+        If i > 1 Then
+            If sec.Footers(wdHeaderFooterPrimary).LinkToPrevious Then
+                line = line & "; footer linked to previous"
+            End If
+        End If
+
+        ' First page of the section deliberately unnumbered?
+        If sec.PageSetup.DifferentFirstPageHeaderFooter Then
+            If StoryHasPageField(sec.Footers(wdHeaderFooterPrimary)) And _
+               Not StoryHasPageField(sec.Footers(wdHeaderFooterFirstPage)) Then
+                line = line & "; no number on its first page"
+            End If
+        End If
+
+        report = report & line & vbCrLf
+
+        ' Duplicate numbering - header AND footer both carry numbers
+        Dim footerHas As Boolean, headerHas As Boolean
+        footerHas = StoryHasPageField(sec.Footers(wdHeaderFooterPrimary))
+        If Not footerHas And sec.PageSetup.DifferentFirstPageHeaderFooter Then
+            footerHas = StoryHasPageField(sec.Footers(wdHeaderFooterFirstPage))
+        End If
+        headerHas = StoryHasPageField(sec.Headers(wdHeaderFooterPrimary))
+        If Not headerHas And sec.PageSetup.DifferentFirstPageHeaderFooter Then
+            headerHas = StoryHasPageField(sec.Headers(wdHeaderFooterFirstPage))
+        End If
+        If footerHas And headerHas Then
+            warnings = warnings & "- Section " & i & " has page numbers in BOTH " & _
+                       "the header and the footer." & vbCrLf
+        End If
+    Next sec
+
+    ' Sections missing numbers while others have them
+    If anyHave Then
+        Dim missing As String
+        For i = 1 To sectionCount
+            If Not hasNum(i) Then
+                If missing <> "" Then missing = missing & ", "
+                missing = missing & i
+            End If
+        Next i
+        If missing <> "" Then
+            warnings = warnings & "- Section(s) " & missing & " have no page " & _
+                       "numbers while other sections do." & vbCrLf
+        End If
+    End If
+
+    Dim msg As String
+    msg = "PAGE NUMBERING REPORT" & vbCrLf & _
+          String(40, "-") & vbCrLf & report
+
+    If warnings <> "" Then
+        msg = msg & vbCrLf & "POSSIBLE PROBLEMS" & vbCrLf & _
+              String(40, "-") & vbCrLf & warnings & vbCrLf & _
+              "Fix restarts with ""Continue from Previous"", or use " & _
+              """Remove Page Numbers"" and re-insert for a clean start."
+    ElseIf Not anyHave Then
+        msg = msg & vbCrLf & "This document has no page numbers."
+    Else
+        msg = msg & vbCrLf & "No numbering problems found."
+    End If
+
+    MsgBox msg, vbInformation, "Check Numbering"
+
+    Exit Sub
+
+ErrorHandler:
+    MsgBox "An error occurred checking page numbering." & vbCrLf & _
+           "Error " & Err.Number & ": " & Err.Description, _
+           vbCritical, "Check Numbering"
 End Sub
 
 ' =============================================================================
